@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * use for inline search in header
+ */
 use AcMarche\Theme\Lib\Mailer;
 use AcMarche\Theme\Lib\Search\MeiliSearch;
 use Symfony\Component\HttpFoundation\JsonResponse;
