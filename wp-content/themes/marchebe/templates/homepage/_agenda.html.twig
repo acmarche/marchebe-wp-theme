@@ -12,12 +12,25 @@
                 >
                     <div
                             class="bg-cta-dark text-white p-3 md:p-4 flex flex-col items-center justify-center w-20 md:w-24 text-center flex-shrink-0">
-                        <span class="text-2xl md:text-3xl font-bold leading-none">{{ event.shortCutDateEvent["day"] }}</span>
-                        <span class="text-xs md:text-sm uppercase tracking-wide opacity-90">{{ event.shortCutDateEvent["month"] }}</span>
+                        {% if event.isEventOnPeriod and event.dates[0].dateEnd %}
+                            <div class="flex flex-col items-center">
+                                <span class="text-lg md:text-xl font-bold leading-none">{{ event.dates[0].dateBegin|date('d') }}</span>
+                                <span class="text-[10px] md:text-xs uppercase tracking-wide opacity-90">{{ event.dates[0].dateBegin|date('M') }}</span>
+                            </div>
+                            <span class="mx-1.5 md:mx-2 text-white/70 text-sm">›</span>
+                            <div class="flex flex-col items-center">
+                                <span class="text-lg md:text-xl font-bold leading-none">{{ event.dates[0].dateEnd|date('d') }}</span>
+                                <span class="text-[10px] md:text-xs uppercase tracking-wide opacity-90">{{ event.dates[0].dateEnd|date('M') }}</span>
+                            </div>
+                        {% else %}
+                            <span class="text-2xl md:text-3xl font-bold leading-none">{{ event.shortCutDateEvent["day"] }}</span>
+                            <span class="text-xs md:text-sm uppercase tracking-wide opacity-90">{{ event.shortCutDateEvent["month"] }}</span>
+                        {% endif %}
                     </div>
                     <div class="p-3 md:p-4 flex-1 overflow-hidden flex flex-col justify-center">
                         <h4 class="font-semibold text-sm md:text-base text-slate-800 line-clamp-2 leading-snug">{{ event.nom }}</h4>
-                        <p class="text-xs md:text-sm text-slate-500 mt-1"><i class="fas fa-map-marker-alt mr-1 text-citoyen"></i> {{ event.locality }}</p>
+                        <p class="text-xs md:text-sm text-slate-500 mt-1"><i
+                                    class="fas fa-map-marker-alt mr-1 text-citoyen"></i> {{ event.locality }}</p>
                     </div>
                 </a>
             </li>
