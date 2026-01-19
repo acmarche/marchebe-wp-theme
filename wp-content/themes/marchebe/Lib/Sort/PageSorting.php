@@ -36,16 +36,6 @@ class PageSorting
                 PageSorting::renderPageNews();
             },
         );
-        add_submenu_page(
-            'acmarche_trie',
-            'Trie des articles',
-            'Tri des articles',
-            'edit_posts',
-            'acmarche_trie_post',
-            function () {
-                PageSorting::renderPageCategory();
-            },
-        );
     }
 
     static function pageIndex()
@@ -68,23 +58,6 @@ class PageSorting
             '@AcMarche/sort/tri_news.html.twig',
             [
                 'news' => $news,
-            ]
-        );
-    }
-
-    static function renderPageCategory()
-    {
-        $cat_id = isset($_GET['cat_id']) ? intval($_GET['cat_id']) : 0;
-        $category = get_category($cat_id);
-        $wpRepository = new WpRepository();
-        $posts = $wpRepository->getPostsAndFiches($cat_id);
-        $posts = AcSort::getSortedItems($cat_id, $posts);
-
-        Twig::rendPage(
-            '@AcMarche/sort/tri_articles.html.twig',
-            [
-                'category' => $category,
-                'posts' => $posts,
             ]
         );
     }
