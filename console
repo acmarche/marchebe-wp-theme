@@ -5,6 +5,7 @@ use AcMarche\Theme\Command\FixCommand;
 use AcMarche\Theme\Command\IntegrityCommand;
 use AcMarche\Theme\Command\MeiliCommand;
 use AcMarche\Theme\Command\PivotCommand;
+use AcMarche\Theme\Command\PivotQueryCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Dotenv\Dotenv;
 
@@ -23,6 +24,7 @@ require __DIR__.'/wp-load.php';
 $application = new Application();
 
 $application->addCommand(new PivotCommand());
+$application->addCommand(new PivotQueryCommand());
 $application->addCommand(new MeiliCommand());
 $application->addCommand(new FixCommand());
 $application->addCommand(new IntegrityCommand());
