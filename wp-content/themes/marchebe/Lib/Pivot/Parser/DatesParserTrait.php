@@ -24,16 +24,19 @@ trait DatesParserTrait
         if ($spec) {
             $dateEvent = new EventDate();
             foreach ($spec->spec as $row) {
+                /*  if ($data = $this->getData($row, UrnEnum::DATE_DEB)) {
+                      $dateEvent->dateBegin = DateHelper::convertStringToDateTime($data);
+                      $dateEvent->dateRealBegin = $dateEvent->dateBegin;
+                      /**
+                       * Exception for event on all the year
+                       * like st loup or marche public
+                       *
+                      if ($dateEvent->dateBegin->format('Y-m-d') < $today->format('Y-m-d')) {
+                          // $dateEvent->dateBegin = $today;
+                      }
+                  }*/
                 if ($data = $this->getData($row, UrnEnum::DATE_DEB)) {
                     $dateEvent->dateBegin = DateHelper::convertStringToDateTime($data);
-                    $dateEvent->dateRealBegin = $dateEvent->dateBegin;
-                    /**
-                     * Exception for event on all the year
-                     * like st loup or marche public
-                     */
-                    if ($dateEvent->dateBegin->format('Y-m-d') < $today->format('Y-m-d')) {
-                        $dateEvent->dateBegin = $today;
-                    }
                 }
                 if ($data = $this->getData($row, UrnEnum::DATE_END)) {
                     $dateEvent->dateEnd = DateHelper::convertStringToDateTime($data);
@@ -55,6 +58,17 @@ trait DatesParserTrait
                 }
                 if ($data = $this->getData($row, UrnEnum::DATE_RANGE)) {
                     $dateEvent->dateRange = $data;
+                }
+                if (!$dateEvent->dateRange) {
+                    if ($dateEvent->dateBegin instanceof \DateTimeInterface && $dateEvent->dateEnd instanceof \DateTimeInterface) {
+                        if ($dateEvent->dateBegin->format('Y-m-d') != $dateEvent->dateEnd->format('Y-m-d')) {
+                            $dateEvent->dateRangeShort = $dateEvent->dateBegin->format('d-m').
+                                '>'.$dateEvent->dateBegin->format('d-m');
+                            $dateEvent->dateRange =
+                                'Du '.$dateEvent->dateBegin->format('d-m-Y').
+                                ' au '.$dateEvent->dateBegin->format('d-m-Y');
+                        }
+                    }
                 }
             }
             $allDates[] = $dateEvent;
