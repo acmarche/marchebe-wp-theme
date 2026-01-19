@@ -15,7 +15,7 @@ use Twig\TwigFunction;
 
 class Twig
 {
-    public static function loadTwig(string $path = null): Environment
+    public static function loadTwig(?string $path = null): Environment
     {
         if (!$path) {
             $path = get_template_directory().'/templates';

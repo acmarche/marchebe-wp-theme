@@ -36,7 +36,7 @@ class DataForSearch
      * @param int|null $categoryId
      * @return array<int,Document>
      */
-    public function getPosts(int $idSite, int $categoryId = null): array
+    public function getPosts(int $idSite, ?int $categoryId = null): array
     {
         $args = array(
             'numberposts' => 5000,
