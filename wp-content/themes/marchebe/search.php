@@ -28,7 +28,7 @@ try {
 }
 
 $twig = Twig::loadTwig();
-$thumbnail = "https://picsum.photos/2070";
+$thumbnail = get_template_directory_uri().'/assets/images/bg-search.jpeg';
 $paths = [];
 
 try {
