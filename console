@@ -22,9 +22,9 @@ require __DIR__.'/wp-load.php';
 
 $application = new Application();
 
-$application->add(new PivotCommand());
-$application->add(new MeiliCommand());
-$application->add(new FixCommand());
-$application->add(new IntegrityCommand());
+$application->addCommand(new PivotCommand());
+$application->addCommand(new MeiliCommand());
+$application->addCommand(new FixCommand());
+$application->addCommand(new IntegrityCommand());
 
 $application->run();
