@@ -7,11 +7,6 @@ use AcMarche\Theme\Repository\WpRepository;
 
 class PageSorting
 {
-    public function __construct()
-    {
-
-    }
-
     static function loadPages()
     {
         $position = 61;

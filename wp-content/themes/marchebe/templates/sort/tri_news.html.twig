@@ -7,7 +7,11 @@
     <div id="order-post-type">
         <ul id="sortable">
             {% for actu in news %}
-                <li class="ui-sortable-handle" id="item_{{ actu.ID }}-{{ actu.blog_id }}"><span>{{ actu.post_title }}</span></li>
+                <li class="ui-sortable-handle" id="item_{{ actu.ID }}-{{ actu.blog_id }}" style="cursor: pointer;">
+                    <span class="drag-handle">&#9776;</span>
+                    <span class="news-title">{{ actu.post_title }}</span>
+                    <span class="news-blog">{{ actu.blog }}</span>
+                </li>
             {% endfor %}
         </ul>
         <div class="clear"></div>

@@ -13,6 +13,7 @@ use AcMarche\Theme\Inc\SecurityConfig;
 use AcMarche\Theme\Inc\SetupTheme;
 use AcMarche\Theme\Inc\ShortCode;
 use AcMarche\Theme\Lib\Seo;
+use AcMarche\Theme\Lib\Sort\AcSort;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
 
@@ -37,3 +38,4 @@ new Seo();
 new ShortCode();
 new WpEventsSubscriber();
 new RestApi();
+new AcSort();

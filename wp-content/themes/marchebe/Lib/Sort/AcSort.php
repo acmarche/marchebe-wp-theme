@@ -18,31 +18,34 @@ namespace AcMarche\Theme\Lib\Sort;
 
 use WP_Error;
 use WP_Post;
-use wpdb;
 
-add_action(
-    'admin_menu',
-    function () {
-        PageSorting::loadPages();
-    }
-);
-
-add_action(
-    'admin_enqueue_scripts',
-    function () {
-        AcSort::load_files();
-    }
-);
-
-add_action(
-    'wp_ajax_update-custom-type-order',
-    function () {
-        AcSort::saveNewsOrder();
-    }
-);
 
 class AcSort
 {
+    public function __construct()
+    {
+        add_action(
+            'admin_menu',
+            function () {
+                PageSorting::loadPages();
+            }
+        );
+
+        add_action(
+            'admin_enqueue_scripts',
+            function () {
+                AcSort::load_files();
+            }
+        );
+
+        add_action(
+            'wp_ajax_update-custom-type-order',
+            function () {
+                AcSort::saveNewsOrder();
+            }
+        );
+    }
+
     public static function load_files()
     {
         wp_enqueue_script(
@@ -178,75 +181,6 @@ class AcSort
                 }
             }
         endforeach;
-
-        if (is_array($data)) {
-            foreach ($data as $key => $values) {
-                if ($key == 'item') {
-                    foreach ($values as $position => $id) {
-                        $wpdb->update(
-                            $wpdb->posts,
-                            array('menu_order' => $position, 'post_parent' => 0),
-                            array('ID' => $id)
-                        );
-                    }
-                } else {
-                    foreach ($values as $position => $id) {
-                        $wpdb->update(
-                            $wpdb->posts,
-                            array('menu_order' => $position, 'post_parent' => str_replace('item_', '', $key)),
-                            array('ID' => $id)
-                        );
-                    }
-                }
-            }
-        }
     }
 
-    /**
-     * Retourne les id des items dans l'ordre
-     *
-     * @param int $cat_id
-     *
-     * @return array
-     * @global wpdb $wpdb
-     */
-    static function getOrderOfItems(int $cat_id): array
-    {
-        global $wpdb;
-        $table_name = $wpdb->prefix.'acposts_order';
-
-        $query = "SELECT * FROM $table_name WHERE `cat_id` = '$cat_id' ORDER BY `sort` ";
-
-        $num_rows = $wpdb->query($query);
-
-        if ($wpdb->last_error) {
-            $error = $wpdb->last_error;
-
-            return array();
-        }
-
-        if ($num_rows == 0) {
-            return array();
-        }
-
-        $rows = $wpdb->get_results($query, ARRAY_A);
-
-        return $rows;
-    }
-
-    /**
-     * TO DO
-     *
-     * @param mixed $ordre
-     */
-    protected static function deleteOldReference($ordre)
-    {
-        foreach ($ordre as $item) {
-            $post_id = $item["post_id"];
-            $post = get_post($post_id);
-            if (!$post) {
-                //   var_dump($post_id);
-            }
-        }
-    }
 }
