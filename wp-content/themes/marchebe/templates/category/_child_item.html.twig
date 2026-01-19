@@ -1,0 +1,11 @@
+<li class="my-2">
+    <a class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta-dark"
+       :class="isSelected({{ item.term_id }})
+           ? 'bg-cta-dark text-white border-cta-dark shadow-md'
+           : 'bg-white text-gray-700 border-gray-200 hover:border-cta-light hover:text-cta-dark'"
+       href="{{ item.url }}"
+       @click.prevent="selectCategory({{ item.term_id }},'{{ (name ?? item.slug)|escape }}')"
+       :aria-current="isSelected({{ item.term_id }}) ? 'page' : null">
+        {{ name ?? item.name }}
+    </a>
+</li>

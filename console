@@ -1,0 +1,30 @@
+#!/usr/bin/env php
+<?php
+
+use AcMarche\Theme\Command\FixCommand;
+use AcMarche\Theme\Command\IntegrityCommand;
+use AcMarche\Theme\Command\MeiliCommand;
+use AcMarche\Theme\Command\PivotCommand;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Dotenv\Dotenv;
+
+require __DIR__.'/vendor/autoload.php';
+
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__.'/.env');
+
+// Set up server variables for WordPress multisite CLI context
+$_SERVER['HTTP_HOST'] = $_ENV['WP_URL_HOME'];
+
+// Bootstrap WordPress to make WordPress functions available
+define('WP_USE_THEMES', false);
+require __DIR__.'/wp-load.php';
+
+$application = new Application();
+
+$application->add(new PivotCommand());
+$application->add(new MeiliCommand());
+$application->add(new FixCommand());
+$application->add(new IntegrityCommand());
+
+$application->run();

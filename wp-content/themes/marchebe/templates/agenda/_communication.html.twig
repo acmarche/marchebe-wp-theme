@@ -1,0 +1,101 @@
+{% if event.communication %}
+    {% set communication = event.communication %}
+    <h3 class="font-montserrat-semi-bold text-cta-light text-md border-bottom">
+        Contacts et réseaux sociaux
+    </h3>
+
+
+    <div class="flex flex-col gap-2 mb-2">
+        {% if communication.phone1 %}
+            <div class="flex gap-2 items-center">
+                <i class="fa-solid fa-phone"></i> <span
+                        class="font-montserrat-semi-bold text-cta-dark">Téléphone:</span>
+                <a href="tel:{{ communication.phone1 }}" target="_blank"
+                   class="">{{ communication.phone1 }}</a>
+            </div>
+        {% endif %}
+        {% if communication.phone2 %}
+            <div class="flex gap-2 items-center">
+                <i class="fa-solid fa-phone"></i> <span
+                        class="font-montserrat-semi-bold text-cta-dark">Téléphone:</span>
+                <a href="tel:{{ communication.phone2 }}" target="_blank"
+                   class="">{{ communication.phone2 }}</a>
+            </div>
+        {% endif %}
+        {% if communication.mobile1 %}
+            <div class="flex gap-2 items-center">
+                <i class="fa-solid fa-mobile"></i> <span
+                        class="font-montserrat-semi-bold text-cta-dark">Téléphone:</span>
+                <a href="tel:{{ communication.mobile1 }}" target="_blank"
+                   class="">{{ communication.mobile1 }}</a>
+            </div>
+        {% endif %}
+        {% if communication.mobile2 %}
+            <div class="flex gap-2 items-center">
+                <i class="fa-solid fa-mobile"></i> <span
+                        class="font-montserrat-semi-bold text-cta-dark">Téléphone:</span>
+                <a href="tel:{{ communication.mobile2 }}" target="_blank"
+                   class="">{{ communication.mobile2 }}</a>
+            </div>
+        {% endif %}
+        {% if communication.mail1 %}
+            <div class="flex gap-2 items-center">
+                <i class="fa-solid fa-envelope"></i> <span
+                        class="font-montserrat-semi-bold text-cta-dark">Email:</span>
+                <a href="tel:{{ communication.mail1 }}" target="_blank"
+                   class="">{{ communication.mail1 }}</a>
+            </div>
+        {% endif %}
+        {% if communication.mail2 %}
+            <div class="flex gap-2 items-center">
+                <i class="fa-solid fa-envelope"></i> <span
+                        class="font-montserrat-semi-bold text-cta-dark">Email:</span>
+                <a href="tel:{{ communication.mail2 }}" target="_blank"
+                   class="">{{ communication.mail2 }}</a>
+            </div>
+        {% endif %}
+
+    </div>
+    <div class="flex flex-col gap-2 mb-2">
+        {% if communication.facebook %}
+            <div class="flex gap-2 items-center">
+                <i class="fa-brands fa-facebook"></i> <span
+                        class="font-montserrat-semi-bold text-cta-dark">Facebook:</span>
+                <a href="{{ communication.facebook }}" target="_blank"
+                   class="">{{ communication.facebook }}</a>
+            </div>
+        {% endif %}
+        {% if communication.youtube %}
+            <div class="flex gap-2 items-center">
+                <i class="fa-brands fa-youtube"></i> <span
+                        class="font-montserrat-semi-bold text-cta-dark">Youtube:</span>
+                <a href="{{ communication.youtube }}" target="_blank"
+                   class="">{{ communication.youtube }}</a>
+            </div>
+        {% endif %}
+        {% if communication.website %}
+            <div class="flex gap-2 items-center">
+                <i class="fa-solid fa-globe"></i> <span class="font-montserrat-semi-bold text-cta-dark">Site web:</span>
+                <a
+                        href="{{ communication.website }}" target="_blank"
+                        class="">{{ communication.website }}</a>
+            </div>
+        {% endif %}
+        {% if communication.instagram %}
+            <div class="flex gap-2 items-center">
+                <i class="fa-brands fa-instagram"></i> <span
+                        class="font-montserrat-semi-bold text-cta-dark">Instagram:</span>
+                <a href="{{ communication.instagram }}" target="_blank"
+                   class="">{{ communication.instagram }}</a>
+            </div>
+        {% endif %}
+        {% if communication.flickr %}
+            <div class="flex gap-2 items-center">
+                <i class="fa-brands fa-flickr"></i> <span
+                        class="font-montserrat-semi-bold text-cta-dark">Flickr :</span>
+                <a href="{{ communication.flickr }}" target="_blank"
+                   class="">{{ communication.flickr }}</a>
+            </div>
+        {% endif %}
+    </div>
+{% endif %}

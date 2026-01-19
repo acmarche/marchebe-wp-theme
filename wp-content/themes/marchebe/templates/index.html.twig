@@ -1,0 +1,20 @@
+<div class="bg-slate-50">
+    {% include '@AcMarche/article/_header.html.twig' %}
+    <div class="relative z-20 -mt-16 md:-mt-24">
+        <article class="w-full md:max-w-6xl mx-auto bg-white rounded-xl shadow-2xl p-2 sm:p-10 md:p-12">
+            {% include '@AcMarche/article/_title.html.twig' %}
+        </article>
+    </div>
+    <section class="mx-auto p-8 bg-slate-50">
+        <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 list-none">
+            {% for child in children %}
+                <li>
+                    <a class="bg-white text-black-base p-4 rounded-md shadow-sm flex items-center justify-between transition-colors duration-300 block hover:bg-gray-50"
+                       href="{{ child.url }}">
+                        <span class="mr-2">{{ child.name }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>

@@ -1,0 +1,25 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th style="font-weight: bold; text-align: center;">Nom</th>
+        <th colspan="2" style="font-weight: bold; text-align: center;">Qualité de l'air</th>
+    </tr>
+    </thead>
+    {% for station in stations %}
+        <tr>
+            <td>
+                {{ station.nom }}
+            </td>
+            <td style="display: flex; align-items: center; justify-content: space-evenly;">
+                {% if station.lastBelAqi %}
+                    {{ station.lastBelAqi.label }}
+                {% endif %}
+            </td>
+            <td>
+                {% if station.lastBelAqi %}
+                {% include '@AcMarche/capteur/_color.html.twig' with {'indice': station.lastBelAqi} %}
+             {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>

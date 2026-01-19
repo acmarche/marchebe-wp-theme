@@ -1,0 +1,27 @@
+<!-- Google tag (gtag.js) - Loaded conditionally based on cookie preferences -->
+<script>
+    // Check if user has consented to statistics cookies
+    (function () {
+        {% if cookieIsAuthorizedByName('statistics') %}
+            // Load Google Analytics script
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-VF2FHEY1S7';
+            document.head.appendChild(script);
+
+            // Initialize Google Analytics
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+
+            gtag('js', new Date());
+            gtag('config', 'G-VF2FHEY1S7', {
+                'anonymize_ip': true
+            });
+        {% else %}
+             console.log('Google Analytics disabled - statistics cookies refused');
+        {% endif %}
+    })();
+</script>

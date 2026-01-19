@@ -1,0 +1,47 @@
+<div class="bg-slate-50 ">
+    {% include '@AcMarche/article/_header.html.twig' %}
+    <div class="relative z-20 -mt-16 md:-mt-24">
+        <article class="w-full md:max-w-6xl mx-auto bg-white rounded-xl shadow-2xl p-2 sm:p-10 md:p-12">
+            {% include '@AcMarche/article/_title.html.twig' %}
+            <form action="/?s=" method="GET" role="search">
+                <label for="hero-search" class="sr-only">Rechercher sur le site</label>
+                <div class="relative">
+                    <!-- Search Icon (decorative) -->
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+                         aria-hidden="true">
+                        <i class="fas fa-search text-gray-500"></i>
+                    </div>
+                    <!-- Search Input -->
+                    <input v-model="searchQuery"
+                           id="hero-search"
+                           name="s"
+                           type="search"
+                           placeholder="Que recherchez-vous ?"
+                           class="w-full py-3 pl-12 pr-16 md:pr-32 text-gray-900 bg-white rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-cta-dark focus:ring-opacity-75 transition-shadow"
+                    >
+
+                    <!-- Submit Button -->
+                    <button
+                            type="button"
+                            @click="performSearch(searchQuery)"
+                            class="absolute inset-y-0 right-0 flex items-center px-4 md:px-6 bg-cta-brown text-white font-semibold rounded-r-full hover:bg-cta-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta-dark transition-colors"
+                    >
+                        <!-- Mobile: Icon only -->
+                        <span class="md:hidden"><i class="fas fa-search text-white"></i></span>
+                        <!-- Desktop: Text only -->
+                        <span class="hidden md:inline">Rechercher</span>
+                    </button>
+                </div>
+            </form>
+            {% if hits|length > 0 %}
+                <ul class="divide-y divide-gray-200">
+                    {% for result in hits %}
+                        {% include '@AcMarche/search/_inline_document.html.twig' %}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>no result</p>
+            {% endif %}
+        </article>
+    </div>
+</div>

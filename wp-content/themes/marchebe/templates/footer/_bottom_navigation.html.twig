@@ -1,0 +1,60 @@
+<nav class="lg:hidden fixed bottom-0 left-0 right-0 w-full z-[60]">
+    <ul class="grid grid-cols-4 items-center justify-evenly bg-gray-800 text-gray-300"
+        id="navigationTop" style="box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -1px 3px rgba(0, 0, 0, 0.05);">
+        <li
+                class="btn-vivre">
+            <button
+                    @click="toggleMobileMenu()"
+                    type="button"
+                    class="icon-menu-mobile cursor-pointer hover:text-cta-light transition-colors w-full"
+                    :class="{ 'text-cta-light': isMobileMenuOpen }"
+                    :aria-expanded="isMobileMenuOpen"
+                    aria-label="Ouvrir le menu">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                </svg>
+                <span class="text-menu-mobile">Menu</span>
+            </button>
+        </li>
+        <li class="">
+            <a
+                    href="https://marche-auth.guichet-citoyen.be/"
+                    class="icon-menu-mobile hover:text-cta-light transition-colors"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/>
+                </svg>
+                <span class="text-menu-mobile">EGuichet</span>
+            </a>
+        </li>
+        <li class="">
+            <a
+                    href="/actualites/"
+                    class="icon-menu-mobile hover:text-cta-light transition-colors text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor"
+                     class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/>
+                </svg>
+                <span class="text-menu-mobile">Actualités</span>
+            </a>
+        </li>
+        <li class="">
+            <a
+                    href="/administration/?p=277"
+                    class="icon-menu-mobile hover:text-cta-light transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/>
+                </svg>
+                <span class="text-menu-mobile">Contacter</span>
+            </a>
+        </li>
+    </ul>
+</nav>

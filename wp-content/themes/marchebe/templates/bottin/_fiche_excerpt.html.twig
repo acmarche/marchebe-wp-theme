@@ -1,0 +1,24 @@
+{{ fiche.localite }}
+
+{% if fiche.nom %}
+    {{ fiche.nom }} {{fiche.prenom }}
+{% endif %}
+
+<br/>
+
+{% if fiche.telephone %}
+    {{ fiche.telephone }}
+{% endif %}
+
+{% if fiche.gsm %}
+
+    {% if fiche.telephone %} - {% endif %}  {{ fiche.gsm }}
+{% endif %}
+
+{% if fiche.telephone_autre %}
+    {% if fiche.gsm %} - {% endif %} {{ fiche.telephone_autre }}
+{% endif %}
+
+{% if fiche.email %}
+    {{ fiche.email }}
+{% endif %}

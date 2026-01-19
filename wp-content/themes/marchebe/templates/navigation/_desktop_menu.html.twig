@@ -1,0 +1,75 @@
+{# Desktop Menu Panel #}
+<div x-show="isDesktopMenuOpen"
+     x-ref="desktopMenuPanel"
+     @keydown="handleDesktopMenuKeydown($event)"
+     x-transition:enter="transition ease-out duration-200"
+     x-transition:enter-start="opacity-0"
+     x-transition:enter-end="opacity-100"
+     x-transition:leave="transition ease-in duration-150"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-0"
+     id="desktop-menu"
+     class="hidden md:block absolute top-16 left-0 w-full bg-white text-gray-900 shadow-xl z-30 border-t border-gray-100"
+     style="display: none;"
+     role="navigation"
+     aria-label="Menu principal">
+
+    <div class="container mx-auto grid grid-cols-3 gap-12 p-10">
+        {# Column 1: Parent Categories #}
+        <div class="col-span-1 border-r border-gray-200 pr-8">
+            <ul class="space-y-1" aria-label="Catégories">
+                <template x-for="(item, index) in menuData" :key="item.blogid">
+                    <li>
+                        <button
+                                @click="selectDesktopCategory(item); focusedCategoryIndex = index;"
+                                @focus="focusContext = 'categories'; focusedCategoryIndex = index;"
+                                type="button"
+                                :data-category-index="index"
+                                :tabindex="index === 0 ? 0 : -1"
+                                :aria-label="`Catégorie: ${item.name}`"
+                                class="cursor-pointer w-full text-left px-4 py-3 text-base rounded-lg transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-cta-dark flex items-center justify-between"
+                                :class="activeDesktopCategory?.blogid === item.blogid ?
+                                    'bg-cta-light text-white font-semibold shadow-sm' :
+                                    'text-gray-700 hover:bg-slate-50 hover:text-cta-dark'"
+                        >
+                            <span x-html="item.name"></span>
+                            <i x-show="activeDesktopCategory?.blogid === item.blogid"
+                               class="fas fa-chevron-right text-xs opacity-75"
+                               aria-hidden="true"></i>
+                        </button>
+                    </li>
+                </template>
+            </ul>
+        </div>
+
+        {# Column 2 & 3: Child Items #}
+        <div class="col-span-2">
+            <div x-show="activeDesktopCategory">
+                <p
+                        class="text-base font-bold text-cta-light tracking-widest uppercase mb-6 pb-2 border-b-2 border-slate-200"
+                        x-text="activeDesktopCategory?.name ?? 'select a category'"
+                        role="status"
+                        aria-live="polite"
+                ></p>
+                <ul class="grid grid-cols-2 gap-x-10 gap-y-1">
+                    <template x-for="(child, index) in activeDesktopCategory?.items" :key="child.id">
+                        <li>
+                            <a
+                                    :href="child.url || `#${child.id}`"
+                                    @click="toggleDesktopMenu()"
+                                    @focus="focusContext = 'children'; focusedChildIndex = index;"
+                                    :data-child-index="index"
+                                    tabindex="-1"
+                                    class="block py-3 px-3 -mx-3 rounded-lg text-gray-700 hover:bg-slate-50 hover:text-cta-dark transition-colors duration-150 text-sm font-medium border-l-2 border-transparent hover:border-cta-light focus:outline-none focus:ring-2 focus:ring-cta-dark"
+                                    x-html="child.title"
+                            ></a>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+            <div x-show="!activeDesktopCategory" class="flex items-center justify-center h-full min-h-48">
+                <p class="text-gray-400 text-base">Sélectionnez une catégorie sur la gauche</p>
+            </div>
+        </div>
+    </div>
+</div>

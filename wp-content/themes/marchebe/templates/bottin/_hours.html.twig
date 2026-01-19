@@ -1,0 +1,66 @@
+{% if fiche.horaires is defined and fiche.horaires|length > 0 %}
+    <div class="mt-6">
+        <h4 class="text-lg font-semibold mb-4">Horaires</h4>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 text-sm">
+                <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-3 py-2 text-left font-medium text-gray-700">Jour</th>
+                    <th class="px-3 py-2 text-center font-medium text-gray-700">Fermé ?</th>
+                    <th class="px-3 py-2 text-center font-medium text-gray-700">Ouvert à midi ?</th>
+                    <th class="px-3 py-2 text-center font-medium text-gray-700">Ouverture<br/> matinée</th>
+                    <th class="px-3 py-2 text-center font-medium text-gray-700">Fermeture<br/> matinée</th>
+                    <th class="px-3 py-2 text-center font-medium text-gray-700">Ouverture<br/> après-midi</th>
+                    <th class="px-3 py-2 text-center font-medium text-gray-700">Fermeture<br/> après-midi</th>
+                    <th class="px-3 py-2 text-center font-medium text-gray-700">Sur Rdv</th>
+                </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                {% for horaire in fiche.horaires %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-3 py-2 font-medium">
+                            {% set days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'] %}
+                            {{ days[horaire.day]|default('Jour ' ~ horaire.day) }}
+                        </td>
+                        <td class="px-3 py-2 text-center">
+                            {% if horaire.isClosed %}
+                                <i class="fas fa-check text-green-600"></i>
+                            {% endif %}
+                        </td>
+                        <td class="px-3 py-2 text-center">
+                            {% if horaire.isOpenAtLunch %}
+                                <i class="fas fa-check text-green-600"></i>
+                            {% endif %}
+                        </td>
+                        <td class="px-3 py-2 text-center">
+                            {% if not horaire.isClosed and horaire.morningStart %}
+                                {{ horaire.morningStart }}
+                            {% endif %}
+                        </td>
+                        <td class="px-3 py-2 text-center">
+                            {% if not horaire.isClosed and horaire.morningEnd %}
+                                {{ horaire.morningEnd }}
+                            {% endif %}
+                        </td>
+                        <td class="px-3 py-2 text-center">
+                            {% if not horaire.isClosed and horaire.noonStart %}
+                                {{ horaire.noonStart }}
+                            {% endif %}
+                        </td>
+                        <td class="px-3 py-2 text-center">
+                            {% if not horaire.isClosed and horaire.noonEnd %}
+                                {{ horaire.noonEnd }}
+                            {% endif %}
+                        </td>
+                        <td class="px-3 py-2 text-center">
+                            {% if not horaire.isClosed and horaire.isRdv %}
+                                <i class="fas fa-check text-green-600"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,22 @@
+<section class="py-4 lg:py-4 bg-background mt-3" id="posts">
+    <div class="container mx-auto px-6">
+        <p class="text-lg lg:text-2xl font-bold text-cta-brown mb-4" x-show="categorySelected !== currentCategory">
+            <span x-text="filteredPosts.length"></span> article(s) dans <span x-html="categoryName"></span>
+        </p>
+        <!-- Loading State -->
+        <div x-show="loading" class="flex justify-center items-center py-12">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-cta-dark"></div>
+            <span class="ml-3 text-lg text-gray-600">Chargement des articles...</span>
+        </div>
+
+        <!-- Posts Grid -->
+        <div x-show="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-8 ml-0 md:ml-4">
+            <template x-for="post in filteredPosts" :key="post.id">
+                {% include '@AcMarche/category/_post_inline.html.twig' %}
+            </template>
+            <div x-show="!loading && filteredPosts.length === 0" class="text-center col-span-full">
+                Aucun article pour le moment.
+            </div>
+        </div>
+    </div>
+</section>

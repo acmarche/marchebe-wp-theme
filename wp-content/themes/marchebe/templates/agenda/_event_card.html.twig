@@ -1,0 +1,48 @@
+<article
+        class="group flex flex-col bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 ease-in-out animate-card-in"
+        style="animation-delay: {{ loop.index * 100 }}ms;">
+    <a href="{{ event.url }}" class="block relative">
+        <img
+                src="{% if event.images|length > 0 %} {{ event.images[0] }} {% else %} 'https://pivotmedia.tourismewallonie.be/OTH-A0-00UE-0HH1/OTH-A0-00UE-0HH1.jpg' {% endif %}"
+                alt="{{ event.nom }}"
+                class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+    </a>
+    {#  <span
+            class="text-citoyen absolute top-3 left-3 font-bold uppercase tracking-wider px-2 py-1 rounded-md">
+         event.locality
+      </span>#}
+
+    <div class="flex flex-grow">
+        <!-- Date Section -->
+        <div class="flex flex-col items-center justify-center bg-slate-50 p-4 text-center border-r border-slate-200">
+            <span class="text-3xl font-bold text-slate-800">{{ event.shortCutDateEvent["day"] }}</span>
+            <span class="text-sm font-semibold text-slate-500 uppercase tracking-wide">{{ event.shortCutDateEvent["month"] }}</span>
+            <span class="text-sm font-semibold text-slate-500 uppercase tracking-wide">{{ event.shortCutDateEvent["year"] }}</span>
+        </div>
+
+        <!-- Content Section -->
+        <div class="p-5 flex flex-col flex-grow">
+            <a href="/tourisme/agenda-des-manifestations/manifestation/{{ event.codeCgt }}">
+                <h3 class="text-lg font-bold text-cta-dark mb-2 leading-tight">{{ event.nom }}</h3>
+            </a>
+
+            <div class="flex items-center text-sm text-slate-600 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                          clip-rule="evenodd"/>
+                </svg>
+                <span>{{ event.locality }}</span>
+            </div>
+            <div class="flex flex-row gap-2 items-center">
+                {% for tag in event.tags %}
+                    {% if tag.urn != 'urn:fam:9' %}
+                        <span>{{ tag.name }}</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</article>

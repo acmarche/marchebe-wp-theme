@@ -1,0 +1,15 @@
+<div class="prose max-w-none prose-lg prose-slate
+            prose-a:text-cta-dark prose-a:underline-offset-2 hover:prose-a:text-cta-light hover:prose-a:underline
+            prose-li:marker:text-cta-dark
+            prose-ul:space-y-1
+            prose-headings:text-cta-dark
+            prose-strong:text-slate-800
+            prose-p:text-slate-700"
+     id="contentToListen">
+
+    {% if post.post_excerpt is defined and post.post_excerpt != '' %}
+        <p class="fade-in-up text-lg text-slate-600 italic border-l-4 border-cta-dark/30 pl-4">{{ post.post_excerpt }}</p>
+    {% endif %}
+
+    <div class="fade-in-up text-slate-700 article-content">{{ body|raw }}</div>
+</div>

@@ -1,0 +1,134 @@
+{# Modal Overlay #}
+<div x-show="isPopupCookieOpen"
+     x-transition:enter="transition ease-out duration-300"
+     x-transition:enter-start="opacity-0"
+     x-transition:enter-end="opacity-100"
+     x-transition:leave="transition ease-in duration-200"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-0"
+     @click="togglePopupCookie"
+     class="fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-sm"
+     x-cloak>
+</div>
+
+{# Modal Content #}
+<article x-show="isPopupCookieOpen"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform translate-y-4 sm:translate-y-0 sm:scale-95"
+         x-transition:enter-end="opacity-100 transform translate-y-0 sm:scale-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 transform translate-y-0 sm:scale-100"
+         x-transition:leave-end="opacity-0 transform translate-y-4 sm:translate-y-0 sm:scale-95"
+         @click.outside="togglePopupCookie"
+         class="fixed inset-0 z-50 flex items-center justify-center p-4"
+         x-cloak>
+    <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+        <form class="space-y-6">
+            {# Header #}
+            <header class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl">
+                <div class="flex items-center justify-between">
+                    <h1 class="text-2xl font-bold text-gray-900">
+                        <span class="text-3xl mr-2">🍪</span>
+                        Choix des cookies
+                    </h1>
+                    <button @click="togglePopupCookie"
+                            class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <p class="mt-2 text-gray-600">
+                    Choisissez d'accepter ou de refuser certains cookies.
+                    Notre politique en matière de cookies peut vous aider à faire ce choix.
+                </p>
+            </header>
+
+            {# Content #}
+            <div class="px-6 py-6">
+                <div class="space-y-6">
+                    {# Cookies essentiels #}
+                    <div class="bg-gray-50 rounded-lg p-5 border border-gray-200">
+                        <h2 class="text-lg font-bold text-citoyen mb-3">Informations sur nos cookies</h2>
+                        <p class="text-gray-700 mb-4">
+                            Les cookies essentiels sont nécessaires au bon fonctionnement de ce site internet.
+                        </p>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="cookies-essential" checked value="true" disabled
+                                       class="w-4 h-4 text-citoyen focus:ring-citoyen">
+                                <span class="font-medium text-gray-900">Accepter</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-not-allowed opacity-50">
+                                <input type="radio" name="cookies-essential" value="false" disabled
+                                       class="w-4 h-4 text-gray-400">
+                                <span class="font-medium text-gray-500">Refuser</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    {# Statistiques #}
+                    <div class="bg-gray-50 rounded-lg p-5 border border-gray-200">
+                        <h2 class="text-lg font-bold text-citoyen mb-3">Statistiques</h2>
+                        <p class="text-gray-700 mb-4">
+                            Nous utilisons Google Analytics pour collecter, de façon anonyme, des statistiques de
+                            fréquentation et d'interactions avec le site.
+                        </p>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="cookies-statistics" @click="statistics = true" :checked="statistics === true"
+                                       class="w-4 h-4 text-citoyen focus:ring-citoyen">
+                                <span class="font-medium text-gray-900">Accepter</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="cookies-statistics" @click="statistics = false" :checked="statistics === false"
+                                       class="w-4 h-4 text-citoyen focus:ring-citoyen">
+                                <span class="font-medium text-gray-900">Refuser</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    {# Contenu encapsulé #}
+                    <div class="bg-gray-50 rounded-lg p-5 border border-gray-200">
+                        <h2 class="text-lg font-bold text-citoyen mb-3">Contenu encapsulé</h2>
+                        <p class="text-gray-700 mb-4">
+                            Nous utilisons des services externes (YouTube, OpenStreetMap, etc.) pour afficher des
+                            vidéos, des plans, ou tout autre type de contenu utile. Ces services utilisent leurs propres
+                            cookies. Refuser ceux-ci bloqueront automatiquement l'affichage de ces contenus dans le
+                            site.
+                        </p>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="cookies-encapsulated" @click="encapsulated = true" :checked="encapsulated === true"
+                                       class="w-4 h-4 text-citoyen focus:ring-citoyen">
+                                <span class="font-medium text-gray-900">Accepter</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="cookies-encapsulated" @click="encapsulated = false" :checked="encapsulated === false"
+                                       class="w-4 h-4 text-citoyen focus:ring-citoyen">
+                                <span class="font-medium text-gray-900">Refuser</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Footer Actions #}
+            <footer class="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 rounded-b-2xl">
+                <div class="flex items-center justify-end gap-3">
+                    <button @click="togglePopupCookie()"
+                            type="button"
+                            class="px-6 py-2.5 text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors">
+                        Annuler
+                    </button>
+                    <button @click.prevent="savePreferences()"
+                            type="submit"
+                            class="cursor-pointer px-6 py-2.5 bg-citoyen text-white font-medium rounded-lg hover:bg-opacity-90 transition-colors shadow-lg">
+                        Enregistrer mes préférences
+                    </button>
+                </div>
+            </footer>
+        </form>
+    </div>
+</article>

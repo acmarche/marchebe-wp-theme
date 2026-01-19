@@ -1,0 +1,18 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Valeur</th>
+        <th>Label</th>
+        <th>Couleur</th>
+    </tr>
+    </thead>
+    {% for indice in indices %}
+        <tr>
+            <td>{{ indice.value }}</td>
+            <td>{{ indice.label }}</td>
+            <td>
+                {% include '@AcMarche/capteur/_color.html.twig' %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>

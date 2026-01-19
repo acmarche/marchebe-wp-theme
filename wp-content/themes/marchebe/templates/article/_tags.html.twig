@@ -1,0 +1,9 @@
+<div class="flex flex-row flex-wrap gap-2 mt-6">
+    {% for tag in tags %}
+        <a
+                href="{{ tag.url }}"
+                class="inline-block bg-slate-100 text-cta-brown text-xs font-semibold px-3 py-1 rounded-full uppercase hover:bg-slate-200 transition-colors">
+            {{ tag.name }}
+        </a>
+    {% endfor %}
+</div>

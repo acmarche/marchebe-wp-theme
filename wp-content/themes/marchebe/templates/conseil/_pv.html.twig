@@ -1,0 +1,13 @@
+{% for year,data in pvs %}
+    <h2>Les PV de {{ year }}</h2>
+    <ul class="list-group mb-2">
+        {% for pv in data %}
+            <li class="list-group-item">
+                <a href="{{ pv.url }}"
+                   title="Télécharger le pv" target="_blank">
+                    {{ pv.nom }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endfor %}

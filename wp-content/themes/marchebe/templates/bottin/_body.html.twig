@@ -1,0 +1,29 @@
+<div class="p-6 md:p-8">
+    <div class="space-y-4">
+
+        {% if fiche.comment1 %}
+            <p class="text-gray-500 dark:text-gray-400 mt-1">
+                {{ fiche.comment1 }}
+            </p>
+        {% endif %}
+
+        {% if fiche.comment1 %}
+            <p class="text-gray-500 dark:text-gray-400 mt-1">
+                {{ fiche.comment3 }}
+            </p>
+        {% endif %}
+
+        {% if fiche.comment1 %}
+            <p class="text-gray-500 dark:text-gray-400 mt-1">
+                {{ fiche.comment2 }}
+            </p>
+        {% endif %}
+
+        {% include '@AcMarche/bottin/_address.html.twig' %}
+        {% include '@AcMarche/bottin/_contact.html.twig' %}
+        {% include '@AcMarche/bottin/_hours.html.twig' %}
+        {% include '@AcMarche/bottin/_images.html.twig' %}
+
+    </div>
+    {% include '@AcMarche/bottin/_social_networks.html.twig' %}
+</div>

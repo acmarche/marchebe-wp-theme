@@ -1,0 +1,37 @@
+<section class="flex flex-col h-full">
+    <h3 class="text-2xl md:text-3xl font-bold mb-6 text-slate-800 flex items-center gap-3">
+        <span class="w-1 h-8 bg-citoyen rounded-full"></span>
+        Actualités
+    </h3>
+    <ul class="grid md:grid-cols-2 gap-3 flex-1">
+        {% for item in news %}
+            <li class="h-full {% if loop.index > 3 %}hidden md:block{% endif %}">
+                <a
+                        class="h-full flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                        href="{{ item.link }}"
+                >
+                    <div class="relative overflow-hidden">
+                        <img
+                                src="{{ item.post_thumbnail_url }}"
+                                {% if item.post_thumbnail_srcset %}srcset="{{ item.post_thumbnail_srcset }}"{% endif %}
+                                {% if item.post_thumbnail_sizes %}sizes="{{ item.post_thumbnail_sizes }}"{% endif %}
+                                alt="{{ item.post_title }}"
+                                class="w-full h-44 object-cover transition-transform duration-300 group-hover:scale-105"
+                                loading="lazy"
+                        />
+                    </div>
+                    <div class="p-4 flex-1">
+                        <h4 class="font-semibold text-base md:text-lg text-slate-800 leading-snug line-clamp-2">{{ item.post_title }}</h4>
+                    </div>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="mt-auto pt-6">
+        <a href="/actualites"
+           class="inline-flex items-center gap-2 bg-cta-dark text-white font-semibold py-2.5 px-6 rounded-lg hover:bg-cta-light transition-colors">
+            Toutes les actualités
+            <i class="fas fa-arrow-right text-sm"></i>
+        </a>
+    </div>
+</section>

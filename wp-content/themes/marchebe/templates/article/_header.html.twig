@@ -1,0 +1,17 @@
+<header class="relative  w-full overflow-hidden {% if thumbnail %} h-[35vh] md:h-[50vh] {% else %} h-[8vh] md:h-[12vh] {% endif %}"
+        title="">
+    <!-- Background Image -->
+    <div class="absolute inset-0 bg-slate-100">
+        {% if thumbnail %}
+            <img src="{{ thumbnail }}"
+                 {% if thumbnail_srcset %}srcset="{{ thumbnail_srcset }}"{% endif %}
+                    {% if thumbnail_sizes %}sizes="{{ thumbnail_sizes }}"{% endif %}
+                 alt=""
+                 class="w-full h-full object-cover hero-image-zoom"
+                 loading="eager">
+        {% endif %}
+    </div>
+
+    <!-- Dark Overlay -->
+    <div class="absolute inset-0 {% if thumbnail %}bg-black/50{% else %}bg-slate-100{% endif %}"></div>
+</header>

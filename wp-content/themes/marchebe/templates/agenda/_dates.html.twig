@@ -1,0 +1,40 @@
+<h3 class="font-montserrat-semi-bold text-cta-light text-md">
+    Quand ?
+</h3>
+<ul class="font-montserrat-semi-bold text-cta-dark flex flex-col gap-2 not-prose">
+    {% for dateEvent in event.dates %}
+        <li class="flex flex-row gap-2">
+            {% if dateEvent.isSameDate() %}
+                {% if dateEvent.dateBegin %}
+                    <span>{{ dateEvent.dateBegin.date|format_date('full') }}</span>
+                {% endif %}
+            {% else %}
+                {% if dateEvent.dateRange %}
+                    <span>{{ dateEvent.dateRange }}</span>
+                {% else %}
+                    Du {{ dateEvent.dateBegin.date|format_date('full') }}  au {{ dateEvent.dateEnd.date|format_date('full') }}
+                {% endif %}
+            {% endif %}
+
+            {% if dateEvent.ouvertureHeure1 %}
+                <span>{{ dateEvent.ouvertureHeure1 }}</span>
+            {% endif %}
+
+            {% if dateEvent.fermetureHeure1 %}
+                <span>{{ dateEvent.fermetureHeure1 }}</span>
+            {% endif %}
+
+            {% if dateEvent.ouvertureHeure2 %}
+                <span>{{ dateEvent.ouvertureHeure2 }}</span>
+            {% endif %}
+
+            {% if dateEvent.fermetureHeure2 %}
+                <span>{{ dateEvent.fermetureHeure2 }}</span>
+            {% endif %}
+
+            {% if dateEvent.ouvertureDetails %}
+                <span>{{ dateEvent.ouvertureDetails|raw }}</span>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

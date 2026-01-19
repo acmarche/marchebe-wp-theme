@@ -1,0 +1,10 @@
+<ul class="list-group">
+    {% for ordre in ordres %}
+        <li class="list-group-item">
+            <a href="/wp-content/uploads/conseil/ordre/{{ ordre.file_name }}"
+               title="Télécharger l'ordre" target="_blank">
+                {{ ordre.nom }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>

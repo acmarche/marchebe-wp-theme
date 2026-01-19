@@ -1,0 +1,15 @@
+{% if fiche.images is defined and fiche.images|length > 0 %}
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+        {% for image in fiche.images %}
+            <a href="https://bottin.marche.be/bottin/fiches/{{ fiche.id }}/{{ image.image_name }}"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
+                <img src="https://bottin.marche.be/bottin/fiches/{{ fiche.id }}/{{ image.image_name }}"
+                     alt="Image {{ loop.index }} - {{ fiche.societe|default('commerce') }}"
+                     class="w-full h-full object-cover"
+                     loading="lazy"/>
+            </a>
+        {% endfor %}
+    </div>
+{% endif %}

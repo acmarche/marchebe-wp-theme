@@ -1,0 +1,117 @@
+<!-- Toast Notification -->
+<div x-data="{ showToast: false, toastMessage: '' }" x-show="showToast"
+     @copy-success.window="showToast = true; toastMessage = $event.detail; setTimeout(() => showToast = false, 3000)"
+     x-transition:enter="transition ease-out duration-300"
+     x-transition:enter-start="opacity-0 translate-y-2"
+     x-transition:enter-end="opacity-100 translate-y-0"
+     x-transition:leave="transition ease-in duration-200"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-0"
+     class="fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-1000"
+     role="status"
+     aria-live="polite"
+     style="display: none;">
+    <p x-text="toastMessage"></p>
+</div>
+
+<script>
+    function copyLinkToClipboard(url) {
+        navigator.clipboard.writeText(url)
+            .then(() => {
+                window.dispatchEvent(new CustomEvent('copy-success', {
+                    detail: 'Lien copié dans votre presse-papier'
+                }));
+            })
+            .catch(err => {
+                console.error('Failed to copy: ', err);
+                window.dispatchEvent(new CustomEvent('copy-success', {
+                    detail: 'Erreur lors de la copie'
+                }));
+            });
+    }
+</script>
+
+<!-- Modal Backdrop with Blur -->
+<div x-show="showModal"
+     x-transition:enter="transition ease-out duration-300"
+     x-transition:enter-start="opacity-0"
+     x-transition:enter-end="opacity-100"
+     x-transition:leave="transition ease-in duration-200"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-0"
+     @click="showModal = false"
+     class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+     style="display: none;">
+
+    <!-- Modal Content -->
+    <div @click.stop
+         x-transition:enter="transition ease-out duration-300 transform"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-200 transform"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         class="bg-white rounded-2xl shadow-2xl p-8 m-10 relative">
+
+        <!-- Close Button -->
+        <button @click="showModal = false"
+                type="button"
+                class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                title="Fermer la fenêtre de partage"
+                aria-label="Fermer la fenêtre de partage">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                 stroke="currentColor" class="w-6 h-6" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+
+        <!-- Modal Header -->
+        <h4 class="text-2xl font-bold text-cta-dark mb-6">Partagez l'article via</h4>
+
+        <!-- Share Buttons -->
+        <div class="flex items-center justify-center gap-4">
+            <a
+                    class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-cta-dark hover:bg-cta-dark hover:text-white transition-all duration-200 hover:scale-110"
+                    href="http://www.facebook.com/sharer.php?u={{ currentUrl() }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Partager sur Facebook"
+                    aria-label="Partager sur Facebook"
+            >
+                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                          clip-rule="evenodd"></path>
+                </svg>
+            </a>
+            <button
+                    type="button"
+                    class="cursor-pointer inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-cta-dark hover:bg-cta-dark hover:text-white transition-all duration-200 hover:scale-110"
+                    onclick="copyLinkToClipboard('{{ currentUrl() }}')"
+                    title="Copier le lien"
+                    aria-label="Copier le lien"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor"
+                     class="w-6 h-6" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/>
+                </svg>
+            </button>
+            <button
+                    type="button"
+                    class="cursor-pointer inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-cta-dark hover:bg-cta-dark hover:text-white transition-all duration-200 hover:scale-110"
+                    onclick="window.print();"
+                    title="Imprimer la page"
+                    aria-label="Imprimer la page"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor"
+                     class="w-6 h-6" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>

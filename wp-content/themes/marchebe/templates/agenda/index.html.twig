@@ -1,0 +1,36 @@
+<section class="min-h-screen">
+    <header
+            class="relative h-[40vh] md:h-[60vh] md:min-h-[400px] bg-cover bg-center bg-cta-dark text-white flex items-center"
+            style="background-image: url('https://www.visitmarche.be/wp-content/uploads/2021/02/bg_events.png');">
+        <div class="absolute inset-0 bg-text/50"></div>
+        <div class="container mx-auto px-0 md:px-6 relative z-10 text-center animate-fade-in-up"
+             style="animation: fade-in-up 1s ease-out forwards;">
+            <h1 class="text-4xl md:text-6xl font-bold">Agenda des manifestations</h1>
+            <p class="text-lg text-slate-600">Découvrez les prochains événements à Marche-en-Famenne</p>
+            <!-- <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto">Ensemble, agissons pour un cadre de vie durable, propre et
+               respectueux de la nature.</p> -->
+        </div>
+    </header>
+    <div class="container mx-auto px-4 py-8 md:py-16">
+        {% include '@AcMarche/widgets/_breadcrumbs.html.twig' %}
+        <div class="text-center max-w-3xl mx-auto mb-0 lg:mb-6">
+            <h2 class="text-3xl lg:text-4xl font-bold mt-3">Agenda des manifestations</h2>
+            <div class="mt-5 text-base md:text-lg text-text/70">
+                Découvrez les prochains événements à Marche-en-Famenne
+            </div>
+        </div>
+        <!-- Events Grid -->
+        {% if events|length > 0 %}
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                {% for event in events %}
+                    {% include '@AcMarche/agenda/_event_card.html.twig' %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- No Results Message -->
+            <div class="text-center py-16 px-6 bg-white rounded-lg shadow-sm">
+                <h3 class="text-2xl font-semibold text-slate-800">Erreur de chargement des manifestations</h3>
+            </div>
+        {% endif %}
+    </div>
+</section>

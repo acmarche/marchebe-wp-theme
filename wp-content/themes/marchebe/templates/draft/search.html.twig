@@ -1,0 +1,72 @@
+<div class="bg-slate-50">
+    {% include '@AcMarche/article/_header.html.twig' %}
+    <div class="relative z-20 -mt-16 md:-mt-24">
+        <article class="w-full md:max-w-6xl mx-auto bg-white rounded-xl shadow-2xl p-4 sm:p-10 md:p-12">
+            {% include '@AcMarche/article/_title.html.twig' %}
+
+            {# Search Form #}
+            <form action="/" method="GET" role="search" class="mb-8">
+                <label for="hero-search" class="sr-only">Rechercher sur le site</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none" aria-hidden="true">
+                        <i class="fas fa-search text-slate-400"></i>
+                    </div>
+                    <input id="hero-search"
+                           name="s"
+                           type="search"
+                           value="{{ keyword|default('') }}"
+                           placeholder="Que recherchez-vous ?"
+                           class="w-full py-3.5 pl-12 pr-16 md:pr-36 text-slate-800 bg-slate-50 border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-cta-dark/40 focus:border-cta-dark focus:bg-white transition-all"
+                    >
+                    <button type="submit"
+                            class="absolute inset-y-1.5 right-1.5 flex items-center px-5 md:px-6 bg-cta-dark text-white font-semibold rounded-full hover:bg-cta-dark/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta-dark transition-colors">
+                        <span class="md:hidden"><i class="fas fa-search"></i></span>
+                        <span class="hidden md:inline">Rechercher</span>
+                    </button>
+                </div>
+            </form>
+
+            {# Results #}
+            {% if keyword|default('') is not empty %}
+                {% if hits|length > 0 %}
+                    {# Results Count #}
+                    <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                        <p class="text-slate-600">
+                            <span class="font-semibold text-cta-dark">{{ count }}</span>
+                            {{ count > 1 ? 'résultats' : 'résultat' }} pour
+                            <span class="font-medium text-slate-800">"{{ keyword }}"</span>
+                        </p>
+                    </div>
+
+                    {# Results List #}
+                    <ul class="space-y-1">
+                        {% for result in hits %}
+                            {% include '@AcMarche/search/_inline_document.html.twig' %}
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    {# No Results #}
+                    <div class="text-center py-12">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 mb-4">
+                            <i class="fas fa-search text-2xl text-slate-400"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-700 mb-2">Aucun résultat trouvé</h3>
+                        <p class="text-slate-500 max-w-md mx-auto">
+                            Nous n'avons trouvé aucun résultat pour "<span class="font-medium">{{ keyword }}</span>".
+                            Essayez avec d'autres termes ou vérifiez l'orthographe.
+                        </p>
+                    </div>
+                {% endif %}
+            {% else %}
+                {# Initial State #}
+                <div class="text-center py-12">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-cta-dark/10 mb-4">
+                        <i class="fas fa-search text-2xl text-cta-dark"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-700 mb-2">Rechercher sur le site</h3>
+                    <p class="text-slate-500">Entrez un mot-clé pour trouver des articles, catégories et services.</p>
+                </div>
+            {% endif %}
+        </article>
+    </div>
+</div>

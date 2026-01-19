@@ -1,0 +1,139 @@
+<!-- Publication Date and Share Button -->
+<div class="mt-6 mb-4 flex flex-row justify-between items-start sm:items-center gap-4"
+x-data="{
+    showModal: false,
+    isPlaying: false,
+    isPaused: false,
+    synthesis: null,
+    utterance: null,
+
+    initSpeech() {
+        if ('speechSynthesis' in window) {
+            this.synthesis = window.speechSynthesis;
+        }
+    },
+
+    getArticleText() {
+        const title = document.querySelector('h1')?.innerText || '';
+        const bodyElement = document.querySelector('#contentToListen');
+        let bodyText = '';
+
+        if (bodyElement) {
+            const clone = bodyElement.cloneNode(true);
+            const buttons = clone.querySelectorAll('button, .hidden, script, style');
+            buttons.forEach(btn => btn.remove());
+            bodyText = clone.innerText || clone.textContent || '';
+        }
+
+        const fullText = title + '. ' + bodyText;
+        return fullText.trim();
+    },
+
+    toggleSpeech() {
+        if (!this.synthesis) {
+            alert('La synthèse vocale n\'est pas supportée par votre navigateur.');
+            return;
+        }
+
+        if (this.isPlaying) {
+            if (this.isPaused) {
+                this.synthesis.resume();
+                this.isPaused = false;
+            } else {
+                this.synthesis.pause();
+                this.isPaused = true;
+            }
+        } else {
+            this.startSpeech();
+        }
+    },
+
+    startSpeech() {
+        const text = this.getArticleText();
+
+        if (!text || text.length < 3) {
+            alert('Aucun texte à lire.');
+            return;
+        }
+
+        this.utterance = new SpeechSynthesisUtterance(text);
+        this.utterance.lang = 'fr-FR';
+        this.utterance.rate = 1.0;
+        this.utterance.pitch = 1.0;
+        this.utterance.volume = 1.0;
+
+        this.utterance.onstart = () => {
+            this.isPlaying = true;
+            this.isPaused = false;
+        };
+
+        this.utterance.onend = () => {
+            this.isPlaying = false;
+            this.isPaused = false;
+        };
+
+        this.utterance.onerror = (event) => {
+            this.isPlaying = false;
+            this.isPaused = false;
+            console.error('Speech error:', event);
+            alert('Une erreur est survenue lors de la lecture: ' + (event.error || 'inconnue'));
+        };
+
+        this.synthesis.cancel();
+        this.synthesis.speak(this.utterance);
+    },
+
+    stopSpeech() {
+        if (this.synthesis) {
+            this.synthesis.cancel();
+            this.isPlaying = false;
+            this.isPaused = false;
+        }
+    }
+}"
+x-init="initSpeech()">
+    <button
+            @click="toggleSpeech()"
+            type="button"
+            class="cursor-pointer flex flex-row items-center gap-2 px-4 py-2 bg-slate-100 text-slate-800 font-semibold text-sm rounded-lg hover:bg-slate-200 transition-colors border border-slate-200"
+            :class="{ 'bg-cta-light/20 border-cta-light': isPlaying }"
+            :aria-label="isPlaying ? (isPaused ? 'Reprendre la lecture' : 'Mettre en pause') : 'Écouter l\'article'">
+        <!-- Play Icon -->
+        <svg x-show="!isPlaying || isPaused" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+             class="size-6" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"/>
+        </svg>
+        <!-- Pause Icon -->
+        <svg x-show="isPlaying && !isPaused" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+             class="size-6" aria-hidden="true" style="display: none;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5"/>
+        </svg>
+        <span x-text="isPlaying ? (isPaused ? 'Reprendre' : 'Pause') : 'Ecouter'"></span><span class="hidden md:inline"> l'article</span>
+    </button>
+    <button
+            x-show="isPlaying"
+            @click="stopSpeech()"
+            type="button"
+            class="cursor-pointer flex flex-row items-center gap-2 px-4 py-2 bg-red-100 text-red-800 font-semibold text-sm rounded-lg hover:bg-red-200 transition-colors border border-red-200"
+            aria-label="Arrêter la lecture"
+            style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+             class="size-6" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 7.5A2.25 2.25 0 0 1 7.5 5.25h9a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25h-9a2.25 2.25 0 0 1-2.25-2.25v-9Z"/>
+        </svg>
+        <span>Arrêter</span>
+    </button>
+    <button
+            @click="showModal = true"
+            type="button"
+            class="cursor-pointer flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-800 font-semibold text-sm rounded-lg hover:bg-slate-200 transition-colors border border-slate-200"
+            aria-label="Partager l'article">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path
+                    d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
+        </svg>
+        <span>Partager</span><span class="hidden md:inline"> l'article</span>
+    </button>
+    {% include '@AcMarche/article/_share_modal.html.twig' %}
+</div>

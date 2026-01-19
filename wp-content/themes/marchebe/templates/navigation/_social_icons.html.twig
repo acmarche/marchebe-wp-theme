@@ -1,0 +1,39 @@
+<ul class="flex space-x-6 items-center">
+    <li>
+        <button @click="openSearchModal()"
+                class="cursor-pointer md:inline text-gray-600 hover:text-cta-light flex items-center gap-2"
+                type="button">
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <span class="sr-only">Rechercher</span>
+            <span class="hidden lg:inline text-sm font-medium">Ctrl + K</span>
+        </button>
+    </li>
+    <li class="hidden">
+        <button class="hidden text-gray-600 text-xl hover:text-cta-light  transition-colors"
+                aria-label="Menu"
+                type="button">
+            <i class="fas fa-bars" aria-hidden="true"></i>
+        </button>
+    </li>
+    <li>
+        <a href="https://www.facebook.com/VilledeMarcheenFamenne"
+           class="text-xl hover:text-cta-light transition-colors"
+           aria-label="Suivez-nous sur Facebook">
+            <i class="fab fa-facebook-f" aria-hidden="true"></i>
+        </a>
+    </li>
+    <li>
+        <a href="https://www.instagram.com/villedemarche/"
+           class="text-xl hover:text-cta-light transition-colors"
+           aria-label="Suivez-nous sur Instagram">
+            <i class="fab fa-instagram" aria-hidden="true"></i>
+        </a>
+    </li>
+    <li>
+        <a href="https://www.youtube.com/user/VilledeMarche"
+           class="text-xl hover:text-cta-light transition-colors"
+           aria-label="Suivez-nous sur YouTube">
+            <i class="fab fa-youtube" aria-hidden="true"></i>
+        </a>
+    </li>
+</ul>

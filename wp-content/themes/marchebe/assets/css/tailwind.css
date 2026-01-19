@@ -1,0 +1,254 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
+
+@plugin "@tailwindcss/typography";
+@source "../../templates/";
+
+@theme {
+    --font-montserrat: Montserrat, sans-serif;
+    --font-montserrat-medium: Montserrat, sans-serif;
+    --font-montserrat-thin: Montserrat, sans-serif;
+    --font-montserrat-light: Montserrat, sans-serif;
+    --font-montserrat-extra-light: Montserrat, sans-serif;
+    --font-montserrat-regular: Montserrat, sans-serif;
+    --font-montserrat-bold: Montserrat, sans-serif;
+    --font-montserrat-semi-bold: Montserrat, sans-serif;
+    --font-montserrat-extra-bold: Montserrat, sans-serif;
+    --color-black-base: #4a4a4a;
+    --color-administration: #6b7280;
+    --color-citoyen: #e86a10;
+    --color-citoyen-100: rgba(232, 106, 16, 0.9);
+    --color-culture: #002F2FFF;
+    --color-economie: #0891b2;
+    --color-enfance: #059669;
+    --color-sante: #D71F85FF;
+    --color-sport: #65a30d;
+    --color-social: #dc2626;
+    --color-tourisme: #7c3aed;
+    --color-cta-light: #6B9CA5;
+    --color-cta-brown: #7B6B5F;
+    --color-cta-dark: #477e88;
+    --object-top-center: "top center";
+    --object-center-center: "center center";
+    --object-bottom-center: "bottom center";
+}
+
+html {
+    @apply scroll-pt-3 scroll-smooth font-montserrat text-base;
+    /* see https://www.getrevue.co/profile/shrutibalasa/issues/did-you-know-about-scroll-padding-easy-solution-to-fixed-header-problem-1325973 */
+}
+
+body {
+    @apply antialiased text-cta-dark;
+}
+
+/* WordPress admin bar fix for fixed navigation */
+body.admin-bar nav.fixed {
+    top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+    body.admin-bar nav.fixed {
+        top: 46px;
+    }
+}
+
+#homepage a, #main-header a, #desktop-menu a, #mobile-menu a, #shortcuts a, #widgets a, #category-filter-menu a {
+    text-decoration: none;
+}
+
+img, video, iframe {
+    /*@apply object-cover max-w-full object-top-center;*/ /* todo object-top-center */
+    @apply object-cover max-w-full ;
+    /* see https://web.dev/learn/design/responsive-"/images/ */
+}
+
+article h2:not(:has(a)), article h3 {
+    @apply text-cta-light;
+}
+
+#app {
+    @apply grid min-h-screen;
+    grid-template-rows: auto 1fr auto;
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+/** animation **/
+
+/* Hero image subtle zoom animation */
+@keyframes subtleZoom {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.05);
+    }
+}
+
+.hero-image-zoom {
+    animation: subtleZoom 15s ease-in-out alternate infinite;
+}
+
+/* Initial state for scroll-triggered animations */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Final state for scroll-triggered animations */
+.fade-in-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Simple fade-in-down for header elements */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-down {
+    animation: fadeInDown 0.8s ease-out forwards;
+}
+
+.animate-fade-in-down-delay {
+    animation: fadeInDown 0.8s ease-out 0.2s forwards;
+    opacity: 0; /* Start hidden */
+}
+
+/**
+ * Agenda index page
+ */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* We could also define the animation here using @theme */
+.animate-card-in {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0; /* Start as invisible */
+}
+
+/**
+ * Agenda show page
+ */
+/* Hero image subtle zoom animation */
+@keyframes subtleZoom {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.05);
+    }
+}
+
+.hero-image-zoom {
+    animation: subtleZoom 15s ease-in-out alternate infinite;
+}
+
+/* Initial state for scroll-triggered animations */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Final state for scroll-triggered animations */
+.fade-in-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Simple fade-in-down for header elements */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-down {
+    animation: fadeInDown 0.8s ease-out forwards;
+}
+
+.animate-fade-in-down-delay {
+    animation: fadeInDown 0.8s ease-out 0.2s forwards;
+    opacity: 0; /* Start hidden */
+}
+
+.icon-menu-mobile {
+  @apply my-4 flex flex-col flex-wrap items-center justify-center font-montserrat-semi-bold;
+}
+.musshadow {
+  box-shadow: 0 -0.125rem 0.45rem rgba(0, 0, 0, 0.75);
+}
+
+/**
+ * Article content styling
+ * Improves readability and visual hierarchy for long-form content
+ */
+
+/* Style date/event headers (bold text followed by content) */
+.article-content p > strong:first-child {
+    @apply inline-block bg-cta-dark/10 text-cta-dark px-3 py-1.5 rounded-md mb-2 text-base font-semibold border-l-4 border-cta-dark;
+}
+
+/* Add spacing between event sections */
+.article-content > p:has(> strong:first-child) {
+    @apply mt-8 first:mt-0;
+}
+
+/* Better list indentation and spacing */
+.article-content ul {
+    @apply pl-6 space-y-2;
+}
+
+.article-content ul li {
+    @apply text-slate-700 leading-relaxed;
+}
+
+/* Nested lists get slightly different styling */
+.article-content ul ul {
+    @apply mt-2 pl-4 border-l-2 border-slate-200;
+}
+
+/* Links within article content */
+.article-content a {
+    @apply text-blue-600 underline decoration-blue-300 underline-offset-2 transition-colors duration-200;
+}
+
+.article-content a:hover {
+    @apply text-blue-800 decoration-blue-500;
+}
+
+/**
+ * Search results highlighting
+ */
+mark {
+    @apply bg-yellow-200/70 text-inherit px-0.5 rounded-sm;
+}

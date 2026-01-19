@@ -1,0 +1,206 @@
+<?php
+
+namespace AcMarche\Theme\Data;
+
+class Data
+{
+    //st loup,marche public
+    public static array $eventsToSkip = ['EVT-01-0AVJ-324P', 'EVT-A0-008E-101W'];
+
+    const shortcuts = [
+        [
+            'name' => 'Horaire Contact',
+            'description' => 'Contactez la commune et prenez rendez-vous...',
+            'icon' => 'fas fa-clock',
+            'url' => '/administration/contacter-la-commune/',
+            'id' => 1,
+            'color' => 'text-white',
+            'bgcolor' => 'bg-cta-dark',
+            'bgcolorhover' => 'group-hover:bg-cta-dark',
+            'iconcolor' => 'text-cta-dark',
+        ],
+        [
+            'name' => 'E-guichet',
+            'description' => 'Démarches et commande en ligne',
+            'icon' => 'fas fa-id-card',
+            'url' => 'https://marche.guichet-citoyen.be/',
+            'id' => 2,
+            'color' => 'text-white',
+            'bgcolor' => 'bg-citoyen',
+            'bgcolorhover' => 'group-hover:bg-citoyen',
+            'iconcolor' => 'text-citoyen',
+        ],
+        [
+            'name' => 'Piscine',
+            'description' => 'Horaires et tarifs.',
+            'icon' => 'fas fa-person-swimming',
+            'url' => '/sport/?p=5153',
+            'id' => 3,
+            'color' => 'text-white',
+            'bgcolor' => 'bg-sport',
+            'bgcolorhover' => 'group-hover:bg-sport',
+            'iconcolor' => 'text-sport',
+        ],
+        [
+            'name' => 'Avis de publication',
+            'description' => 'Enquêtes publiques, assemblées institutions...',
+            'class' => 'bg-img-widgets-1',
+            'icon' => 'fas fa-paper-plane',
+            'url' => '/administration/?cat=15',
+            'id' => 4,
+            'color' => 'text-white',
+            'bgcolor' => 'bg-administration',
+            'bgcolorhover' => 'group-hover:bg-administration',
+            'iconcolor' => 'text-administration',
+        ],
+        [
+            'name' => 'Enfance Jeunesse',
+            'description' => 'Activités, écoles et aides',
+            'icon' => 'fas fa-child',
+            'color' => 'text-white',
+            'bgcolor' => 'bg-enfance',
+            'bgcolorhover' => 'group-hover:bg-enfance',
+            'iconcolor' => 'text-enfance',
+            'url' => 'https://enfance-jeunesse.marche.be',
+            'id' => 5,
+        ],
+        [
+            'name' => 'CPAS',
+            'description' => 'Centre public d\'action sociale',
+            'icon' => 'fas fa-heart',
+            'color' => 'text-white',
+            'bgcolor' => 'bg-social',
+            'bgcolorhover' => 'group-hover:bg-social',
+            'iconcolor' => 'text-social',
+            'url' => '/social/?cat=23',
+            'id' => 6,
+        ],
+    ];
+    const widgets = [
+        [
+            'name' => 'Parking',
+            'intro' => 'Retrouvez la liste des parkins dans notre ville.',
+            'icon' => 'fas fa-square-parking',
+            'url' => '/?p=11139',
+            'id' => 1,
+            'color' => 'text-white',
+            'bgcolor' => 'bg-cta-dark',
+            'bgcolorhover' => 'group-hover:bg-cta-dark',
+            'iconcolor' => 'text-cta-dark',
+        ],
+        [
+            'name' => 'Mon courriel @marche.be',
+            'intro' => 'Consultez votre boite mail',
+            'class' => 'bg-img-widgets-1',
+            'icon' => 'fas fa-at',
+            'url' => 'https://citoyen.marche.be/',
+            'id' => 2,
+            'color' => 'text-white',
+            'bgcolor' => 'bg-economie',
+            'bgcolorhover' => 'group-hover:bg-economie',
+            'iconcolor' => 'text-economie',
+        ],
+        [
+            'name' => 'Economie',
+            'intro' => 'Infos pratiques, commerces locaux...',
+            'class' => 'bg-img-widgets-2',
+            'icon' => 'fas fa-shop',
+            'url' => 'https://adl.marche.be',
+            'id' => 3,
+            'color' => 'text-white',
+            'bgcolor' => 'bg-citoyen',
+            'bgcolorhover' => 'group-hover:bg-citoyen',
+            'iconcolor' => 'text-citoyen',
+        ],
+        [
+            'name' => 'Emploi',
+            'intro' => '',
+            'class' => 'bg-img-widgets-3',
+            'icon' => 'fas fa-person',
+            'url' => '/?cat=132',
+            'id' => 4,
+            'color' => 'text-white',
+            'bgcolor' => 'bg-enfance',
+            'bgcolorhover' => 'group-hover:bg-enfance',
+            'iconcolor' => 'text-enfance',
+        ],
+        [
+            'name' => 'Plateforme volontariat',
+            'intro' => 'Offres et demandes du tissu associatif',
+            'class' => 'bg-img-widgets-4',
+            'icon' => 'fas fa-hand-holding-heart',
+            'url' => 'https://volontariat.marche.be',
+            'id' => 5,
+            'color' => 'text-white',
+            'bgcolor' => 'bg-social',
+            'bgcolorhover' => 'group-hover:bg-social',
+            'iconcolor' => 'text-social',
+        ],
+        [
+            'name' => 'Avis de décès',
+            'intro' => 'Annonces nécrologiques de notre commune',
+            'class' => 'bg-img-widgets-5',
+            'icon' => 'fas fa-cross',
+            'url' => '/?p=9635',
+            'id' => 6,
+            'color' => 'text-white',
+            'bgcolor' => 'bg-slate-600',
+            'bgcolorhover' => 'group-hover:bg-slate-600',
+            'iconcolor' => 'text-slate-600',
+        ],
+    ];
+
+    const partners =
+        [
+            [
+                'url' => 'https://cap.marche.be',
+                'img' => '/images/img/img_sponsor02.png',
+                'alt' => 'cap commerçant',
+                'id' => 1,
+            ],
+            [
+                'url' => 'https://www.visitmarche.be',
+                'img' => '/images/img/visit_logo_b.png',
+                'alt' => 'visit marche',
+                'id' => 2,
+            ],
+            [
+                'url' => '/economie',
+                'img' => '/images/img/img_sponsor04.png',
+                'alt' => 'economie',
+                'id' => 3,
+            ],
+            [
+                'url' => 'http://www.paysdefamenne.be',
+                'img' => '/images/img/img_sponsor03.png',
+                'alt' => 'pays de famenne',
+                'id' => 4,
+            ],
+            [
+                'url' => 'https://www.famenneardenne.be',
+                'img' => '/images/img/img_sponsor01.png',
+                'alt' => 'famenne ardenne',
+                'id' => 5,
+            ],
+            [
+                'url' => 'https://mcfa.marche.be',
+                'img' => '/images/img/img_sponsor05.png',
+                'alt' => 'mcfa',
+                'id' => 6,
+            ],
+            [
+                'url' => 'https://artistes.marche.be',
+                'img' => '/images/img/artistes.png',
+                'alt' => 'artistes',
+                'id' => 7,
+            ],
+        ];
+
+    const menuItems = [
+        ['id' => 1, 'name' => 'E-guichet', 'link' => 'https://eguichet.marche.be'],
+        ['id' => 2, 'name' => 'Actualités', 'link' => '/actualites'],
+        ['id' => 3, 'name' => 'Horaires-Contact', 'link' => '/administration/contacter-la-commune/'],
+        ['id' => 4, 'name' => 'Agenda', 'link' => '/tourisme/agenda-des-manifestations'],
+        ['id' => 5, 'name' => 'Prendre Rdv', 'link' => 'https://marche.guichet-citoyen.be/demarches/'],
+    ];
+}

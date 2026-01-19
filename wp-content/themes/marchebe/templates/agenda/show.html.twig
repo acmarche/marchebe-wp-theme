@@ -1,0 +1,37 @@
+<section>
+    <section class="bg-slate-50 ">
+        {% include '@AcMarche/article/_header.html.twig' %}
+        <div class="relative z-20 -mt-16 md:-mt-24">
+            <article class="w-full md:max-w-6xl mx-auto bg-white rounded-xl shadow-2xl p-2 sm:p-10 md:p-12">
+                {% include '@AcMarche/widgets/_breadcrumbs.html.twig' %}
+                {% include '@AcMarche/article/_title.html.twig' %}
+                <div class="prose max-w-none prose-lg prose-slate prose-a:text-cta-dark hover:prose-a:text-cta-light">
+                    {% if event.description %}
+                        <div class="fade-in-up text-xl leading-relaxed text-slate-600">
+                            {{ event.description|raw }}
+                        </div>
+                    {% endif %}
+
+                    <div class="fade-in-up">
+                        {% include '@AcMarche/agenda/_dates.html.twig' %}
+                        {% include '@AcMarche/agenda/_communication.html.twig' %}
+                        <ul class="flex flex-wrap gap-2">
+                            {% for tag in event.tags %}
+                                <li
+                                        class="text-sm mx-2 whitespace-nowrap flex items-center border border-caractere text-caractere transition-all duration-500 ease-in-out hover:bg-cta-light hover:text-white">
+                                    <a href="#" class="px-2 py-2 ">{{ tag.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="fade-in-up mt-8 border-t border-slate-200 pt-8">
+                        <p class="text-center text-slate-600">
+
+                        </p>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</section>

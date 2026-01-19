@@ -1,0 +1,72 @@
+{# Type badge colors #}
+{% set typeColors = {
+    'article': 'bg-cta-dark/10 text-cta-dark',
+    'category': 'bg-citoyen/10 text-citoyen',
+    'fiche': 'bg-economie/10 text-economie',
+    'enquete': 'bg-administration/10 text-administration',
+    'publication': 'bg-tourisme/10 text-tourisme'
+} %}
+{% set typeLabels = {
+    'article': 'Article',
+    'category': 'Catégorie',
+    'fiche': 'Fiche',
+    'enquete': 'Enquête',
+    'publication': 'Publication'
+} %}
+{% set typeIcons = {
+    'article': 'fa-file-alt',
+    'category': 'fa-folder',
+    'fiche': 'fa-address-card',
+    'enquete': 'fa-clipboard-list',
+    'publication': 'fa-book'
+} %}
+
+<li class="group">
+    <a href="{{ result.link }}" class="block p-4 -mx-4 rounded-lg hover:bg-slate-50 transition-colors">
+        <div class="flex items-start gap-4">
+            {# Content #}
+            <div class="flex-1 min-w-0">
+                {# Header: Type badge + Title #}
+                <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium {{ typeColors[result.type]|default('bg-slate-100 text-slate-600') }}">
+                        <i class="fas {{ typeIcons[result.type]|default('fa-file') }} text-[10px]"></i>
+                        {{ typeLabels[result.type]|default('Document') }}
+                    </span>
+                    {% if result.site.name is defined and result.site.name %}
+                        <span class="text-xs text-slate-400">{{ result.site.name }}</span>
+                    {% endif %}
+                </div>
+
+                {# Title with highlight support #}
+                <h3 class="font-semibold text-slate-800 group-hover:text-cta-dark transition-colors mb-1 line-clamp-1">
+                    {% if result._formatted.name is defined %}
+                        {{ result._formatted.name|raw }}
+                    {% else %}
+                        {{ result.name }}
+                    {% endif %}
+                </h3>
+
+                {# Excerpt with highlight support #}
+                {% set excerpt = result._formatted.excerpt|default(result.excerpt)|default(result._formatted.content|default(result.content)) %}
+
+                {# Breadcrumb path #}
+                {% if result.paths|length > 0 %}
+                    <div class="flex items-center gap-1.5 text-xs text-slate-400">
+                        <i class="fas fa-sitemap text-[10px]"></i>
+                        {% for path in result.paths %}
+                            {% if not loop.first %}<span class="text-slate-300">/</span>{% endif %}
+                            <span>{{ path.name }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            {# Arrow #}
+            <div class="flex-shrink-0 mt-1">
+                <svg class="w-5 h-5 text-slate-300 group-hover:text-cta-dark group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                </svg>
+            </div>
+        </div>
+    </a>
+</li>

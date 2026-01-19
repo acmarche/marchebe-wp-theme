@@ -1,0 +1,19 @@
+{% for nomenclature in nomenclatures %}
+    <h3>{{ nomenclature.nom }}</h3>
+    <ul class="list-group">
+        {% for taxe in nomenclature.taxes %}
+            <li class="list-group-item">
+                {{ taxe.nom }}
+                {% for exercice in taxe.exercices %}
+                    {% if exercice.url %}
+                        <a href="{{ exercice.url }}" target="_blank">
+                            {{ exercice.annee }}
+                        </a>
+                    {% elseif exercice.fileName %}
+                        <a href="https://extranet.marche.be/files/taxes/{{ exercice.fileName }}">{{ exercice.annee }}</a>
+                    {% endif %}
+                {% endfor %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endfor %}
