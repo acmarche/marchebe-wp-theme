@@ -12,6 +12,7 @@ class EventDate
     public string $ouvertureHeure2 = '';
     public string $fermetureHeure2 = '';
     public string $ouvertureDetails = '';
+    public string $dateRangeShort = '';
     public string $dateRange = '';
 
     public function isSameDate(): bool
