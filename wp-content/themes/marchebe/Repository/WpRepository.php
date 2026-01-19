@@ -124,7 +124,7 @@ class WpRepository
             $enquetes = $apiRepository->getEnquetesPubliques();
             foreach ($enquetes as $enquete) {
                 $enquete->paths = [];
-                $documents[] = Document::documentFromEnquete($enquete);
+                $documents[] = Document::documentFromEnquete($enquete,'Enquêtes publiques');
             }
         }
 
@@ -132,7 +132,7 @@ class WpRepository
             $publications = ApiRepository::getPublicationsByCategoryWp($categoryIdSelected);
             foreach ($publications as $item) {
                 $item->paths = [];
-                $documents[] = Document::documentFromPublication($item);
+                $documents[] = Document::documentFromPublication($item,'Publications communales');
             }
         }
 

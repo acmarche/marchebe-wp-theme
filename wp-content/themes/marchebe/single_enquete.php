@@ -54,7 +54,7 @@ try {
     $events = [];
 }
 
-$document = Document::documentFromEnquete($enquete);
+$document = Document::documentFromEnquete($enquete,'Enquêtes publiques');
 
 try {
     echo $twig->render('@AcMarche/article/show.html.twig', [
