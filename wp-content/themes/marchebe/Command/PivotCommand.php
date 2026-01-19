@@ -54,6 +54,9 @@ class PivotCommand extends Command
         $this->purge = (bool)$input->getOption('purge');
         $codeCgt = (string)$input->getOption('codeCgt');
 
+        $this->pivotApi = new PivotApi();
+        $this->parser = new EventParser();
+
         if ($codeCgt) {
             $pivotRepository = new PivotRepository();
             try {
@@ -77,9 +80,6 @@ class PivotCommand extends Command
 
             return Command::SUCCESS;
         }
-
-        $this->pivotApi = new PivotApi();
-        $this->parser = new EventParser();
 
         $this->cacheAll($purge);
 
