@@ -64,6 +64,34 @@ class Event
         return null;
     }
 
+    public function dateRangeShort(): ?string
+    {
+        if (count($this->dates) > 0) {
+            $firstDate = $this->dates[0];
+            if ($firstDate?->dateRangeShort) {
+                return $firstDate->dateRangeShort;
+            }
+
+            return null;
+        }
+
+        return null;
+    }
+
+    public function dateRange(): ?string
+    {
+        if (count($this->dates) > 0) {
+            $firstDate = $this->dates[0];
+            if ($firstDate?->dateRange) {
+                return $firstDate->dateRange;
+            }
+
+            return null;
+        }
+
+        return null;
+    }
+
     public function firstRealDate(): ?\DateTimeInterface
     {
         if (count($this->dates) > 0) {
