@@ -9,6 +9,7 @@ namespace AcMarche\Theme\Templates;
 use AcMarche\Theme\Data\Data;
 use AcMarche\Theme\Lib\Mailer;
 use AcMarche\Theme\Lib\Pivot\Repository\PivotRepository;
+use AcMarche\Theme\Lib\Sort\SortLink;
 use AcMarche\Theme\Lib\Twig;
 use AcMarche\Theme\Repository\WpRepository;
 use Twig\Error\LoaderError;
@@ -43,6 +44,7 @@ try {
         'shortcuts' => Data::shortcuts,
         'widgets' => Data::widgets,
         'partners' => Data::partners,
+        'sortLink' => SortLink::linkSortNews(),
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
     echo $e->getMessage();

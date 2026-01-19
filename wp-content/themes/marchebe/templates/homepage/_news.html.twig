@@ -3,6 +3,9 @@
         <span class="w-1 h-8 bg-citoyen rounded-full"></span>
         Actualités
     </h3>
+    {% if sortLink %}
+        {{ sortLink|raw }}
+    {% endif %}
     <ul class="grid md:grid-cols-2 gap-3 flex-1">
         {% for item in news %}
             <li class="h-full {% if loop.index > 3 %}hidden md:block{% endif %}">
