@@ -74,7 +74,7 @@ trait DatesParserTrait
                     }
                 }
             }
-            if ($dateEvent->dateEnd->format('Y-m-d') > $today->format('Y-m-d')) {
+            if ($dateEvent->dateEnd->format('Y-m-d') >= $today->format('Y-m-d')) {
                 $allDates[] = $dateEvent;
             }
         }
