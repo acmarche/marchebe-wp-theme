@@ -22,7 +22,7 @@ class FixCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('To fix something');
+        $this->setDescription('To cleaning medias');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
