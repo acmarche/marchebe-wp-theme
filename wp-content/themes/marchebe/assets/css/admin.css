@@ -1,0 +1,34 @@
+/**
+ * Custom WordPress Admin Styles
+ * Customize the admin interface fonts and appearance
+ */
+
+/* Block Editor (Gutenberg) - Increase content font size */
+.editor-styles-wrapper {
+    font-size: 18px;
+}
+
+.editor-styles-wrapper p {
+    font-size: 18px;
+}
+
+.editor-styles-wrapper .wp-block {
+    font-size: 18px;
+}
+
+/* Block Editor title */
+.editor-post-title__input {
+    font-size: 2.5em !important;
+}
+
+/* Classic Editor (TinyMCE) iframe body - if used */
+body#tinymce {
+    font-size: 18px;
+}
+
+/* General admin text size adjustments */
+.post-type-post .editor-styles-wrapper,
+.post-type-page .editor-styles-wrapper {
+    font-size: 18px;
+    line-height: 1.6;
+}

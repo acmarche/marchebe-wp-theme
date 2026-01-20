@@ -12,10 +12,22 @@ class Assets
         add_action('wp_enqueue_scripts', [$this,'remove_unnecessary_core_styles'], 9999);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_styles']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_styles']);
         add_filter('script_loader_tag', [$this, 'add_defer_attribute'], 10, 2);
         // Fix WordPress core asset URLs in multisite subdirectory setup
         add_filter('style_loader_src', [$this, 'fix_multisite_urls'], 10, 1);
         add_filter('script_loader_src', [$this, 'fix_multisite_urls'], 10, 1);
+    }
+
+    function enqueue_admin_styles(): void
+    {
+        $themeUri = self::getThemeUri();
+        wp_enqueue_style(
+            'marchebe-admin',
+            $themeUri.'/assets/css/admin.css',
+            [],
+            wp_get_theme()->get('Version')
+        );
     }
 
     function enqueue_styles(): void
