@@ -37,7 +37,6 @@ class Event
         public int $visibilite,
         public array $visibiliteUrn,
         public TypeOffre $typeOffre,
-        public ?Adresse $adresse1 = null,
         /**
          * @var array<Spec>
          */
@@ -47,6 +46,7 @@ class Event
          */
         public array $relOffre,
         public array $relOffreTgt,
+        public ?Adresse $adresse1 = null,
     ) {
     }
 

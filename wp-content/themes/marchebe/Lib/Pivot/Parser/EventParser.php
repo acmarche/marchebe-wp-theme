@@ -56,10 +56,10 @@ class EventParser
             visibilite: $data['visibilite'] ?? 0,
             visibiliteUrn: $data['visibiliteUrn'] ?? [],
             typeOffre: $this->parseTypeOffre($data['typeOffre']),
-            adresse1: $this->parseAdresse($data['adresse1'] ?? null),
             spec: array_map(fn($s) => $this->parseSpec($s), $data['spec'] ?? []),
             relOffre: array_map(fn($r) => $this->parseRelOffre($r), $data['relOffre'] ?? []),
             relOffreTgt: $data['relOffreTgt'] ?? [],
+            adresse1: $this->parseAdresse($data['adresse1'] ?? null),
         );
 
         if ($event->typeOffre->idTypeOffre === TypeEnum::Event->value) {
