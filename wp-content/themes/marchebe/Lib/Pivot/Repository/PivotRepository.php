@@ -83,7 +83,9 @@ class PivotRepository
             $events = $all;
         }
 
-        return SortHelper::sortEvents($events);
+        SortHelper::sortEvents($events);
+
+        return $events;
     }
 
     /**
@@ -138,8 +140,7 @@ class PivotRepository
         if (!isset($data['codeCgt'])) {
             if (!isset($data['offre'][0]['codeCgt'])) {
                 return null;
-            }
-            else {
+            } else {
                 $data = $data['offre'][0];
             }
         }
