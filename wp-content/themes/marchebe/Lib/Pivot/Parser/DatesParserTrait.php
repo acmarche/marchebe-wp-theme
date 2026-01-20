@@ -24,20 +24,20 @@ trait DatesParserTrait
         if ($spec) {
             $dateEvent = new EventDate();
             foreach ($spec->spec as $row) {
-                  if ($data = $this->getData($row, UrnEnum::DATE_DEB)) {
-                      $dateEvent->dateBegin = DateHelper::convertStringToDateTime($data);
-                      /**
-                       * Use to sort events
-                       */
-                      $dateEvent->dateRealBegin = $dateEvent->dateBegin;
-                      /**
-                       * ?necessary
-                       */
-                      if ($dateEvent->dateBegin->format('Y-m-d') < $today->format('Y-m-d')) {
-                          $dateEvent->dateBegin = $today;
-          //??            $dateEvent->dateRealBegin = $today;
-                      }
-                  }
+                if ($data = $this->getData($row, UrnEnum::DATE_DEB)) {
+                    $dateEvent->dateBegin = DateHelper::convertStringToDateTime($data);
+                    /**
+                     * Use to sort events
+                     */
+                    $dateEvent->dateRealBegin = $dateEvent->dateBegin;
+                    /**
+                     * ?necessary
+                     */
+                    if ($dateEvent->dateBegin->format('Y-m-d') < $today->format('Y-m-d')) {
+                        $dateEvent->dateBegin = $today;
+                        //??            $dateEvent->dateRealBegin = $today;
+                    }
+                }
                 if ($data = $this->getData($row, UrnEnum::DATE_DEB)) {
                     $dateEvent->dateBegin = DateHelper::convertStringToDateTime($data);
                 }
@@ -74,7 +74,9 @@ trait DatesParserTrait
                     }
                 }
             }
-            $allDates[] = $dateEvent;
+            if ($dateEvent->dateEnd->format('Y-m-d') > $today->format('Y-m-d')) {
+                $allDates[] = $dateEvent;
+            }
         }
 
         $allDates = SortHelper::sortDatesEvent($allDates);
