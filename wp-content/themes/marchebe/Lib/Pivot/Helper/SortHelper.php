@@ -11,12 +11,25 @@ class SortHelper
      * @param array<int,Event> $events
      * @return array<int,Event>
      */
-    public static function sortEvents(array $events, string $order = 'ASC'): array
+    public static function sortEvents(array &$events, string $order = 'ASC'): void
     {
-        usort($events, fn(Event $a, Event $b) => ($order === 'ASC' ? 1 : -1) *
-            ($a->firstRealDate()->getTimestamp() <=> $b->firstRealDate()->getTimestamp()));
+        usort($events, function ($a, $b) {
+            $dateA = !empty($a->dates) ? $a->dates[0] : null;
+            $dateB = !empty($b->dates) ? $b->dates[0] : null;
 
-        return $events;
+            // Handle null cases (empty dates arrays)
+            if ($dateA === null && $dateB === null) {
+                return 0;
+            }
+            if ($dateA === null) {
+                return 1; // Push events without dates to the end
+            }
+            if ($dateB === null) {
+                return -1;
+            }
+
+            return $dateA <=> $dateB;
+        });
     }
 
     /**
