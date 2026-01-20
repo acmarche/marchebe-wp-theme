@@ -16,9 +16,21 @@
     <div class="flex flex-grow">
         <!-- Date Section -->
         <div class="flex flex-col items-center justify-center bg-slate-50 p-4 text-center border-r border-slate-200">
-            <span class="text-3xl font-bold text-slate-800">{{ event.shortCutDateEvent["day"] }}</span>
-            <span class="text-sm font-semibold text-slate-500 uppercase tracking-wide">{{ event.shortCutDateEvent["month"] }}</span>
-            <span class="text-sm font-semibold text-slate-500 uppercase tracking-wide">{{ event.shortCutDateEvent["year"] }}</span>
+            {% if event.isEventOnPeriod and event.dates[0].dateEnd %}
+                <div class="flex flex-col items-center">
+                    <span class="text-xl font-bold text-slate-800 leading-none">{{ event.dates[0].dateBegin|date('d') }}</span>
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">{{ event.dates[0].dateBegin|date('M') }}</span>
+                </div>
+                <span class="my-1 text-slate-400 text-sm">›</span>
+                <div class="flex flex-col items-center">
+                    <span class="text-xl font-bold text-slate-800 leading-none">{{ event.dates[0].dateEnd|date('d') }}</span>
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">{{ event.dates[0].dateEnd|date('M') }}</span>
+                </div>
+            {% else %}
+                <span class="text-3xl font-bold text-slate-800">{{ event.shortCutDateEvent["day"] }}</span>
+                <span class="text-sm font-semibold text-slate-500 uppercase tracking-wide">{{ event.shortCutDateEvent["month"] }}</span>
+                <span class="text-sm font-semibold text-slate-500 uppercase tracking-wide">{{ event.shortCutDateEvent["year"] }}</span>
+            {% endif %}
         </div>
 
         <!-- Content Section -->
