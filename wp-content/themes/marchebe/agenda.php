@@ -26,7 +26,7 @@ try {
     return;
 }
 
-$defaultImage = 'https://www.visitmarche.be/wp-content/uploads/2021/02/bg_events.png';
+$defaultImage = '/wp-content/themes/marchebe/assets/images/img/bg_events.png';
 $thumbnail = "https://picsum.photos/2070";
 $paths = [];
 
