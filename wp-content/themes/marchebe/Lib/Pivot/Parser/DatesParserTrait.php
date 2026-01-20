@@ -35,6 +35,7 @@ trait DatesParserTrait
                        */
                       if ($dateEvent->dateBegin->format('Y-m-d') < $today->format('Y-m-d')) {
                           $dateEvent->dateBegin = $today;
+          //??            $dateEvent->dateRealBegin = $today;
                       }
                   }
                 if ($data = $this->getData($row, UrnEnum::DATE_DEB)) {
