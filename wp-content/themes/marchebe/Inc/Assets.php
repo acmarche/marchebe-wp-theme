@@ -53,18 +53,29 @@ class Assets
 
     function enqueue_scripts(): void
     {
+        $themeUri = self::getThemeUri();
+
+        // Header navigation component (must load before Alpine.js)
+        wp_enqueue_script(
+            'marchebe-header-nav',
+            $themeUri.'/assets/js/header-nav.js',
+            [],
+            wp_get_theme()->get('Version')
+        );
+
+        // Alpine.js (depends on header-nav)
         wp_enqueue_script(
             'marchebe-alpine',
             'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js',
-            [],
+            ['marchebe-header-nav'],
             null
         );
     }
 
     function add_defer_attribute($tag, $handle): string
     {
-        // Add defer to Alpine.js script
-        if ('marchebe-alpine' === $handle) {
+        // Add defer to Alpine.js and header-nav scripts
+        if (in_array($handle, ['marchebe-alpine', 'marchebe-header-nav'])) {
             return str_replace(' src', ' defer src', $tag);
         }
 
