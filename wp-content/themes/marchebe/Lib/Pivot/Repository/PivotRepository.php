@@ -80,14 +80,12 @@ class PivotRepository
         if ($skip) {
             $all = [];
             foreach ($events as $event) {
-                if (count($event->dates) === 1) {
-                    $dateBegin = $event->firstDateBegin();
-                    $dateEnd = $event->firstDateEnd();
-                    if ($dateBegin && $dateEnd) {
-                        $daysDiff = Carbon::parse($dateBegin)->diffInDays(Carbon::parse($dateEnd));
-                        if ($daysDiff > 10) {
-                            continue;
-                        }
+                $dateBegin = $event->firstDateBegin();
+                $dateEnd = $event->firstDateEnd();
+                if ($dateBegin && $dateEnd) {
+                    $daysDiff = Carbon::parse($dateBegin)->diffInDays(Carbon::parse($dateEnd));
+                    if ($daysDiff > 10) {
+                        continue;
                     }
                 }
                 $all[] = $event;
