@@ -20,8 +20,8 @@ trait DatesParserTrait
         //$this->parseDatesValidation($event);
         $today = new \DateTime();
         $allDates = [];
-        $spec = $this->findByUrn($event, UrnEnum::DATE_OBJECT->value, returnValue: false);
-        if ($spec) {
+        $specs = $this->findAllByUrn($event, UrnEnum::DATE_OBJECT->value);
+        foreach ($specs as $spec) {
             $dateEvent = new EventDate();
             foreach ($spec->spec as $row) {
                 if ($data = $this->getData($row, UrnEnum::DATE_DEB)) {
@@ -37,9 +37,6 @@ trait DatesParserTrait
                         $dateEvent->dateBegin = $today;
                         //??            $dateEvent->dateRealBegin = $today;
                     }
-                }
-                if ($data = $this->getData($row, UrnEnum::DATE_DEB)) {
-                    $dateEvent->dateBegin = DateHelper::convertStringToDateTime($data);
                 }
                 if ($data = $this->getData($row, UrnEnum::DATE_END)) {
                     $dateEvent->dateEnd = DateHelper::convertStringToDateTime($data);
@@ -74,7 +71,7 @@ trait DatesParserTrait
                     }
                 }
             }
-            if ($dateEvent->dateEnd->format('Y-m-d') >= $today->format('Y-m-d')) {
+            if ($dateEvent->dateEnd && $dateEvent->dateEnd->format('Y-m-d') >= $today->format('Y-m-d')) {
                 $allDates[] = $dateEvent;
             }
         }
