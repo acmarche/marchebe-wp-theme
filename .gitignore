@@ -34,7 +34,6 @@ wp-config.php
 /wp-content/blogs.dir/
 /wp-content/uploads
 /wp-content/blogs.dir
-/wp-content/blogs.dir/
 /wp-content/upgrade/
 
 # WordPress Plugins (add exceptions for custom plugins)
