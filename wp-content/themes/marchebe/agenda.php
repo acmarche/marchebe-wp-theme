@@ -17,7 +17,7 @@ get_header();
 $twig = Twig::loadTwig();
 $pivotRepository = new PivotRepository();
 try {
-    $events = $pivotRepository->loadEvents();
+    $events = $pivotRepository->loadEvents(purgeCache: WP_DEBUG);
 } catch (\Exception|\Throwable  $e) {
     Twig::renderErrorPage($e);
 
@@ -25,7 +25,6 @@ try {
 
     return;
 }
-
 $defaultImage = '/wp-content/themes/marchebe/assets/images/img/bg_events.png';
 $thumbnail = "https://picsum.photos/2070";
 $paths = [];
