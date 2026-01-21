@@ -209,4 +209,19 @@ class EventParser
 
         return null;
     }
+
+    /**
+     * @return array<Spec>
+     */
+    public function findAllByUrn(Event $event, string $urnName): array
+    {
+        $specs = [];
+        foreach ($event->spec as $specification) {
+            if ($specification->urn === $urnName) {
+                $specs[] = $specification;
+            }
+        }
+
+        return $specs;
+    }
 }
