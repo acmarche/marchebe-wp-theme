@@ -29,7 +29,7 @@ class PivotQueryCommand extends Command
         $this->setDescription('fetch pivot data');
         $this->addOption('parse', "parse", InputOption::VALUE_NONE, 'Parse data');
         $this->addOption('codeCgt', "codeCgt", InputOption::VALUE_REQUIRED, 'Dump one event');
-        $this->addOption('level', "level", InputOption::VALUE_OPTIONAL, 'Dump one event');
+        $this->addOption('level', "level", InputOption::VALUE_OPTIONAL, 'Dump one event', ContentEnum::LVL4->value);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -37,19 +37,17 @@ class PivotQueryCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
         $parse = (bool)$input->getOption('parse');
         $codeCgt = (string)$input->getOption('codeCgt');
-        $level = (int)$input->getOption('codeCgt');
+        $level = (int)$input->getOption('level');
 
         if ($level) {
-            $level = ContentEnum::from($level);
-        } else {
-            $level = ContentEnum::LVL4;
+            $level = ContentEnum::from($level)->value;
         }
 
         if ($codeCgt) {
             $pivotApi = new PivotApi();
 
             try {
-                $response = $pivotApi->loadEvent($codeCgt, $level->value);
+                $response = $pivotApi->loadEvent($codeCgt, $level);
 
             } catch (\Exception|TransportExceptionInterface$e) {
                 $this->io->error($e->getMessage());
