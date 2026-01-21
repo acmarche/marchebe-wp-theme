@@ -55,10 +55,19 @@ class Event
         return $this->adresse1?->getLocalityByLanguage('fr');
     }
 
-    public function firstDate(): ?\DateTimeInterface
+    public function firstDateBegin(): ?\DateTimeInterface
     {
         if (count($this->dates) > 0) {
             return $this->dates[0]->dateBegin;
+        }
+
+        return null;
+    }
+
+    public function firstDateEnd(): ?\DateTimeInterface
+    {
+        if (count($this->dates) > 0) {
+            return $this->dates[0]->dateEnd;
         }
 
         return null;
@@ -104,9 +113,9 @@ class Event
     public function shortCutDateEvent(): array
     {
         return [
-            'year' => $this->firstDate()?->format('Y'),
-            'month' => $this->firstDate()?->format('m'),
-            'day' => $this->firstDate()?->format('d'),
+            'year' => $this->firstDateBegin()?->format('Y'),
+            'month' => $this->firstDateBegin()?->format('m'),
+            'day' => $this->firstDateBegin()?->format('d'),
         ];
     }
 
