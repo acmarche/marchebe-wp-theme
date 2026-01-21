@@ -7,6 +7,7 @@ use AcMarche\Theme\Lib\Pivot\Entity\Event;
 use AcMarche\Theme\Lib\Pivot\Enums\ContentEnum;
 use AcMarche\Theme\Lib\Pivot\Helper\SortHelper;
 use AcMarche\Theme\Lib\Pivot\Parser\EventParser;
+use Carbon\Carbon;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -73,12 +74,23 @@ class PivotRepository
         $parser = new EventParser();
         $events = $parser->parseJsonFile($jsonContent);
 
+        // Remove events with no dates
+        $events = array_filter($events, fn(Event $event) => count($event->dates) > 0);
+
         if ($skip) {
             $all = [];
             foreach ($events as $event) {
-                if (!in_array($event->codeCgt, $this->eventsToSkip)) {
-                    $all[] = $event;
+                if (count($event->dates) === 1) {
+                    $dateBegin = $event->firstDateBegin();
+                    $dateEnd = $event->firstDateEnd();
+                    if ($dateBegin && $dateEnd) {
+                        $daysDiff = Carbon::parse($dateBegin)->diffInDays(Carbon::parse($dateEnd));
+                        if ($daysDiff > 10) {
+                            continue;
+                        }
+                    }
                 }
+                $all[] = $event;
             }
             $events = $all;
         }
