@@ -69,17 +69,23 @@ class IntegrityCommand extends Command
             $this->io->writeln("Deleted rewrite_rules for: $nom");
         }
 
-        // Re-register routers
+        // Re-register rules directly (init hook doesn't fire in CLI)
+        $routerBottin = new RouterBottin();
+        $routerEvent = new RouterEvent();
+        $routerEnquete = new RouterEnquete();
+
         foreach (Theme::SITES as $idSite => $nom) {
             switch_to_blog($idSite);
-            new RouterBottin();
+            $routerBottin->add_rewrite_rule();
         }
 
         switch_to_blog(Theme::TOURISME);
-        new RouterEvent();
+        $routerEvent->add_rewrite_rule();
+        $this->io->writeln("Added RouterEvent rules for: Tourisme");
 
         switch_to_blog(Theme::ADMINISTRATION);
-        new RouterEnquete();
+        $routerEnquete->add_rewrite_rule();
+        $this->io->writeln("Added RouterEnquete rules for: Administration");
 
         // Flush to regenerate rules
         foreach (Theme::SITES as $idSite => $nom) {
