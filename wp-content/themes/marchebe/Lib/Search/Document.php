@@ -23,6 +23,11 @@ class Document
     private ?string $latitude = null;
     private ?string $longitude = null;
 
+    public function post_excerpt(): ?string
+    {
+        return $this->excerpt;
+    }
+
     public static function documentFromPost(\WP_Post|\stdClass $post, int $idSite, string $source): Document
     {
         list($date, $time) = explode(" ", $post->post_date);
@@ -113,7 +118,7 @@ class Document
         $document->name = Cleaner::cleandata($enquete->intitule);
         $document->source = $source;
         $document->excerpt = $enquete->rue." ".$enquete->localite;
-        $document->content = $enquete->demandeur." ".$enquete->localite." ".$enquete->rue;
+        $document->content = $enquete->demandeur." ".$enquete->localite." ".$enquete->rue." ".$enquete->numero;
         $document->site = ['name' => $nameSite, 'id' => Theme::ADMINISTRATION];
         $document->tags = $categories;
         $document->date = $enquete->date_debut;

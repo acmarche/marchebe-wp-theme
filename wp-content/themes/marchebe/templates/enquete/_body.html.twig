@@ -1,0 +1,81 @@
+<article class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+    <div class="p-6">
+        <div class="flex items-start justify-between gap-4 mb-4">
+            <h2 class="text-xl font-semibold text-gray-900 leading-tight">
+                {{ enquete.intitule }}
+            </h2>
+            {% if enquete.categorie %}
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 whitespace-nowrap">
+                    {{ enquete.categorie }}
+                </span>
+            {% endif %}
+        </div>
+
+        {% if enquete.description %}
+            <p class="text-gray-600 mb-4">
+                {{ enquete.description }}
+            </p>
+        {% endif %}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="flex items-center text-sm text-gray-700">
+                <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                <span class="font-medium mr-1">Demandeur:</span> {{ enquete.demandeur }}
+            </div>
+
+            <div class="flex items-center text-sm text-gray-700">
+                <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <span class="font-medium mr-1">Du</span> {{ enquete.date_debut }}
+                <span class="font-medium mx-1">au</span> {{ enquete.date_fin }}
+            </div>
+        </div>
+
+        {% if enquete.rue or enquete.localite %}
+            <div class="flex items-start text-sm text-gray-700 mb-4">
+                <svg class="w-5 h-5 mr-2 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                <span>
+                    {% if enquete.rue %}{{ enquete.rue }}{% if enquete.numero %} {{ enquete.numero }}{% endif %}, {% endif %}
+                    {{ enquete.code_postal }} {{ enquete.localite }}
+                </span>
+            </div>
+        {% endif %}
+
+        <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-100">
+            {% if enquete.avis %}
+                <a href="{{ enquete.avis }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Voir l'avis
+                </a>
+            {% endif %}
+
+            {% if enquete.documents is defined and enquete.documents|length > 0 %}
+                {% for document in enquete.documents %}
+                    <a href="{{ document.url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        {{ document.nom|default('Document') }}
+                    </a>
+                {% endfor %}
+            {% endif %}
+
+            {% if enquete.latitude and enquete.longitude %}
+                <a href="https://www.google.com/maps?q={{ enquete.latitude }},{{ enquete.longitude }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-green-100 text-green-700 text-sm font-medium rounded-md hover:bg-green-200 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+                    </svg>
+                    Voir sur la carte
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</article>

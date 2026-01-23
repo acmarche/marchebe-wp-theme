@@ -65,13 +65,15 @@ try {
     $events = [];
 }
 
-$document = Document::documentFromEnquete($enquete, 'Enquêtes publiques');
+$body = $twig->render('@AcMarche/enquete/_body.html.twig', [
+    'enquete' => $enquete,
+]);
 
 try {
     echo $twig->render('@AcMarche/article/show.html.twig', [
         'post' => $enquete,
         'title' => $enquete->intitule,
-        'body' => $document->content,
+        'body' => $body,
         'paths' => $paths,
         'site' => Theme::ADMINISTRATION,
         'tags' => $tags,
