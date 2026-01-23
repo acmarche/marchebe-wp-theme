@@ -39,12 +39,14 @@ try {
 
 $twig = Twig::loadTwig();
 $category = $apiRepository->getCategoryEnquete();
-
-$paths = $tags = [
-    'name' => $category->name,
-    'term_id' => $category->term_id,
-    'link' => get_category_link($category),
-];
+$paths = $tags = [];
+if ($category) {
+    $paths = $tags = [
+        'name' => $category->name,
+        'term_id' => $category->term_id,
+        'link' => get_category_link($category),
+    ];
+}
 
 $pivotRepository = new PivotRepository();
 try {
@@ -54,7 +56,7 @@ try {
     $events = [];
 }
 
-$document = Document::documentFromEnquete($enquete,'Enquêtes publiques');
+$document = Document::documentFromEnquete($enquete, 'Enquêtes publiques');
 
 try {
     echo $twig->render('@AcMarche/article/show.html.twig', [
