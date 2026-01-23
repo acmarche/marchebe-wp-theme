@@ -3,7 +3,9 @@
          class="mx-auto max-w-5xl px-4 py-6 bg-white border-y border-gray-100"
          id="category-filter-menu">
         <ul class="flex flex-wrap justify-center gap-3">
-            {% include '@AcMarche/category/_child_item.html.twig' with {'item':category, 'name': 'Tous'} %}
+            {% if category is defined %}
+                {% include '@AcMarche/category/_child_item.html.twig' with {'item':category, 'name': 'Tous'} %}
+            {% endif %}
             {% for child in children %}
                 {% include '@AcMarche/category/_child_item.html.twig' with {'item':child} %}
             {% endfor %}

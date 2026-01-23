@@ -1,20 +1,17 @@
-<div class="bg-slate-50">
+<div class="bg-slate-50 mt-16">
+    <!-- HERO HEADER SECTION -->
     {% include '@AcMarche/article/_header.html.twig' %}
-    <div class="relative z-20 -mt-16 md:-mt-24">
-        <article class="w-full md:max-w-6xl mx-auto bg-white rounded-xl shadow-2xl p-2 sm:p-10 md:p-12">
-            {% include '@AcMarche/article/_title.html.twig' %}
-        </article>
-    </div>
-    <section class="mx-auto p-8 bg-slate-50">
-        <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 list-none">
-            {% for child in children %}
-                <li>
-                    <a class="bg-white text-black-base p-4 rounded-md shadow-sm flex items-center justify-between transition-colors duration-300 block hover:bg-gray-50"
-                       href="{{ child.url }}">
-                        <span class="mr-2">{{ child.name }}</span>
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </section>
+    <!-- MAIN CONTENT SECTION -->
+    <main id="main-content" class="relative z-20 -mt-16 md:-mt-24">
+        <section class="container mx-auto bg-white rounded-xl shadow-2xl mb-3 pb-16">
+            <div class="p-4 md:p-6 ">
+                {% include '@AcMarche/widgets/_breadcrumbs.html.twig' %}
+                <div class="text-center">
+                    {% include '@AcMarche/article/_title.html.twig' %}
+                </div>
+            </div>
+            {% include '@AcMarche/category/_menu.html.twig' %}
+            {% include '@AcMarche/category/_description.html.twig' %}
+        </section>
+    </main>
 </div>
