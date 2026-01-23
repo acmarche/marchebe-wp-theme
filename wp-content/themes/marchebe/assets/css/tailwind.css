@@ -202,10 +202,11 @@ article h2:not(:has(a)), article h3 {
 }
 
 .icon-menu-mobile {
-  @apply my-4 flex flex-col flex-wrap items-center justify-center font-montserrat-semi-bold;
+    @apply my-4 flex flex-col flex-wrap items-center justify-center font-montserrat-semi-bold;
 }
+
 .musshadow {
-  box-shadow: 0 -0.125rem 0.45rem rgba(0, 0, 0, 0.75);
+    box-shadow: 0 -0.125rem 0.45rem rgba(0, 0, 0, 0.75);
 }
 
 /**
@@ -251,4 +252,11 @@ article h2:not(:has(a)), article h3 {
  */
 mark {
     @apply bg-yellow-200/70 text-inherit px-0.5 rounded-sm;
+}
+
+/**
+ * For critical error page
+ */
+.wp-die-message {
+    margin-top: 12rem;
 }
