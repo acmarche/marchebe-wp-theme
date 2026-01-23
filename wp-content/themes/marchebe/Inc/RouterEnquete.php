@@ -2,11 +2,10 @@
 
 namespace AcMarche\Theme\Inc;
 
-use AcMarche\Theme\Repository\ApiRepository;
-
 class RouterEnquete
 {
     const PARAM_ENQUETE = 'enqueteId';
+    const ROUTE = 'enquetes-publiques/enquetes-publiques-urbanisme-commune-de-marche-en-famenne/enquete';
     const SINGLE_ENQUETE = 'single_enquete';
 
     public function __construct()
@@ -29,18 +28,16 @@ class RouterEnquete
 
     function add_rewrite_rule(): void
     {
-        $apiRepository = new ApiRepository();
-        $categoryEnquete = $apiRepository->getCategoryEnquete();
-        // Match: enquetes-publiques/enquetes-publiques-urbanisme-commune-de-marche-en-famenne/enquete/[id]
+        //$apiRepository = new ApiRepository();
+        //$categoryEnquete = $apiRepository->getCategoryEnquete();
+        //$parent = get_category($categoryEnquete->parent);
         //$category->slug.'/([a-zA-Z0-9_-]+)/enquete/([0-9]+)/?$',
-        if ($categoryEnquete) {
-            $parent = get_category($categoryEnquete->parent);
-            add_rewrite_rule(
-                $parent->slug.'/'.$categoryEnquete->slug.'/enquete/([0-9]+)/?$',
-                'index.php?'.self::SINGLE_ENQUETE.'=1&'.self::PARAM_ENQUETE.'=$matches[2]',
-                'top'
-            );
-        }
+        //$parent->slug.'/'.$categoryEnquete->slug.'/'.self::PARAM_ENQUETE.'/([0-9]+)/?$',
+        add_rewrite_rule(
+            self::ROUTE.'/([a-zA-Z0-9-]+)[/]?$',
+            'index.php?single_enquete=1&'.self::PARAM_ENQUETE.'=$matches[1]',  // Query vars
+            'top'  // Priority
+        );
     }
 
     function add_query_vars($vars)
@@ -55,41 +52,16 @@ class RouterEnquete
     {
         // Check if this is our custom route
         if (get_query_var(self::SINGLE_ENQUETE)) {
-            $enqueteId = get_query_var(self::PARAM_ENQUETE);
+            $codeCgt = get_query_var(self::PARAM_ENQUETE);
 
             // Check if codeCgt exists
-            if ($enqueteId) {
+            if ($codeCgt) {
                 // Look for template in theme directory
                 $custom_template = locate_template('single_enquete.php');
 
                 if ($custom_template) {
                     return $custom_template;
                 }
-            }
-        }
-
-        return $template;
-    }
-
-    function add_templateAi($template)
-    {
-        // Check if this is our custom route via query var (rewrite rule)
-        $enqueteId = get_query_var(self::PARAM_ENQUETE);
-
-        // If rewrite rule didn't match, check the URL directly
-        // This handles URLs like: /category/post-slug/enquete/123
-        if (!$enqueteId) {
-            $requestUri = $_SERVER['REQUEST_URI'] ?? '';
-            if (preg_match('#/enquete/(\d+)/?$#', $requestUri, $matches)) {
-                $enqueteId = $matches[1];
-                set_query_var(self::PARAM_ENQUETE, $enqueteId);
-            }
-        }
-
-        if ($enqueteId) {
-            $custom_template = locate_template('single_enquete.php');
-            if ($custom_template) {
-                return $custom_template;
             }
         }
 
