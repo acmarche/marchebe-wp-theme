@@ -60,8 +60,18 @@ class IntegrityCommand extends Command
 
     public function flushRoutes(): void
     {
-        foreach (Theme::SITES as $site) {
-            switch_to_blog($site);
+        $current = get_current_blog_id();
+
+        // First, delete all rewrite_rules to remove stale rules
+        foreach (Theme::SITES as $idSite => $nom) {
+            switch_to_blog($idSite);
+            delete_option('rewrite_rules');
+            $this->io->writeln("Deleted rewrite_rules for: $nom");
+        }
+
+        // Re-register routers
+        foreach (Theme::SITES as $idSite => $nom) {
+            switch_to_blog($idSite);
             new RouterBottin();
         }
 
@@ -71,17 +81,14 @@ class IntegrityCommand extends Command
         switch_to_blog(Theme::ADMINISTRATION);
         new RouterEnquete();
 
-        switch_to_blog(Theme::CITOYEN);
-        if (is_multisite()) {
-            $current = get_current_blog_id();
-            foreach (Theme::SITES as $site) {
-                switch_to_blog($site);
-                flush_rewrite_rules();
-            }
-            switch_to_blog($current);
-        } else {
+        // Flush to regenerate rules
+        foreach (Theme::SITES as $idSite => $nom) {
+            switch_to_blog($idSite);
             flush_rewrite_rules();
+            $this->io->writeln("Flushed rules for: $nom");
         }
+
+        switch_to_blog($current);
     }
 
 }
