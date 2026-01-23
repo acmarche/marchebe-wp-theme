@@ -32,9 +32,10 @@ class RouterEnquete
         $apiRepository = new ApiRepository();
         $category = $apiRepository->getCategoryEnquete();
 
+        // Match: enquetes-publiques/[post-slug]/enquete/[id]
         add_rewrite_rule(
-            $category->slug.'/'.self::PARAM_ENQUETE.'/([a-zA-Z0-9_-]+)/?$',
-            'index.php?category_name=$matches[1]&'.self::PARAM_ENQUETE.'=$matches[2]',
+            $category->slug.'/([a-zA-Z0-9_-]+)/enquete/([0-9]+)/?$',
+            'index.php?'.self::SINGLE_ENQUETE.'=1&'.self::PARAM_ENQUETE.'=$matches[2]',
             'top'
         );
     }
