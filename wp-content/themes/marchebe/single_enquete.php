@@ -41,13 +41,16 @@ $twig = Twig::loadTwig();
 $category = $apiRepository->getCategoryEnquete();
 $paths = $tags = [];
 if ($category) {
-    $paths = $tags = [
-        'name' => $category->name,
-        'term_id' => $category->term_id,
-        'link' => get_category_link($category),
+    $paths = [
+        [
+            'name' => $category->name,
+            'term_id' => $category->term_id,
+            'link' => get_category_link($category),
+        ],
     ];
+    $tags = $paths;
 }
-dump(123);
+
 $pivotRepository = new PivotRepository();
 try {
     $events = $pivotRepository->loadEvents(skip: true);
