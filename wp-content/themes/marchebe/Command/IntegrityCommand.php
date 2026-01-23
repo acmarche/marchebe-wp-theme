@@ -58,7 +58,7 @@ class IntegrityCommand extends Command
         foreach (Theme::SITES as $idSite => $nom) {
             $this->io->title($nom);
             switch_to_blog($idSite);
-            $routes = $wp_rewrite->wp_rewrite_rules();
+            $routes = $wp_rewrite->rewrite_rules();
             foreach ($routes as $route) {
                 $this->io->writeln($route);
             }
