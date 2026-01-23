@@ -30,12 +30,14 @@ class RouterEnquete
     function add_rewrite_rule(): void
     {
         $apiRepository = new ApiRepository();
-        $category = $apiRepository->getCategoryEnquete();
-        // Match: enquetes-publiques-urbanisme-commune-de-marche-en-famenne/enquete/[id]
+        $categoryEnquete = $apiRepository->getCategoryEnquete();
+        // Match: enquetes-publiques/enquetes-publiques-urbanisme-commune-de-marche-en-famenne/enquete/[id]
         //$category->slug.'/([a-zA-Z0-9_-]+)/enquete/([0-9]+)/?$',
-        if ($category) {
+        if ($categoryEnquete) {
+            $parent = get_category($categoryEnquete->parent);
+            dump($parent->slug.'/'.$categoryEnquete->slug.'/enquete/([0-9]+)/?$');
             add_rewrite_rule(
-                $category->slug.'/enquete/([0-9]+)/?$',
+                $parent->slug.'/'.$categoryEnquete->slug.'/enquete/([0-9]+)/?$',
                 'index.php?'.self::SINGLE_ENQUETE.'=1&'.self::PARAM_ENQUETE.'=$matches[2]',
                 'top'
             );
