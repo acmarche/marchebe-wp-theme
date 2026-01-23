@@ -31,14 +31,15 @@ class RouterEnquete
     {
         $apiRepository = new ApiRepository();
         $category = $apiRepository->getCategoryEnquete();
-
         // Match: enquetes-publiques-urbanisme-commune-de-marche-en-famenne/enquete/[id]
         //$category->slug.'/([a-zA-Z0-9_-]+)/enquete/([0-9]+)/?$',
-        add_rewrite_rule(
-            $category->slug.'/enquete/([0-9]+)/?$',
-            'index.php?'.self::SINGLE_ENQUETE.'=1&'.self::PARAM_ENQUETE.'=$matches[2]',
-            'top'
-        );
+        if ($category) {
+            add_rewrite_rule(
+                $category->slug.'/enquete/([0-9]+)/?$',
+                'index.php?'.self::SINGLE_ENQUETE.'=1&'.self::PARAM_ENQUETE.'=$matches[2]',
+                'top'
+            );
+        }
     }
 
     function add_query_vars($vars)
