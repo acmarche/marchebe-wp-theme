@@ -20,7 +20,7 @@ $children = $wpRepository->getRootCategories();
 $paths = [];
 $path = Theme::getPathBlog($blog_id);
 $title = Theme::getTitleBlog($blog_id);
-$paths[] = ['name' => $title, 'term_id' => $blog_id, 'url' => $path];
+$paths[] = ['name' => $title, 'term_id' => $blog_id, 'link' => $path];
 
 try {
     echo $twig->render('@AcMarche/index.html.twig', [
