@@ -32,9 +32,10 @@ class RouterEnquete
         $apiRepository = new ApiRepository();
         $category = $apiRepository->getCategoryEnquete();
 
-        // Match: enquetes-publiques/[post-slug]/enquete/[id]
+        // Match: enquetes-publiques-urbanisme-commune-de-marche-en-famenne/enquete/[id]
+        //$category->slug.'/([a-zA-Z0-9_-]+)/enquete/([0-9]+)/?$',
         add_rewrite_rule(
-            $category->slug.'/([a-zA-Z0-9_-]+)/enquete/([0-9]+)/?$',
+            $category->slug.'/enquete/([0-9]+)/?$',
             'index.php?'.self::SINGLE_ENQUETE.'=1&'.self::PARAM_ENQUETE.'=$matches[2]',
             'top'
         );
@@ -49,6 +50,26 @@ class RouterEnquete
     }
 
     function add_template($template)
+    {
+        // Check if this is our custom route
+        if (get_query_var(self::SINGLE_ENQUETE)) {
+            $enqueteId = get_query_var(self::PARAM_ENQUETE);
+
+            // Check if codeCgt exists
+            if ($enqueteId) {
+                // Look for template in theme directory
+                $custom_template = locate_template('single_enquete.php');
+
+                if ($custom_template) {
+                    return $custom_template;
+                }
+            }
+        }
+
+        return $template;
+    }
+
+    function add_templateAi($template)
     {
         // Check if this is our custom route via query var (rewrite rule)
         $enqueteId = get_query_var(self::PARAM_ENQUETE);
