@@ -35,7 +35,6 @@ class RouterEnquete
         //$category->slug.'/([a-zA-Z0-9_-]+)/enquete/([0-9]+)/?$',
         if ($categoryEnquete) {
             $parent = get_category($categoryEnquete->parent);
-            dump($parent->slug.'/'.$categoryEnquete->slug.'/enquete/([0-9]+)/?$');
             add_rewrite_rule(
                 $parent->slug.'/'.$categoryEnquete->slug.'/enquete/([0-9]+)/?$',
                 'index.php?'.self::SINGLE_ENQUETE.'=1&'.self::PARAM_ENQUETE.'=$matches[2]',
