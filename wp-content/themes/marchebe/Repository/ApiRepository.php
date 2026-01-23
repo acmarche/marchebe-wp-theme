@@ -78,7 +78,7 @@ class ApiRepository
         return $publications;
     }
 
-    public  function getCategoryEnquete(): \WP_Term
+    public  function getCategoryEnquete(): ?\WP_Term
     {
         return get_category(Theme::ENQUETE_DIRECTORY_URBA);
     }
