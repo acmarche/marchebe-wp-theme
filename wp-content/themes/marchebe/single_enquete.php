@@ -19,7 +19,7 @@ use Twig\Error\SyntaxError;
 $enqueteId = get_query_var(RouterEnquete::PARAM_ENQUETE, null);
 
 get_header();
-dd($enqueteId);
+
 if (!$enqueteId) {
     Twig::renderNotFoundPage('Code enquete invalide');
     get_footer();
