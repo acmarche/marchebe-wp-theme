@@ -33,7 +33,7 @@ class IntegrityCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
         $wpRepository = new WpRepository();
 
-        //$this->flushRoutes();
+        $this->flushRoutes();
 
         /* $this->listRoutes();
 
