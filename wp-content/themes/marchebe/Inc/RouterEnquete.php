@@ -30,10 +30,10 @@ class RouterEnquete
     function add_rewrite_rule(): void
     {
         $apiRepository = new ApiRepository();
-        //$category = $apiRepository->getCategoryEnquete(); //todo for url
+        $category = $apiRepository->getCategoryEnquete();
 
         add_rewrite_rule(
-            'publications-taxes-arretes-de-police-primes/([a-zA-Z0-9_-]+)/'.self::PARAM_ENQUETE.'/([a-zA-Z0-9_-]+)/?$',
+            $category->slug.'/'.self::PARAM_ENQUETE.'/([a-zA-Z0-9_-]+)/?$',
             'index.php?category_name=$matches[1]&'.self::PARAM_ENQUETE.'=$matches[2]',
             'top'
         );
