@@ -33,10 +33,10 @@ class IntegrityCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
         $wpRepository = new WpRepository();
 
-        $this->flushRoutes();
+       // $this->flushRoutes();
 
-        /* $this->listRoutes();
-
+         $this->listRoutes();
+/*
          foreach (Theme::SITES as $idSite => $nom) {
              switch_to_blog($idSite);
              foreach (get_categories() as $category) {
