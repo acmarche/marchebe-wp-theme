@@ -6,10 +6,10 @@ use AcMarche\Theme\Inc\RouterBottin;
 use AcMarche\Theme\Inc\RouterEnquete;
 use AcMarche\Theme\Inc\RouterEvent;
 use AcMarche\Theme\Inc\Theme;
-use AcMarche\Theme\Repository\WpRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -20,34 +20,27 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class IntegrityCommand extends Command
 {
     private SymfonyStyle $io;
-    private OutputInterface $output;
 
     protected function configure(): void
     {
-        $this->setDescription('To fix something');
+        $this
+            ->setDescription('List or flush rewrite rules')
+            ->addOption('list', 'l', InputOption::VALUE_NONE, 'List all rewrite rules')
+            ->addOption('flush', 'f', InputOption::VALUE_NONE, 'Flush rewrite rules');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->output = $output;
         $this->io = new SymfonyStyle($input, $output);
-        $wpRepository = new WpRepository();
 
-        // $this->flushRoutes();
-
-        $this->listRoutes();
-
-        /*
-                 foreach (Theme::SITES as $idSite => $nom) {
-                     switch_to_blog($idSite);
-                     foreach (get_categories() as $category) {
-                         $posts = $wpRepository->getPostsAndFiches($category->cat_ID);
-                         if (count($posts) === 0) {
-                             $this->io->writeln($category->name);
-                             $this->io->writeln(get_category_link($category));
-                         }
-                     }
-                 }*/
+        if ($input->getOption('flush')) {
+            $this->flushRoutes();
+            $this->io->success('Rewrite rules flushed');
+        } elseif ($input->getOption('list')) {
+            $this->listRoutes();
+        } else {
+            $this->io->warning('Please specify --list or --flush');
+        }
 
         return Command::SUCCESS;
     }
@@ -58,7 +51,7 @@ class IntegrityCommand extends Command
         foreach (Theme::SITES as $idSite => $nom) {
             $this->io->title($nom);
             switch_to_blog($idSite);
-            $routes = $wp_rewrite->rewrite_rules();
+            $routes = $wp_rewrite->wp_rewrite_rules();
             foreach ($routes as $route) {
                 $this->io->writeln($route);
             }
