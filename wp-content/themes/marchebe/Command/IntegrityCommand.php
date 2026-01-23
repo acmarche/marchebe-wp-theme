@@ -33,20 +33,21 @@ class IntegrityCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
         $wpRepository = new WpRepository();
 
-       // $this->flushRoutes();
+        // $this->flushRoutes();
 
-         $this->listRoutes();
-/*
-         foreach (Theme::SITES as $idSite => $nom) {
-             switch_to_blog($idSite);
-             foreach (get_categories() as $category) {
-                 $posts = $wpRepository->getPostsAndFiches($category->cat_ID);
-                 if (count($posts) === 0) {
-                     $this->io->writeln($category->name);
-                     $this->io->writeln(get_category_link($category));
-                 }
-             }
-         }*/
+        $this->listRoutes();
+
+        /*
+                 foreach (Theme::SITES as $idSite => $nom) {
+                     switch_to_blog($idSite);
+                     foreach (get_categories() as $category) {
+                         $posts = $wpRepository->getPostsAndFiches($category->cat_ID);
+                         if (count($posts) === 0) {
+                             $this->io->writeln($category->name);
+                             $this->io->writeln(get_category_link($category));
+                         }
+                     }
+                 }*/
 
         return Command::SUCCESS;
     }
@@ -54,10 +55,13 @@ class IntegrityCommand extends Command
     private function listRoutes(): void
     {
         global $wp_rewrite;
-        switch_to_blog(Theme::TOURISME);
-        $routes = $wp_rewrite->wp_rewrite_rules();
-        foreach ($routes as $route) {
-            $this->io->writeln($route);
+        foreach (Theme::SITES as $idSite => $nom) {
+            $this->io->title($nom);
+            switch_to_blog($idSite);
+            $routes = $wp_rewrite->wp_rewrite_rules();
+            foreach ($routes as $route) {
+                $this->io->writeln($route);
+            }
         }
     }
 
