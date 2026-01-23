@@ -48,7 +48,13 @@ if ($category) {
             'link' => get_category_link($category),
         ],
     ];
-    $tags = $paths;
+    $tags = [
+        [
+            'name' => $category->name,
+            'term_id' => $category->term_id,
+            'url' => get_category_link($category),
+        ],
+    ];
 }
 
 $pivotRepository = new PivotRepository();
