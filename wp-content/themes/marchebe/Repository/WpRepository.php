@@ -225,7 +225,7 @@ class WpRepository
             'parent' => 0,
             'orderby' => 'name',
             'order' => 'ASC',
-            'hide_empty' => true,
+            'hide_empty' => false,
         ]);
         array_map(
             function ($category) {
