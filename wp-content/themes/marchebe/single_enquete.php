@@ -36,7 +36,7 @@ try {
 
     return;
 }
-
+dd($enquete);
 $twig = Twig::loadTwig();
 $category = $apiRepository->getCategoryEnquete();
 $paths = $tags = [];
