@@ -50,18 +50,23 @@ class RouterEnquete
 
     function add_template($template)
     {
-        // Check if this is our custom route
-        if (get_query_var(self::SINGLE_ENQUETE)) {
-            $codeCgt = get_query_var(self::PARAM_ENQUETE);
+        // Check if this is our custom route via query var (rewrite rule)
+        $enqueteId = get_query_var(self::PARAM_ENQUETE);
 
-            // Check if codeCgt exists
-            if ($codeCgt) {
-                // Look for template in theme directory
-                $custom_template = locate_template('single_enquete.php');
+        // If rewrite rule didn't match, check the URL directly
+        // This handles URLs like: /category/post-slug/enquete/123
+        if (!$enqueteId) {
+            $requestUri = $_SERVER['REQUEST_URI'] ?? '';
+            if (preg_match('#/enquete/(\d+)/?$#', $requestUri, $matches)) {
+                $enqueteId = $matches[1];
+                set_query_var(self::PARAM_ENQUETE, $enqueteId);
+            }
+        }
 
-                if ($custom_template) {
-                    return $custom_template;
-                }
+        if ($enqueteId) {
+            $custom_template = locate_template('single_enquete.php');
+            if ($custom_template) {
+                return $custom_template;
             }
         }
 
