@@ -58,7 +58,6 @@ try {
 
 $document = Document::documentFromEnquete($enquete, 'Enquêtes publiques');
 
-dd($document);
 try {
     echo $twig->render('@AcMarche/article/show.html.twig', [
         'post' => $enquete,
@@ -73,7 +72,7 @@ try {
         'events' => $events,
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
-    echo $e->getMessage();
+    Twig::renderErrorPage($e);
 }
 
 get_footer();
