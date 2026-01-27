@@ -69,8 +69,9 @@ try {
 $thumbnail = null;
 if (count($images) > 0) {
     $image = array_first($images);
-    $thumbnail = Bottin::getUrlBottin().$image->image_name;
+    $thumbnail = Bottin::urlImage($fiche, $image);
 }
+
 try {
     echo $twig->render('@AcMarche/article/show.html.twig', [
         'post' => $post,
