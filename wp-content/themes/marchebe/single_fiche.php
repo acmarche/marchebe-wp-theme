@@ -65,7 +65,7 @@ try {
 } catch (\Exception|\Throwable  $e) {
     $events = [];
 }
-dd($images);
+
 try {
     echo $twig->render('@AcMarche/article/show.html.twig', [
         'post' => $post,
@@ -74,7 +74,7 @@ try {
         'paths' => $paths,
         'site' => Theme::TOURISME,
         'tags' => $tags,
-        'thumbnail' => count($images) > 0 ? $images[0] : null,
+        'thumbnail' => count($images) > 0 ? array_first($images) : null,
         'thumbnail_srcset' => null,
         'thumbnail_sizes' => null,
         'events' => $events,
