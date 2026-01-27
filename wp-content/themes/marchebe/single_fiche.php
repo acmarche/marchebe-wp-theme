@@ -65,6 +65,7 @@ try {
 } catch (\Exception|\Throwable  $e) {
     $events = [];
 }
+dd($images);
 try {
     echo $twig->render('@AcMarche/article/show.html.twig', [
         'post' => $post,
