@@ -71,7 +71,9 @@ if (count($images) > 0) {
     $image = array_first($images);
     $thumbnail = Bottin::urlImage($fiche, $image);
 }
-
+if (isset($fiche->post_excerpt)) {
+    $fiche->post_excerpt = null;//force doesn't display
+}
 try {
     echo $twig->render('@AcMarche/article/show.html.twig', [
         'post' => $post,
