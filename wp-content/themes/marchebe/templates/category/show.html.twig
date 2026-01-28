@@ -3,6 +3,7 @@
     currentCategory: {{ category.term_id }},
     categorySelected: {{ category.term_id }},
     categoryName: '{{ category.name }}',
+    description: '{{ description|e('js') }}',
     posts: {{ postsSerialized }}
 })">
     <!-- HERO HEADER SECTION -->

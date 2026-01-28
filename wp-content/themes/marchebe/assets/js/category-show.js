@@ -5,14 +5,9 @@ document.addEventListener('alpine:init', () => {
         categorySelected: config.categorySelected,
         loading: false,
         categoryName: config.categoryName,
+        categoryDescription: config.description || '',
         allPosts: config.posts,
         filteredPosts: config.posts,
-
-        handleCategorySelected(category) {
-            this.categorySelected = category.cat_ID;
-            this.categoryName = category.name;
-        },
-
         async selectCategory(categoryId, categoryName) {
             this.categorySelected = categoryId;
             this.categoryName = categoryName;
@@ -47,9 +42,11 @@ document.addEventListener('alpine:init', () => {
 
                 if (result.success && result.data.posts) {
                     this.filteredPosts = result.data.posts;
+                    this.categoryDescription = result.data.description || '';
                 } else {
                     console.error('Error fetching posts:', result.data?.message || 'Unknown error');
                     this.filteredPosts = [];
+                    this.categoryDescription = '';
                 }
             } catch (error) {
                 console.error('Error:', error);

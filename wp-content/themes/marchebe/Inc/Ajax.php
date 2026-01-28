@@ -55,8 +55,13 @@ class Ajax
         $wpRepository = new WpRepository();
         switch_to_blog($currentSite);
         $posts = $wpRepository->getPostsAndFiches($categoryId);
+        $category = get_category($categoryId);
+        $description = $category ? category_description($categoryId) : '';
 
-        wp_send_json_success(['posts' => $posts]);
+        wp_send_json_success([
+            'posts' => $posts,
+            'description' => $description,
+        ]);
     }
 
     // Localize script to pass Ajax URL and nonce
