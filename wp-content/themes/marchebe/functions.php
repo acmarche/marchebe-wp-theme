@@ -42,4 +42,4 @@ new ShortCode();
 new WpEventsSubscriber();
 new RestApi();
 new AcSort();
-new CategoryEditor();
+//new CategoryEditor();
