@@ -21,7 +21,16 @@ $description = category_description($cat_ID);
 $title = single_cat_title('', false);
 $currentSite = get_current_blog_id();
 
-$posts = $wpRepository->getPostsAndFiches($cat_ID);
+$postsIndexed = [];
+foreach ($wpRepository->getPostsAndFiches($cat_ID) as $post) {
+    $postsIndexed[$post->id] = $post;
+}
+foreach ($children as $child) {
+    foreach ($wpRepository->getPostsAndFiches($child->term_id) as $post) {
+        $postsIndexed[$post->id] = $post;
+    }
+}
+$posts = array_values($postsIndexed);
 
 $twig = Twig::loadTwig();
 $thumbnail = null;

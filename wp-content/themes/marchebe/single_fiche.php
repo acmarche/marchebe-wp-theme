@@ -8,6 +8,7 @@ namespace AcMarche\Theme\Templates;
 
 use AcMarche\Theme\Inc\RouterBottin;
 use AcMarche\Theme\Inc\Theme;
+use AcMarche\Theme\Lib\Bottin\Bottin;
 use AcMarche\Theme\Lib\Pivot\Repository\PivotRepository;
 use AcMarche\Theme\Lib\Search\Document;
 use AcMarche\Theme\Lib\Twig;
@@ -65,6 +66,14 @@ try {
 } catch (\Exception|\Throwable  $e) {
     $events = [];
 }
+$thumbnail = null;
+if (count($images) > 0) {
+    $image = array_first($images);
+    $thumbnail = Bottin::urlImage($fiche, $image);
+}
+if (isset($fiche->post_excerpt)) {
+    $fiche->post_excerpt = null;//force doesn't display
+}
 try {
     echo $twig->render('@AcMarche/article/show.html.twig', [
         'post' => $post,
@@ -73,7 +82,7 @@ try {
         'paths' => $paths,
         'site' => Theme::TOURISME,
         'tags' => $tags,
-        'thumbnail' => count($images) > 0 ? $images[0] : null,
+        'thumbnail' => $thumbnail,
         'thumbnail_srcset' => null,
         'thumbnail_sizes' => null,
         'events' => $events,

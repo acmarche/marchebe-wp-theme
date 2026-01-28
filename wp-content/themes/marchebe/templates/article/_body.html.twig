@@ -8,7 +8,7 @@
      id="contentToListen">
 
     {% if post.post_excerpt is defined and post.post_excerpt != '' %}
-        <p class="fade-in-up text-lg text-slate-600 italic border-l-4 border-cta-dark/30 pl-4">{{ post.post_excerpt }}</p>
+        <p class="fade-in-up text-lg text-slate-600 italic border-l-4 border-cta-dark/30 pl-4">{{ post.post_excerpt|raw }}</p>
     {% endif %}
 
     <div class="fade-in-up text-slate-700 article-content">{{ body|raw }}</div>
