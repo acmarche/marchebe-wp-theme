@@ -63,19 +63,27 @@ class Assets
             wp_get_theme()->get('Version')
         );
 
-        // Alpine.js (depends on header-nav)
+        // Category show component (must load before Alpine.js)
+        wp_enqueue_script(
+            'marchebe-category-show',
+            $themeUri.'/assets/js/category-show.js',
+            [],
+            wp_get_theme()->get('Version')
+        );
+
+        // Alpine.js (depends on header-nav and category-show)
         wp_enqueue_script(
             'marchebe-alpine',
             'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js',
-            ['marchebe-header-nav'],
+            ['marchebe-header-nav', 'marchebe-category-show'],
             null
         );
     }
 
     function add_defer_attribute($tag, $handle): string
     {
-        // Add defer to Alpine.js and header-nav scripts
-        if (in_array($handle, ['marchebe-alpine', 'marchebe-header-nav'])) {
+        // Add defer to Alpine.js and component scripts
+        if (in_array($handle, ['marchebe-alpine', 'marchebe-header-nav', 'marchebe-category-show'])) {
             return str_replace(' src', ' defer src', $tag);
         }
 

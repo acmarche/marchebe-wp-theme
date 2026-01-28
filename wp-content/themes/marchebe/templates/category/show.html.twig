@@ -1,60 +1,10 @@
-<div class="bg-slate-50 mt-16" x-data="
-{
-  currentSite: {{ currentSite }},
-  currentCategory: {{ category.term_id }},
-  categorySelected: {{ category.term_id }},
-  loading: false,
-  categoryName: '{{ category.name }}',
-  allPosts: {{ postsSerialized }},
-  filteredPosts: {{ postsSerialized }},
-  handleCategorySelected(category) {
-    this.categorySelected = category.cat_ID;
-    this.categoryName = category.name;
-  },
-  async selectCategory(categoryId, categoryName) {
-    this.categorySelected = categoryId;
-    this.categoryName = categoryName;
-    await this.fetchData();
-    await this.$nextTick();
-    const element = document.getElementById('posts');
-    if (element) {
-      element.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }
-  },
-  isSelected(categoryId){
-    return this.categorySelected === categoryId;
-  },
-  async fetchData() {
-    this.loading = true;
-
-    const formData = new FormData();
-    formData.append('action', 'set_category_action');
-    formData.append('nonce', wpData.categoryNonce);
-    formData.append('categorySelected', this.categorySelected);
-    formData.append('currentSite', this.currentSite);
-
-    try {
-        const response = await fetch(wpData.ajaxUrl, {
-            method: 'POST',
-            body: formData
-        });
-
-        const result = await response.json();
-
-        if (result.success && result.data.posts) {
-            this.filteredPosts = result.data.posts;
-        } else {
-            console.error('Error fetching posts:', result.data?.message || 'Unknown error');
-            this.filteredPosts = [];
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        this.filteredPosts = [];
-    } finally {
-        this.loading = false;
-    }
-  }
-}">
+<div class="bg-slate-50 mt-16" x-data="categoryShow({
+    currentSite: {{ currentSite }},
+    currentCategory: {{ category.term_id }},
+    categorySelected: {{ category.term_id }},
+    categoryName: '{{ category.name }}',
+    posts: {{ postsSerialized }}
+})">
     <!-- HERO HEADER SECTION -->
     {% include '@AcMarche/article/_header.html.twig' %}
     <!-- MAIN CONTENT SECTION -->
