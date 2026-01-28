@@ -16,6 +16,7 @@
 
 namespace AcMarche\Theme\Lib\Sort;
 
+use AcMarche\Theme\Inc\Assets;
 use WP_Error;
 use WP_Post;
 
@@ -53,9 +54,10 @@ class AcSort
             null,
             array("jquery", "jquery-ui-core", "interface", "jquery-ui-sortable", "wp-lists", "jquery-ui-sortable")
         );
+        $themeUri = Assets::getThemeUri();
         wp_enqueue_style(
             'marchebe-sort-style',
-            plugin_dir_url(__FILE__).'/css/cpt.css',
+            $themeUri.'/assets/css/cpt.css',
             array(),
             wp_get_theme()->get('Version')
         );
