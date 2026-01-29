@@ -115,7 +115,7 @@ class OpenGraph
         $data['modified_time'] = get_the_modified_date('c');
 
         if (has_post_thumbnail()) {
-            $data['image'] = get_the_post_thumbnail_url($post, 'large');
+            $data['image'] = get_the_post_thumbnail_url($post, 'original');
         }
 
         return $data;
