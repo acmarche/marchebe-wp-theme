@@ -12,7 +12,7 @@
 
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {% for image in images %}
-                <div class="relative aspect-square overflow-hidden rounded-lg cursor-pointer group"
+                <div class="relative aspect-squ2are overflow-hidden rounded-lg cursor-pointer group"
                      @click="openLightbox({{ loop.index0 }})">
                     <img src="{{ image }}"
                          alt="Photo {{ loop.index }}"
