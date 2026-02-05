@@ -49,7 +49,7 @@ $wpRepository = new WpRepository();
 $children = $wpRepository->getRootCategories();
 
 try {
-    echo $twig->render('@AcMarche/article/show.html.twig', [
+    echo $twig->render('@AcMarche/page/subsite.html.twig', [
         'post' => $page,
         'title' => $page->post_title,
         'body' => $content,
