@@ -2,7 +2,7 @@
     currentSite: {{ currentSite }},
     currentCategory: {{ category.term_id }},
     categorySelected: {{ category.term_id }},
-    categoryName: '{{ category.name }}',
+    categoryName: '{{ category.name|e('js') }}',
     description: '{{ description|e('js') }}',
     posts: {{ postsSerialized }}
 })">
