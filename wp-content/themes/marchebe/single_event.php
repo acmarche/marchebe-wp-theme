@@ -37,6 +37,13 @@ try {
 
 $twig = Twig::loadTwig();
 
+if (!$event) {
+    Twig::renderNotFoundPage('Evènement non trouvé');
+    get_footer();
+
+    return;
+}
+
 if (count($event->dates) === 0) {
     Twig::renderNotFoundPage('Evènement cloturé');
     get_footer();
