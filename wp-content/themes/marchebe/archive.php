@@ -18,6 +18,9 @@ $children = $wpRepository->getChildrenOfCategory($cat_ID);
 $category = get_category($cat_ID);
 $category->url = get_category_link($cat_ID);
 $description = category_description($cat_ID);
+if($description) {
+    $description = make_clickable($description);
+}
 $title = single_cat_title('', false);
 $currentSite = get_current_blog_id();
 
