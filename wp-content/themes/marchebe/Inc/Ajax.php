@@ -58,6 +58,10 @@ class Ajax
         $category = get_category($categoryId);
         $description = $category ? category_description($categoryId) : '';
 
+        if ($description) {
+            $description = make_clickable($description);
+        }
+
         wp_send_json_success([
             'posts' => $posts,
             'description' => $description,
@@ -75,7 +79,7 @@ class Ajax
     {
         check_ajax_referer('set_cookie_nonce', 'nonce');
 
-        $essential =  true;
+        $essential = true;
         $statistics = isset($_POST['statistics']) ? filter_var($_POST['statistics'], FILTER_VALIDATE_BOOLEAN) : false;
         $encapsulated = isset($_POST['encapsulated']) ? filter_var(
             $_POST['encapsulated'],
