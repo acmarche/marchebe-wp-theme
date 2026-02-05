@@ -68,6 +68,7 @@ try {
         'paths' => [$paths],
         'site' => Theme::TOURISME,
         'tags' => $tags,
+        'images' => $event->images,
         'thumbnail' => $image,
         'thumbnail_srcset' => null,
         'thumbnail_sizes' => null,
