@@ -71,11 +71,19 @@ class Assets
             wp_get_theme()->get('Version')
         );
 
-        // Alpine.js (depends on header-nav and category-show)
+        // Image gallery component (must load before Alpine.js)
+        wp_enqueue_script(
+            'marchebe-image-gallery',
+            $themeUri.'/assets/js/image-gallery.js',
+            [],
+            wp_get_theme()->get('Version')
+        );
+
+        // Alpine.js (depends on header-nav, category-show, and image-gallery)
         wp_enqueue_script(
             'marchebe-alpine',
             'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js',
-            ['marchebe-header-nav', 'marchebe-category-show'],
+            ['marchebe-header-nav', 'marchebe-category-show', 'marchebe-image-gallery'],
             null
         );
     }
@@ -83,7 +91,7 @@ class Assets
     function add_defer_attribute($tag, $handle): string
     {
         // Add defer to Alpine.js and component scripts
-        if (in_array($handle, ['marchebe-alpine', 'marchebe-header-nav', 'marchebe-category-show'])) {
+        if (in_array($handle, ['marchebe-alpine', 'marchebe-header-nav', 'marchebe-category-show', 'marchebe-image-gallery'])) {
             return str_replace(' src', ' defer src', $tag);
         }
 
