@@ -20,8 +20,8 @@ class Data
             'iconcolor' => 'text-cta-dark',
         ],
         [
-            'name' => 'E-guichet',
-            'description' => 'Démarches et commande en ligne',
+            'name' => 'E-guichet - Emploi',
+            'description' => 'Démarches et commandes en ligne',
             'icon' => 'fas fa-id-card',
             'url' => 'https://marche.guichet-citoyen.be/',
             'id' => 2,
