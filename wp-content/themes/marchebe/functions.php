@@ -28,7 +28,7 @@ use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
 if (WP_DEBUG === false) {
     HtmlErrorRenderer::setTemplate(get_template_directory().'/error500.php');
 } else {
-    //Debug::enable();
+    Debug::enable();
 }
 new SetupTheme();
 new Assets();
