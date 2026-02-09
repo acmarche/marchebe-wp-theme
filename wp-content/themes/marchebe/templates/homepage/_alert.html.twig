@@ -1,0 +1,30 @@
+{% if alertPage and alertPage.post_status == 'publish' %}
+    <section x-data="{ visible: !localStorage.getItem('alertDismissed') || Date.now() - parseInt(localStorage.getItem('alertDismissed')) > 3 * 24 * 60 * 60 * 1000 }"
+             x-show="visible"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="bg-amber-50 border-y border-amber-300">
+        <div class="container mx-auto px-4 md:px-6 py-4 flex items-center gap-3 md:gap-4">
+            <div class="flex items-center gap-2 text-amber-700 shrink-0">
+                <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+            </div>
+            <div class="flex-1 text-center md:text-left">
+                <h2 class="font-bold text-amber-900 text-lg">{{ alertPage.post_title }}</h2>
+                {% if alertPage.post_excerpt %}
+                    <p class="text-amber-800 text-sm mt-1">{{ alertPage.post_excerpt }}</p>
+                {% endif %}
+            </div>
+            <a href="{{ alertPage.url }}"
+               class="hidden md:inline-flex shrink-0 items-center gap-1 bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors duration-200">
+                Lire la suite
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+            <button @click="localStorage.setItem('alertDismissed', Date.now()); visible = false"
+                    class="shrink-0 text-amber-700 hover:text-amber-900 transition-colors p-1 cursor-pointer"
+                    aria-label="Fermer l'alerte">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+    </section>
+{% endif %}

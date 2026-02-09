@@ -7,6 +7,7 @@
 namespace AcMarche\Theme\Templates;
 
 use AcMarche\Theme\Data\Data;
+use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Mailer;
 use AcMarche\Theme\Lib\Pivot\Repository\PivotRepository;
 use AcMarche\Theme\Lib\Sort\SortLink;
@@ -21,7 +22,7 @@ get_header();
 $wpRepository = new WpRepository();
 $pivotRepository = new PivotRepository();
 try {
-    $events = $pivotRepository->loadEvents(skip: true, purgeCache: WP_DEBUG);
+    $events = $pivotRepository->loadEvents(purgeCache: WP_DEBUG, skip: true);
     foreach ($events as $key => $event) {
         if (in_array($event->codeCgt, Data::$eventsToSkip)) {
             unset($events[$key]);
@@ -36,6 +37,11 @@ $events = array_slice($events, 0, 8);
 $news = $wpRepository->getNews();
 $news = array_slice($news, 0, 6);
 
+$alertPage = get_post(Theme::PAGE_ALERT);
+if ($alertPage) {
+    $alertPage->url = get_permalink($alertPage);
+}
+
 $twig = Twig::loadTwig();
 try {
     echo $twig->render('@AcMarche/homepage.html.twig', [
@@ -44,6 +50,7 @@ try {
         'shortcuts' => Data::shortcuts,
         'widgets' => Data::widgets,
         'partners' => Data::partners,
+        'alertPage' => $alertPage,
         'sortLink' => SortLink::linkSortNews(),
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
