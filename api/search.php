@@ -9,20 +9,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 require_once(__DIR__.'/../wp-load.php');
 $searcher = new MeiliSearch();
 $searcher->initClientAndIndex();
-$keyword = $_GET['s'] ?? null;
-if (!$keyword) {
-    $response = new JsonResponse(['error' => 'no keyword'], 500);
+$keyword = trim((string)($_GET['s'] ?? ''));
+if ($keyword === '' || mb_strlen($keyword) > 200) {
+    $response = new JsonResponse(['error' => 'invalid keyword'], 400);
     $response->send();
+    exit;
 }
 try {
     $searching = $searcher->doSearch($keyword);
     $hits = $searching->getHits();
-    $count = $searching->count();
     $response = new JsonResponse($hits);
     $response->send();
 } catch (Exception $e) {
-    Mailer::sendError("wp error search", $e->getMessage());
-    $hits = ['error' => $e->getMessage()];
-    $response = new JsonResponse($hits, 500);
+    $response = new JsonResponse(['error' => 'search failed'], 500);
     $response->send();
 }
