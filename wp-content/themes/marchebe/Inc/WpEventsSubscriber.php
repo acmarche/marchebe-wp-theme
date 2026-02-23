@@ -16,8 +16,9 @@ class WpEventsSubscriber
     {
         if (!$update) {
             try {
-                $server = new MeiliServer();
-                $server->addPost($post);
+                $meiliServer = new MeiliServer();
+                $meiliServer->initClientAndIndex();
+                $meiliServer->addPost($post);
             } catch (\Exception $exception) {
 
             }
@@ -26,9 +27,10 @@ class WpEventsSubscriber
 
     function postDeleted(int $post_ID, \WP_Post $post): void
     {
-        $server = new MeiliServer();
+        $meiliServer = new MeiliServer();
+        $meiliServer->initClientAndIndex();
         try {
-            $server->deleteDocument($post_ID, "post", get_current_blog_id());
+            $meiliServer->deleteDocument($post_ID, "post", get_current_blog_id());
         } catch (\Exception $exception) {
 
         }
