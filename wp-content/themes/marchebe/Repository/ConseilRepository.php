@@ -6,6 +6,8 @@ use Symfony\Component\Finder\Finder;
 
 class ConseilRepository
 {
+    public const ORDRE_DIRECTORY = '/var/www/marche-wp/wp-content/uploads/conseil/ordre/';
+
     public function getAllOrdre(): array
     {
         global $wpdb;

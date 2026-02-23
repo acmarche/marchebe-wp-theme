@@ -16,6 +16,7 @@
     "symfony/console": "^8.0",
     "symfony/dotenv": "^8.0",
     "symfony/error-handler": "8.0.*",
+    "symfony/filesystem": "8.0.*",
     "symfony/finder": "^8.0",
     "symfony/http-client": "^8.0",
     "symfony/http-foundation": "^8.0",
