@@ -42,7 +42,7 @@ class MenuRepository
         );
     }
 
-    public function getItems(string $site = null): array
+    public function getItems(string|null $site = null): array
     {
         $menu = wp_get_nav_menu_object(self::MENU_NAME);
 
