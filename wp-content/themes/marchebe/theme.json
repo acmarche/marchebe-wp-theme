@@ -1,8 +1,9 @@
 {
-  "version": 2,
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
   "settings": {
     "layout": {
-      "contentSize": "840px",
+      "contentSize": "1200px",
       "wideSize": "1100px"
     }
   }
