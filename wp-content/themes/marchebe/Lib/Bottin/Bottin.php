@@ -12,26 +12,16 @@ class Bottin
     public const ECO = 511;
     public const SANTECO = 636;
 
-    public const ALL = [self::COMMERCES, self::LIBERALES, self::PHARMACIES, self::ECO, self::SANTECO];
+    public const array ALL = [self::COMMERCES, self::LIBERALES, self::PHARMACIES, self::ECO, self::SANTECO];
 
-    public static function getUrlBottin(): string
+    public static function urlImage(array $image): string
     {
-        return $_ENV['DB_BOTTIN_URL'].'/bottin/fiches/';
-    }
-
-    public static function urlImage( array $image): string
-    {
-        return self::getUrlBottin().$image['file_name'];
+        return $_ENV['DB_BOTTIN_URL'].'/'.$image['file_name'];
     }
 
     public static function getUrlDocument(): string
     {
         return $_ENV['DB_BOTTIN_URL'].'/bottin/documents/';
-    }
-
-    public function getImageUrl(): void
-    {
-        //  /public/bottin/fiches/
     }
 
     public static function getExcerpt(\stdClass $fiche): string

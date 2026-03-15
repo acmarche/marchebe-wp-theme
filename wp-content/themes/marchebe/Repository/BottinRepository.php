@@ -168,7 +168,7 @@ class BottinRepository
         $logo = null;
 
         if ($images !== []) {
-            $logo = Bottin::getUrlBottin().$id.DIRECTORY_SEPARATOR.$images[0]['file_name'];
+            $logo = $_ENV['DB_BOTTIN_URL'].'/'.$images[0]['file_name'];
         }
 
         return $logo;
