@@ -299,9 +299,9 @@ class BottinRepository
     public function findByFicheIdWpSite(object $fiche): int
     {
         if ($classementPrincipal = $this->getCategoriePrincipale($fiche)) {
-            list($vide, $root) = explode('/', $classementPrincipal->materialized_path);
-            if ($root) {
-                return match ($root) {
+            $rootId = $this->findRootCategoryId($classementPrincipal);
+            if ($rootId) {
+                return match ((string) $rootId) {
                     '485' => Theme::TOURISME,
                     '486' => Theme::SPORT,
                     '487' => Theme::SOCIAL,
@@ -321,13 +321,23 @@ class BottinRepository
     public function findRootOfBottinFiche(object $fiche): int
     {
         if ($classementPrincipal = $this->getCategoriePrincipale($fiche)) {
-            list($vide, $root) = explode('/', $classementPrincipal->materialized_path);
-            if ($root) {
-                return $root;
-            }
+            return $this->findRootCategoryId($classementPrincipal);
         }
 
         return 0;
+    }
+
+    private function findRootCategoryId(object $category): int
+    {
+        while ($category->parent_id) {
+            $parent = $this->getCategory($category->parent_id);
+            if (!$parent) {
+                break;
+            }
+            $category = $parent;
+        }
+
+        return $category->id;
     }
 
     private function sortFiches(array $fiches): array
@@ -336,11 +346,11 @@ class BottinRepository
             $fiches,
             function ($a, $b) {
                 {
-                    if ($a->compagny == $b->compagny) {
+                    if ($a->company == $b->company) {
                         return 0;
                     }
 
-                    return ($a->compagny < $b->compagny) ? -1 : 1;
+                    return ($a->company < $b->company) ? -1 : 1;
                 }
             }
         );

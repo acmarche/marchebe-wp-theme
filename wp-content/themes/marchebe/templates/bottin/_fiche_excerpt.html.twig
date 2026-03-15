@@ -1,22 +1,22 @@
-{{ fiche.localite }}
+{{ fiche.city }}
 
-{% if fiche.nom %}
-    {{ fiche.nom }} {{fiche.prenom }}
+{% if fiche.last_name %}
+    {{ fiche.last_name }} {{fiche.first_name }}
 {% endif %}
 
 <br/>
 
-{% if fiche.telephone %}
-    {{ fiche.telephone }}
+{% if fiche.phone %}
+    {{ fiche.phone }}
 {% endif %}
 
-{% if fiche.gsm %}
+{% if fiche.mobile %}
 
-    {% if fiche.telephone %} - {% endif %}  {{ fiche.gsm }}
+    {% if fiche.phone %} - {% endif %}  {{ fiche.mobile }}
 {% endif %}
 
-{% if fiche.telephone_autre %}
-    {% if fiche.gsm %} - {% endif %} {{ fiche.telephone_autre }}
+{% if fiche.phone_other %}
+    {% if fiche.mobile %} - {% endif %} {{ fiche.phone_other }}
 {% endif %}
 
 {% if fiche.email %}

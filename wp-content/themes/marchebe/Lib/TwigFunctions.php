@@ -13,12 +13,12 @@ class TwigFunctions
             'fichePhones',
             function (\stdClass $fiche): array {
                 $phoneFields = [
-                    $fiche->telephone ?? null,
-                    $fiche->telephone_autre ?? null,
-                    $fiche->gsm ?? null,
-                    $fiche->contact_gsm ?? null,
-                    $fiche->contact_telephone ?? null,
-                    $fiche->contact_telephone_autre ?? null,
+                    $fiche->phone ?? null,
+                    $fiche->phone_other ?? null,
+                    $fiche->mobile ?? null,
+                    $fiche->contact_mobile ?? null,
+                    $fiche->contact_phone ?? null,
+                    $fiche->contact_phone_other ?? null,
                 ];
 
                 return array_values(array_filter($phoneFields, fn($phone) => !empty($phone)));
@@ -50,7 +50,7 @@ class TwigFunctions
                     return "https://www.google.com/maps/search/?api=1&query=".$fiche->latitude.",".$fiche->longitude;
                 }
 
-                $address = "$fiche->rue $fiche->numero , $fiche->cp $fiche->localite";
+                $address = "$fiche->street $fiche->number , $fiche->postal_code $fiche->city";
 
                 return "https://www.google.com/maps/search/?api=1&query=".urlencode($address);
 

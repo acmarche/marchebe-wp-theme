@@ -78,7 +78,7 @@ class Seo
             $cats = '';
             $categories = $bottinRepository->getCategoriesOfFiche($fiche->id);
             $comment = $fiche->comment1.' '.$fiche->comment2;
-            self::$metas['title'] = $fiche->societe.' | ';
+            self::$metas['title'] = $fiche->company.' | ';
             foreach ($categories as $category) {
                 $cats .= $category->name;
             }

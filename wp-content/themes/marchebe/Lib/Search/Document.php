@@ -73,7 +73,7 @@ class Document
         $document = new Document();
         $nameSite = Theme::getTitleBlog($idWpSite);
         $document->id = self::createId($fiche->id, "fiche", $idWpSite);
-        $document->name = Cleaner::cleandata($fiche->societe);
+        $document->name = Cleaner::cleandata($fiche->company);
         $document->source = $source;
         $document->excerpt = Bottin::getExcerpt($fiche);
         $document->content = DataForSearch::getContentFiche($fiche);

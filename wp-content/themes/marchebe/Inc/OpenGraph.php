@@ -181,7 +181,7 @@ class OpenGraph
                 $data['type'] = 'article';
                 $category = $bottinRepository->getCategoriePrincipale($fiche->id);
 
-                $data['title'] = $fiche->societe.' | '.$category?->name.' | '.$this->siteName;
+                $data['title'] = $fiche->company.' | '.$category?->name.' | '.$this->siteName;
 
                 $document = Document::documentFromFiche(
                     $fiche,
