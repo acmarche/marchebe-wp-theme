@@ -35,7 +35,7 @@ class BottinRepository
 
     public function getClassementsFiche(int $ficheId): array|bool
     {
-        $sql = 'SELECT * FROM classements WHERE `fiche_id` = '.$ficheId.' ORDER BY `principal` DESC ';
+        $sql = 'SELECT * FROM category_shop WHERE `shop_id` = '.$ficheId.' ORDER BY `principal` DESC ';
         $query = $this->execQuery($sql);
 
         return $query->fetchAll();
@@ -86,7 +86,7 @@ class BottinRepository
      */
     public function getFicheById(int $id): bool|object
     {
-        $sql = 'SELECT * FROM fiche WHERE `id` = '.$id;
+        $sql = 'SELECT * FROM shops WHERE `id` = '.$id;
         $query = $this->execQuery($sql);
 
         return $query->fetch(\PDO::FETCH_OBJ);
@@ -101,7 +101,7 @@ class BottinRepository
     public function getFicheBySlug(string $slug): ?object
     {
         $this->init();
-        $sql = 'SELECT * FROM fiche WHERE `slug` = :slug ';
+        $sql = 'SELECT * FROM shops WHERE `slug` = :slug ';
         $sth = $this->dbh->prepare($sql, array(\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY));
         $sth->execute(array(':slug' => $slug));
         if (!$data = $sth->fetch(\PDO::FETCH_OBJ)) {
@@ -117,7 +117,7 @@ class BottinRepository
      */
     public function getFiches(): array|bool
     {
-        $sql = 'SELECT * FROM fiche';
+        $sql = 'SELECT * FROM shops';
         $query = $this->execQuery($sql);
 
         return $query->fetchAll(\PDO::FETCH_OBJ);
@@ -128,7 +128,7 @@ class BottinRepository
      */
     public function getImagesFiche(int $id): array|bool
     {
-        $sql = 'SELECT * FROM fiche_images WHERE `fiche_id` = '.$id.' ORDER BY `principale` DESC';
+        $sql = 'SELECT * FROM media WHERE `shop_id` = '.$id.' AND `mime_type` LIKE \'image%\' ORDER BY `is_main` DESC';
         $query = $this->execQuery($sql);
 
         return $query->fetchAll();
@@ -139,33 +139,26 @@ class BottinRepository
      */
     public function getDocuments(int $id): array|bool
     {
-        $sql = 'SELECT * FROM document WHERE `fiche_id` = '.$id.' ORDER BY `name` DESC';
+        $sql = 'SELECT * FROM media WHERE `shop_id` = '.$id.' AND `mime_type` NOT LIKE \'image%\' ORDER BY `updated_at` DESC';
         $query = $this->execQuery($sql);
 
         return $query->fetchAll();
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function getSituations(int $id): array|bool
+    public function getTags(int $id): array
     {
-        $sql = 'SELECT * FROM `fiche_situation` LEFT JOIN situation ON situation.id = fiche_situation.situation_id WHERE `fiche_id` = '.$id.' ORDER BY `name` DESC';
+        $sql = 'SELECT t.id, t.name FROM shop_tag st JOIN tags t ON st.tag_id = t.id WHERE st.shop_id = '.$id;
         $query = $this->execQuery($sql);
 
-        return $query->fetchAll();
+        return $query->fetchAll(\PDO::FETCH_OBJ);
     }
 
     public function isCentreVille(int $id): bool
     {
-        $situations = $this->getSituations($id);
-        foreach ($situations as $situation) {
-            if (in_array('Centre ville', $situation)) {
-                return true;
-            }
-        }
+        $tags = $this->getTags($id);
 
-        return false;
+        return array_any($tags, fn($tag) => $tag->name == 'Centre ville');
+
     }
 
     public function getLogo(int $id): ?string
@@ -174,7 +167,7 @@ class BottinRepository
         $logo = null;
 
         if ($images !== []) {
-            $logo = Bottin::getUrlBottin().$id.DIRECTORY_SEPARATOR.$images[0]['image_name'];
+            $logo = Bottin::getUrlBottin().$id.DIRECTORY_SEPARATOR.$images[0]['file_name'];
         }
 
         return $logo;
@@ -190,7 +183,7 @@ class BottinRepository
         if (!$id) {
             return null;
         }
-        $sql = 'SELECT * FROM category WHERE `id` = '.$id;
+        $sql = 'SELECT * FROM categories WHERE `id` = '.$id;
         $sth = $this->execQuery($sql);
         if (!$data = $sth->fetch(\PDO::FETCH_OBJ)) {
             return null;
@@ -207,7 +200,7 @@ class BottinRepository
     public function getCategoryBySlug(string $slug): ?object
     {
         $this->init();
-        $sql = 'SELECT * FROM category WHERE `slug` = :slug ';
+        $sql = 'SELECT * FROM categories WHERE `slug` = :slug ';
         $sth = $this->dbh->prepare($sql, array(\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY));
         $sth->execute(array(':slug' => $slug));
         if (!$data = $sth->fetch(\PDO::FETCH_OBJ)) {
@@ -225,9 +218,9 @@ class BottinRepository
     public function getCategories(?int $parentId): array|bool
     {
         if ($parentId == null) {
-            $sql = 'SELECT * FROM category WHERE `parent_id` IS NULL';
+            $sql = 'SELECT * FROM categories WHERE `parent_id` IS NULL';
         } else {
-            $sql = 'SELECT * FROM category WHERE `parent_id` = '.$parentId;
+            $sql = 'SELECT * FROM categories WHERE `parent_id` = '.$parentId;
         }
         $query = $this->execQuery($sql);
 
@@ -240,32 +233,20 @@ class BottinRepository
      */
     public function getAllCategories(): array|bool
     {
-        $sql = 'SELECT * FROM category ORDER BY `name` ';
+        $sql = 'SELECT * FROM categories ORDER BY `name` ';
         $query = $this->execQuery($sql);
 
         return $query->fetchAll(\PDO::FETCH_OBJ);
     }
 
-    public function getFichesByCategories(array $ids): array
-    {
-        $fiches = [[]];
-        foreach ($ids as $id) {
-            $fiches[] = $this->getFichesByCategory($id);
-        }
-
-        $fiches = array_merge(...$fiches);
-
-        return $this->sortFiches($fiches);
-    }
-
     public function getFichesByCategory(int $id): array
     {
-        $sql = 'SELECT * FROM classements WHERE `category_id` = '.$id;
+        $sql = 'SELECT * FROM category_shop WHERE `category_id` = '.$id;
         $query = $this->execQuery($sql);
         $classements = $query->fetchAll();
 
         $fiches = array_map(
-            fn($classement) => $this->getFicheById($classement['fiche_id']),
+            fn($classement) => $this->getFicheById($classement['shop_id']),
             $classements
         );
 
@@ -355,11 +336,11 @@ class BottinRepository
             $fiches,
             function ($a, $b) {
                 {
-                    if ($a->societe == $b->societe) {
+                    if ($a->compagny == $b->compagny) {
                         return 0;
                     }
 
-                    return ($a->societe < $b->societe) ? -1 : 1;
+                    return ($a->compagny < $b->compagny) ? -1 : 1;
                 }
             }
         );
