@@ -35,6 +35,7 @@ $classementPrincipal = $bottinRepository->getCategoriePrincipale($fiche);
 $images = $bottinRepository->getImagesFiche($fiche->id);
 $documents = $bottinRepository->getDocuments($fiche->id);
 $isCentreVille = $bottinRepository->isCentreVille($fiche->id);
+$bottinTags = $bottinRepository->getTags($fiche->id);
 $logo = $bottinRepository->getLogo($fiche->id);
 if ($logo) {
     unset($images[0]);
@@ -57,6 +58,7 @@ $content = $twig->render('@AcMarche/bottin/_body.html.twig', [
     'documents' => $documents,
     'latitude' => $fiche->latitude,
     'longitude' => $fiche->longitude,
+    'bottinTags' => $bottinTags,
 ]);
 
 $pivotRepository = new PivotRepository();
