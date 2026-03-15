@@ -31,15 +31,11 @@ if (!$fiche) {
     return;
 }
 $categories = $bottinRepository->getCategoriesOfFiche($fiche->id);
-$classementPrincipal = $bottinRepository->getCategoriePrincipale($fiche);
 $images = $bottinRepository->getImagesFiche($fiche->id);
 $documents = $bottinRepository->getDocuments($fiche->id);
 $isCentreVille = $bottinRepository->isCentreVille($fiche->id);
 $bottinTags = $bottinRepository->getTags($fiche->id);
 $logo = $bottinRepository->getLogo($fiche->id);
-if ($logo) {
-    unset($images[0]);
-}
 array_map(
     function ($category) {
         $category->url = RouterBottin::getUrlCategoryBottin($category);
@@ -71,7 +67,7 @@ try {
 $thumbnail = null;
 if (count($images) > 0) {
     $image = array_first($images);
-    $thumbnail = Bottin::urlImage($fiche, $image);
+    $thumbnail = Bottin::urlImage( $image);
 }
 if (isset($fiche->post_excerpt)) {
     $fiche->post_excerpt = null;//force doesn't display

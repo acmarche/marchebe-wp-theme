@@ -19,9 +19,9 @@ class Bottin
         return $_ENV['DB_BOTTIN_URL'].'/bottin/fiches/';
     }
 
-    public static function urlImage(\stdClass $fiche, array $image): string
+    public static function urlImage( array $image): string
     {
-        return self::getUrlBottin().$fiche->id.'/'.$image['image_name'];
+        return self::getUrlBottin().$image['file_name'];
     }
 
     public static function getUrlDocument(): string
