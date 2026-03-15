@@ -4,6 +4,7 @@ namespace AcMarche\Theme\Repository;
 
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Bottin\Bottin;
+use Pdo\Mysql;
 
 class BottinRepository
 {
@@ -13,11 +14,11 @@ class BottinRepository
     private function init(): void
     {
         if (!$this->dbh) {
-            $dsn = 'mysql:host=127.0.0.1;dbname=bottin';
+            $dsn = 'mysql:host=127.0.0.1;dbname=bottin_laravel';
             $username = $_ENV['DB_BOTTIN_USER'];
             $password = $_ENV['DB_BOTTIN_PASS'];
             $options = array(
-                \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+                Mysql::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
             );
             $this->dbh = new \PDO($dsn, $username, $password, $options);
         }
