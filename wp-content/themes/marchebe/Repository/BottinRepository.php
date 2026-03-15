@@ -168,7 +168,7 @@ class BottinRepository
         $logo = null;
 
         if ($images !== []) {
-            $logo = $_ENV['DB_BOTTIN_URL'].'/'.$images[0]['file_name'];
+            $logo = $_ENV['DB_BOTTIN_URL'].'/storage/'.$images[0]['file_name'];
         }
 
         return $logo;
