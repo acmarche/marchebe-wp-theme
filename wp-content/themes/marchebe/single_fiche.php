@@ -42,6 +42,12 @@ array_map(
     },
     $categories
 );
+array_map(
+    function ($tag) {
+        $tag->url = RouterBottin::getUrlTagBottin($tag);
+    },
+    $bottinTags
+);
 $paths = $tags = [];
 $twig = Twig::loadTwig();
 $post = Document::documentFromFiche($fiche, $bottinRepository->findByFicheIdWpSite($fiche), 'bottin');
@@ -55,6 +61,7 @@ $content = $twig->render('@AcMarche/bottin/_body.html.twig', [
     'latitude' => $fiche->latitude,
     'longitude' => $fiche->longitude,
     'bottinTags' => $bottinTags,
+    'bottinCategories' => $categories,
 ]);
 
 $pivotRepository = new PivotRepository();

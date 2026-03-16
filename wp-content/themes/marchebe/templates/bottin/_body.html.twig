@@ -22,14 +22,27 @@
         {% include '@AcMarche/bottin/_address.html.twig' %}
         {% include '@AcMarche/bottin/_contact.html.twig' %}
 
+        {% if bottinCategories is defined and bottinCategories|length > 0 %}
+            <div class="mt-4">
+                <div class="flex flex-wrap gap-2 mt-2">
+                    {% for category in bottinCategories %}
+                        <a href="{{ category.url }}"
+                           class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-slate-100 text-cta-brown hover:bg-slate-200 transition-colors">
+                            {{ category.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
         {% if bottinTags is defined and bottinTags|length > 0 %}
             <div class="mt-4">
-                <h3>Tags</h3>
                 <div class="flex flex-wrap gap-2 mt-2">
                     {% for tag in bottinTags %}
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200">
+                        <a href="{{ tag.url }}"
+                           class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200 hover:bg-teal-200 dark:hover:bg-teal-800 transition-colors">
                             {{ tag.name }}
-                        </span>
+                        </a>
                     {% endfor %}
                 </div>
             </div>

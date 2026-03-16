@@ -14,7 +14,7 @@ class BottinRepository
     private function init(): void
     {
         if (!$this->dbh) {
-            $dsn = 'mysql:host=127.0.0.1;dbname=bottin_laravel';
+            $dsn = 'mysql:host=127.0.0.1;dbname=bottin';
             $username = $_ENV['DB_BOTTIN_USER'];
             $password = $_ENV['DB_BOTTIN_PASS'];
             $options = array(
@@ -148,7 +148,28 @@ class BottinRepository
 
     public function getTags(int $id): array
     {
-        $sql = 'SELECT t.id, t.name FROM shop_tag st JOIN tags t ON st.tag_id = t.id WHERE st.shop_id = '.$id;
+        $sql = 'SELECT t.id, t.name, t.slug FROM shop_tag st JOIN tags t ON st.tag_id = t.id WHERE st.shop_id = '.$id;
+        $query = $this->execQuery($sql);
+
+        return $query->fetchAll(\PDO::FETCH_OBJ);
+    }
+
+    public function getTagBySlug(string $slug): ?object
+    {
+        $this->init();
+        $sql = 'SELECT * FROM tags WHERE `slug` = :slug';
+        $sth = $this->dbh->prepare($sql, array(\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY));
+        $sth->execute(array(':slug' => $slug));
+        if (!$data = $sth->fetch(\PDO::FETCH_OBJ)) {
+            return null;
+        }
+
+        return $data;
+    }
+
+    public function getFichesByTag(int $tagId): array
+    {
+        $sql = 'SELECT s.* FROM shop_tag st JOIN shops s ON st.shop_id = s.id WHERE st.tag_id = '.$tagId.' ORDER BY s.company';
         $query = $this->execQuery($sql);
 
         return $query->fetchAll(\PDO::FETCH_OBJ);

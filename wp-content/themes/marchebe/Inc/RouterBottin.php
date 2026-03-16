@@ -12,6 +12,9 @@ class RouterBottin
     public const PARAM_CATEGORY = 'slugcategory';
     public const CATEGORY_ROUTE = 'bwp/categorie';
     public const SINGLE_CATEGORY = 'single_category';
+    public const PARAM_TAG = 'slugtag';
+    public const TAG_ROUTE = 'bottin/tag/';
+    public const SINGLE_TAG = 'single_tag';
     private static ?BottinRepository $bottinRepository = null;
 
     public function __construct()
@@ -65,6 +68,11 @@ class RouterBottin
             'index.php?'.self::SINGLE_CATEGORY.'=1&'.self::PARAM_CATEGORY.'=$matches[1]',  // Query vars
             'top'  // Priority
         );
+        add_rewrite_rule(
+            self::TAG_ROUTE.'([a-zA-Z0-9-]+)[/]?$',
+            'index.php?'.self::SINGLE_TAG.'=1&'.self::PARAM_TAG.'=$matches[1]',
+            'top'
+        );
     }
 
     function add_query_vars($vars): array
@@ -73,6 +81,8 @@ class RouterBottin
         $vars[] = self::PARAM_FICHE;
         $vars[] = self::SINGLE_CATEGORY;
         $vars[] = self::PARAM_CATEGORY;
+        $vars[] = self::SINGLE_TAG;
+        $vars[] = self::PARAM_TAG;
 
         return $vars;
     }
@@ -106,6 +116,17 @@ class RouterBottin
                 }
             }
         }
+        if (get_query_var(self::SINGLE_TAG)) {
+            $queryVar = get_query_var(self::PARAM_TAG);
+
+            if ($queryVar) {
+                $custom_template = locate_template('tag_bottin.php');
+
+                if ($custom_template) {
+                    return $custom_template;
+                }
+            }
+        }
 
         return $template;
     }
@@ -117,6 +138,11 @@ class RouterBottin
         }
 
         return self::getBaseUrlSite(Theme::ECONOMIE).self::CATEGORY_ROUTE.'/'.$category->slug;
+    }
+
+    public static function getUrlTagBottin(\stdClass $tag): string
+    {
+        return self::getBaseUrlSite(Theme::ECONOMIE).self::TAG_ROUTE.$tag->slug;
     }
 
     public static function getUrlFicheBottin(int $idSite, \stdClass $fiche): string
