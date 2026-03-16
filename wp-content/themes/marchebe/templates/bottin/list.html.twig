@@ -1,0 +1,38 @@
+<div class="bg-slate-50 mt-16">
+    <header class="relative w-full overflow-hidden h-[8vh] md:h-[12vh]">
+        <div class="absolute inset-0 bg-slate-100"></div>
+    </header>
+    <main id="main-content" class="relative z-20 -mt-16 md:-mt-24">
+        <article class="md:max-w-5xl mx-auto bg-white rounded-xl shadow-2xl p-4 md:p-10 mb-3">
+            <h1 class="text-3xl font-bold text-cta-dark mb-6">{{ title }}</h1>
+            {% if fiches|length > 0 %}
+                <p class="text-sm text-gray-500 mb-4">{{ fiches|length }} résultat{{ fiches|length > 1 ? 's' : '' }}</p>
+                <ul class="divide-y divide-gray-200">
+                    {% for fiche in fiches %}
+                        <li class="py-4 flex items-center justify-between group">
+                            <div class="block w-full">
+                                <a href="{{ fiche.url }}" class="font-semibold text-cta-dark group-hover:text-citoyen transition-colors">
+                                    {{ fiche.company }}
+                                </a>
+                                <div class="flex flex-row gap-2 mt-1 text-sm text-gray-500">
+                                    {% if fiche.city %}
+                                        <span>{{ fiche.city }}</span>
+                                    {% endif %}
+                                    {% if fiche.phone %}
+                                        <span>{{ fiche.phone }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <svg class="h-5 w-5 text-gray-400 group-hover:text-cta-dark transition-colors flex-shrink-0" fill="none"
+                                 viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-gray-500">Aucun résultat trouvé.</p>
+            {% endif %}
+        </article>
+    </main>
+</div>
