@@ -4,7 +4,6 @@ namespace AcMarche\Theme\Repository;
 
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Bottin\Bottin;
-use Pdo\Mysql;
 
 class BottinRepository
 {
@@ -18,7 +17,7 @@ class BottinRepository
             $username = $_ENV['DB_BOTTIN_USER'];
             $password = $_ENV['DB_BOTTIN_PASS'];
             $options = array(
-                Mysql::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+                Pdo\Mysql::ATTR_INIT_COMMAND => 'SET NAMES utf8',
             );
             $this->dbh = new \PDO($dsn, $username, $password, $options);
         }
@@ -323,7 +322,7 @@ class BottinRepository
         if ($classementPrincipal = $this->getCategoriePrincipale($fiche)) {
             $rootId = $this->findRootCategoryId($classementPrincipal);
             if ($rootId) {
-                return match ((string) $rootId) {
+                return match ((string)$rootId) {
                     '485' => Theme::TOURISME,
                     '486' => Theme::SPORT,
                     '487' => Theme::SOCIAL,
