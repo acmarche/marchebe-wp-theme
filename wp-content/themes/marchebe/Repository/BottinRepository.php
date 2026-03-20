@@ -4,6 +4,7 @@ namespace AcMarche\Theme\Repository;
 
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Bottin\Bottin;
+use Pdo\Mysql;
 
 class BottinRepository
 {
@@ -17,7 +18,7 @@ class BottinRepository
             $username = $_ENV['DB_BOTTIN_USER'];
             $password = $_ENV['DB_BOTTIN_PASS'];
             $options = array(
-                Pdo\Mysql::ATTR_INIT_COMMAND => 'SET NAMES utf8',
+                Mysql::ATTR_INIT_COMMAND => 'SET NAMES utf8',
             );
             $this->dbh = new \PDO($dsn, $username, $password, $options);
         }
