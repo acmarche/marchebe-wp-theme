@@ -1,11 +1,11 @@
 <?php
 
-require_once dirname(__DIR__).'/vendor/autoload.php';
+require_once dirname(__DIR__).'/../vendor/autoload.php';
 
 use Symfony\Component\Dotenv\Dotenv;
 
 $dotenv = new Dotenv();
-$dotenv->load(dirname(__DIR__).'/.env');
+$dotenv->load(dirname(__DIR__).'/../.env');
 
 $dsn = 'mysql:host=127.0.0.1;dbname=guichet';
 $username = $_ENV['DB_GUICHET_USER'];
