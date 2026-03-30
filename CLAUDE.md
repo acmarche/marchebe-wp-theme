@@ -17,6 +17,9 @@ npx @tailwindcss/cli -i wp-content/themes/marchebe/assets/css/tailwind.css -o wp
 npx @tailwindcss/cli -i wp-content/themes/marchebe/assets/css/tailwind.css -o wp-content/themes/marchebe/assets/css/marchebe.css
 ```
 
+```bash
+npx @tailwindcss/cli -c tailwind.guichet.config.js -i api/guichet/tailwind.css -o api/guichet/guichet.css                                                                                                                     
+```
 ### Console Commands
 ```bash
 php console pivot:cache          # Fetch & cache Pivot tourism API data (--all, --parse, --purge)

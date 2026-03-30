@@ -54,7 +54,7 @@ foreach ($tickets as $ticket) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guichet - File d'attente</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="guichet.css">
     <meta http-equiv="refresh" content="15">
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
