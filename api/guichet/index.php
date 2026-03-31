@@ -57,46 +57,46 @@ foreach ($tickets as $ticket) {
     <link rel="stylesheet" href="guichet.css">
     <meta http-equiv="refresh" content="15">
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
+<body>
 
-<div class="p-8">
-    <header class="text-center mb-10">
-        <h1 class="text-5xl font-bold tracking-tight">Guichet - File d'attente</h1>
-        <p class="text-2xl text-gray-400 mt-2"><?= date('d/m/Y - H:i') ?></p>
-    </header>
+<div class="container">
+    <div class="header">
+        <h1>Guichet - File d'attente</h1>
+        <p class="date"><?= date('d/m/Y - H:i') ?></p>
+    </div>
 
     <?php if (!empty($called)): ?>
-    <section class="mb-12">
-        <h2 class="text-3xl font-semibold text-center mb-6 text-green-400">Tickets appelés</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-7xl mx-auto">
+    <div class="section">
+        <h2 class="section-title section-title-green">Tickets appel&eacute;s</h2>
+        <div class="grid">
             <?php foreach ($called as $ticket): ?>
-            <div class="bg-green-800/40 border-2 border-green-500 rounded-2xl p-8 text-center">
-                <div class="text-7xl font-black mb-4"><?= htmlspecialchars($ticket['number']) ?></div>
-                <div class="text-3xl font-bold text-green-300"><?= htmlspecialchars($ticket['office_name']) ?></div>
-                <div class="text-xl text-gray-300 mt-2"><?= htmlspecialchars($ticket['service']) ?></div>
+            <div class="card-called">
+                <div class="number"><?= htmlspecialchars($ticket['number']) ?></div>
+                <div class="office"><?= htmlspecialchars($ticket['office_name']) ?></div>
+                <div class="service"><?= htmlspecialchars($ticket['service']) ?></div>
             </div>
             <?php endforeach; ?>
         </div>
-    </section>
+    </div>
     <?php endif; ?>
 
     <?php if (!empty($waiting)): ?>
-    <section>
-        <h2 class="text-3xl font-semibold text-center mb-6 text-yellow-400">En attente</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 max-w-7xl mx-auto">
+    <div class="section">
+        <h2 class="section-title section-title-yellow">En attente</h2>
+        <div class="grid">
             <?php foreach ($waiting as $ticket): ?>
-            <div class="bg-yellow-800/30 border border-yellow-600 rounded-xl p-6 text-center">
-                <div class="text-5xl font-black mb-2"><?= htmlspecialchars($ticket['number']) ?></div>
-                <div class="text-2xl text-yellow-300">Veuillez patienter</div>
-                <div class="text-lg text-gray-400 mt-1"><?= htmlspecialchars($ticket['service']) ?></div>
+            <div class="card-waiting">
+                <div class="number"><?= htmlspecialchars($ticket['number']) ?></div>
+                <div class="status">Veuillez patienter</div>
+                <div class="service"><?= htmlspecialchars($ticket['service']) ?></div>
             </div>
             <?php endforeach; ?>
         </div>
-    </section>
+    </div>
     <?php endif; ?>
 
     <?php if (empty($called) && empty($waiting)): ?>
-    <div class="text-center text-4xl text-gray-500 mt-32">Aucun ticket pour aujourd'hui</div>
+    <div class="empty">Aucun ticket pour aujourd'hui</div>
     <?php endif; ?>
 </div>
 
