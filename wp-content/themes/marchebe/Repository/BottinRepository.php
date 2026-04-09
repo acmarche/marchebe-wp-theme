@@ -129,7 +129,7 @@ class BottinRepository
      */
     public function getImagesFiche(int $id): array|bool
     {
-        $sql = 'SELECT * FROM media WHERE `shop_id` = '.$id.' AND `mime_type` LIKE \'image%\' ORDER BY `is_main` DESC';
+        $sql = 'SELECT * FROM media WHERE `model_id` = '.$id.' AND `mime_type` LIKE \'image%\' ORDER BY `order_column` ASC';
         $query = $this->execQuery($sql);
 
         return $query->fetchAll();
@@ -140,7 +140,7 @@ class BottinRepository
      */
     public function getDocuments(int $id): array|bool
     {
-        $sql = 'SELECT * FROM media WHERE `shop_id` = '.$id.' AND `mime_type` NOT LIKE \'image%\' ORDER BY `updated_at` DESC';
+        $sql = 'SELECT * FROM media WHERE `model_id` = '.$id.' AND `mime_type` NOT LIKE \'image%\' ORDER BY `order_column` ASC';
         $query = $this->execQuery($sql);
 
         return $query->fetchAll();
@@ -189,7 +189,7 @@ class BottinRepository
         $logo = null;
 
         if ($images !== []) {
-            $logo = $_ENV['DB_BOTTIN_URL'].'/storage/'.$images[0]['file_name'];
+            $logo = $_ENV['DB_BOTTIN_URL'].'/storage/'.$images[0]['id'].'/'.$images[0]['file_name'];
         }
 
         return $logo;

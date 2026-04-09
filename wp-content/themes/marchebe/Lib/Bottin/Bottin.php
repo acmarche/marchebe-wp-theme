@@ -16,7 +16,7 @@ class Bottin
 
     public static function urlImage(array $image): string
     {
-        return $_ENV['DB_BOTTIN_URL'].'/storage/'.$image['file_name'];
+        return $_ENV['DB_BOTTIN_URL'].'/storage/'.$image['id'].'/'.$image['file_name'];
     }
 
     public static function getUrlDocument(): string
