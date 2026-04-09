@@ -82,7 +82,6 @@ if (isset($fiche->post_excerpt)) {
 try {
     echo $twig->render('@AcMarche/article/show.html.twig', [
         'post' => $post,
-        'ficheId' => $fiche->id,
         'title' => $post->name,
         'body' => $content,
         'paths' => $paths,
