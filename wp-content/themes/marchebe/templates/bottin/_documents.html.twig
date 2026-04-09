@@ -1,12 +1,15 @@
 {% if documents is defined and documents|length > 0 %}
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-        {% for document in documents %}
-            <a href="https://bottin.marche.be/storage/bottin/fiches/{{ fiche.id }}/{{ document.file_name }}"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
-                {{ document.name }}
-            </a>
-        {% endfor %}
+    <div class="">
+        <h3>Documents</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+            {% for document in documents %}
+                <a href="https://bottin.marche.be/storage/bottin/fiches/{{ fiche.id }}/{{ document.file_name }}"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
+                    {{ document.name }}
+                </a>
+            {% endfor %}
+        </div>
     </div>
 {% endif %}
