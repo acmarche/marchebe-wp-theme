@@ -74,7 +74,7 @@ try {
 $thumbnail = null;
 if (count($images) > 0) {
     $image = array_first($images);
-    $thumbnail = Bottin::urlImage( $image);
+    $thumbnail = Bottin::urlImage($fiche->id, $image);
 }
 if (isset($fiche->post_excerpt)) {
     $fiche->post_excerpt = null;//force doesn't display

@@ -195,7 +195,7 @@ class OpenGraph
                 $images = $bottinRepository->getImagesFiche($fiche->id);
                 if (count($images) > 0) {
                     $image = array_first($images);
-                    $data['image'] = Bottin::urlImage( $image);
+                    $data['image'] = Bottin::urlImage($fiche->id, $image);
                 }
 
                 if (!empty($fiche->created_at)) {

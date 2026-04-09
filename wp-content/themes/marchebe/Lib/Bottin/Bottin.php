@@ -14,9 +14,9 @@ class Bottin
 
     public const array ALL = [self::COMMERCES, self::LIBERALES, self::PHARMACIES, self::ECO, self::SANTECO];
 
-    public static function urlImage(array $image): string
+    public static function urlImage(int $ficheId,array $image): string
     {
-        return $_ENV['DB_BOTTIN_URL'].'/storage/'.$image['id'].'/'.$image['file_name'];
+        return $_ENV['DB_BOTTIN_URL'].'/storage/'.$ficheId.'/'.$image['file_name'];
     }
 
     public static function getUrlDocument(): string
