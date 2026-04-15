@@ -1,16 +1,19 @@
 {% if alertPage and alertPage.post_status == 'publish' %}
-    <section x-data="{ visible: !localStorage.getItem('alertDismissed') || Date.now() - parseInt(localStorage.getItem('alertDismissed')) > 3 * 24 * 60 * 60 * 1000 }"
-             x-show="visible"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="bg-amber-50 border-y border-amber-300">
+    <section
+            x-data="{ visible: !localStorage.getItem('alertDismissed') || Date.now() - parseInt(localStorage.getItem('alertDismissed')) > 3 * 24 * 60 * 60 * 1000 }"
+            x-show="visible"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="bg-amber-50 border-y border-amber-300">
         <div class="container mx-auto px-4 md:px-6 py-4 flex items-center gap-3 md:gap-4">
             <div class="flex items-center gap-2 text-amber-700 shrink-0">
                 <i class="fa-solid fa-triangle-exclamation text-xl"></i>
             </div>
             <div class="flex-1 text-center md:text-left">
-                <h2 class="font-bold text-amber-900 text-lg">{{ alertPage.post_title }}</h2>
+                <a href="{{ alertPage.url }}">
+                    <h2 class="font-bold text-amber-900 text-lg">{{ alertPage.post_title }}</h2>
+                </a>
                 {% if alertPage.post_excerpt %}
                     <p class="text-amber-800 text-sm mt-1">{{ alertPage.post_excerpt }}</p>
                 {% endif %}
