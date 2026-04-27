@@ -5,7 +5,6 @@ namespace AcMarche\Theme;
 use AcMarche\Theme\Inc\Ajax;
 use AcMarche\Theme\Inc\Assets;
 use AcMarche\Theme\Inc\BottinCategoryMetaBox;
-use AcMarche\Theme\Inc\CategoryEditor;
 use AcMarche\Theme\Inc\OpenGraph;
 use AcMarche\Theme\Inc\RestApi;
 use AcMarche\Theme\Inc\RouterBottin;

@@ -7,6 +7,7 @@ class SetupTheme
     public function __construct()
     {
         $this->setup();
+        add_filter('upload_mimes', [$this, 'allow_svg_upload']);
     }
 
     /**
@@ -52,5 +53,12 @@ class SetupTheme
 
         // Add support for responsive embedded content.
         add_theme_support('responsive-embeds');
+    }
+
+    public static function allow_svg_upload($mimes)
+    {
+        $mimes['svg'] = 'image/svg+xml';
+
+        return $mimes;
     }
 }
