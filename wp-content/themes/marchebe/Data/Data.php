@@ -54,14 +54,14 @@ class Data
             'iconcolor' => 'text-administration',
         ],
         [
-            'name' => 'Enfance Jeunesse',
-            'description' => 'Activités, écoles et aides',
-            'icon' => 'fas fa-child',
+            'name' => 'Travaux en cours',
+            'description' => '',
+            'icon' => 'fas fa-person-digging',
             'color' => 'text-white',
             'bgcolor' => 'bg-enfance',
             'bgcolorhover' => 'group-hover:bg-enfance',
             'iconcolor' => 'text-enfance',
-            'url' => 'https://enfance-jeunesse.marche.be',
+            'url' => '/travaux-en-cours/',
             'id' => 5,
         ],
         [
