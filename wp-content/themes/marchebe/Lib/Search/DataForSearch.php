@@ -215,7 +215,7 @@ class DataForSearch
             $root = $this->bottinRepository->findRootOfBottinFiche($fiche);
             $source = 'local';
             if (in_array($root, [Bottin::COMMERCES, Bottin::SANTECO])) {
-                $source = 'https://cap.marche.be';
+                $source = 'https://bottin.marche.be';
             }
             $documents[] = Document::documentFromFiche($fiche, $idWpSite, $source);
         }

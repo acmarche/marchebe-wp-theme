@@ -164,7 +164,7 @@ class RouterBottin
             return null;
         }
 
-        return 'https://cap.marche.be/en_GB/commerce?id='.$fiche->id;
+        return 'https://bottin.marche.be/fiche/'.$fiche->slug;
     }
 
     /**
@@ -172,7 +172,7 @@ class RouterBottin
      */
     public static function generateCategoryUrlCap(\stdClass $category): string
     {
-        $parents = [574, 520, 609, 548, 582, 553, 527, 540, 534, 636, 568, 591];
+      /*  $parents = [574, 520, 609, 548, 582, 553, 527, 540, 534, 636, 568, 591];
 
         if (in_array($category->id, $parents)) {
             $categoryId = $category->id;
@@ -181,9 +181,9 @@ class RouterBottin
             $parent = self::getBottinRepository()->getCategory($category->parent_id);
             $categoryId = $parent->id;
             $sousCategory = $category->id;
-        }
+        }*/
 
-        return "https://cap.marche.be/en_GB/liste-commercants?search=&categorie_id=$categoryId&sous_categorie_id=$sousCategory";
+        return 'https://bottin.marche.be/categorie/'.$category->slug;
     }
 
     /**
