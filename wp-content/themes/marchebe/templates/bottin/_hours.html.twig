@@ -1,60 +1,31 @@
 {% if fiche.horaires is defined and fiche.horaires|length > 0 %}
+    {% set days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'] %}
     <div class="mt-6">
-        <h4 class="text-lg font-semibold mb-4">Horaires</h4>
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 text-sm">
-                <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-3 py-2 text-left font-medium text-gray-700">Jour</th>
-                    <th class="px-3 py-2 text-center font-medium text-gray-700">Fermé ?</th>
-                    <th class="px-3 py-2 text-center font-medium text-gray-700">Ouvert à midi ?</th>
-                    <th class="px-3 py-2 text-center font-medium text-gray-700">Ouverture<br/> matinée</th>
-                    <th class="px-3 py-2 text-center font-medium text-gray-700">Fermeture<br/> matinée</th>
-                    <th class="px-3 py-2 text-center font-medium text-gray-700">Ouverture<br/> après-midi</th>
-                    <th class="px-3 py-2 text-center font-medium text-gray-700">Fermeture<br/> après-midi</th>
-                    <th class="px-3 py-2 text-center font-medium text-gray-700">Sur Rdv</th>
-                </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                {% for horaire in fiche.horaires %}
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-3 py-2 font-medium">
-                            {% set days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'] %}
-                            {{ days[horaire.day]|default('Jour ' ~ horaire.day) }}
+        <h2 class="text-lg font-semibold text-slate-900">Horaires</h2>
+        <div class="mt-3 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            <table class="w-full text-base">
+                <tbody class="divide-y divide-slate-100">
+                {% for schedule in fiche.horaires %}
+                    <tr>
+                        <td class="px-4 py-2.5 font-medium text-slate-700">
+                            {{ days[schedule.day] ?? '' }}
                         </td>
-                        <td class="px-3 py-2 text-center">
-                            {% if horaire.isClosed %}
-                                <i class="fas fa-check text-green-600"></i>
-                            {% endif %}
-                        </td>
-                        <td class="px-3 py-2 text-center">
-                            {% if horaire.isOpenAtLunch %}
-                                <i class="fas fa-check text-green-600"></i>
-                            {% endif %}
-                        </td>
-                        <td class="px-3 py-2 text-center">
-                            {% if not horaire.isClosed and horaire.morningStart %}
-                                {{ horaire.morningStart }}
-                            {% endif %}
-                        </td>
-                        <td class="px-3 py-2 text-center">
-                            {% if not horaire.isClosed and horaire.morningEnd %}
-                                {{ horaire.morningEnd }}
-                            {% endif %}
-                        </td>
-                        <td class="px-3 py-2 text-center">
-                            {% if not horaire.isClosed and horaire.noonStart %}
-                                {{ horaire.noonStart }}
-                            {% endif %}
-                        </td>
-                        <td class="px-3 py-2 text-center">
-                            {% if not horaire.isClosed and horaire.noonEnd %}
-                                {{ horaire.noonEnd }}
-                            {% endif %}
-                        </td>
-                        <td class="px-3 py-2 text-center">
-                            {% if not horaire.isClosed and horaire.isRdv %}
-                                <i class="fas fa-check text-green-600"></i>
+                        <td class="px-4 py-2.5 text-slate-600">
+                            {% if schedule.is_closed %}
+                                <span class="text-red-500">Fermé</span>
+                            {% elseif schedule.is_by_appointment %}
+                                <span class="text-amber-600">Sur rendez-vous</span>
+                            {% elseif schedule.morning_end is null and schedule.noon_start is null %}
+                                {{ schedule.morningStart }}
+                                {% if schedule.noonEnd %}- {{ schedule.noonEnd }}{% endif %}
+                            {% else %}
+                                {{ schedule.morningStart }}
+                                {% if schedule.morningEnd %}- {{ schedule.morningEnd }}{% endif %}
+                                {% if schedule.noon_start %}
+                                    <span class="mx-1 text-slate-400">|</span>
+                                    {{ schedule.noonStart }}
+                                    {% if schedule.noonEnd %}- {{ schedule.noonEnd }}{% endif %}
+                                {% endif %}
                             {% endif %}
                         </td>
                     </tr>

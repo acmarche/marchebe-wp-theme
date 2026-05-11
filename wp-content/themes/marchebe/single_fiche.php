@@ -33,6 +33,7 @@ if (!$fiche) {
 $categories = $bottinRepository->getCategoriesOfFiche($fiche->id);
 $images = $bottinRepository->getImagesFiche($fiche->id);
 $documents = $bottinRepository->getDocuments($fiche->id);
+$fiche->horaires = $bottinRepository->getSchedules($fiche->id);
 $isCentreVille = $bottinRepository->isCentreVille($fiche->id);
 $bottinTags = $bottinRepository->getTags($fiche->id);
 $logo = $bottinRepository->getLogo($fiche->id);

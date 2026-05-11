@@ -146,6 +146,27 @@ class BottinRepository
         return $query->fetchAll();
     }
 
+    public function getSchedules(int $ficheId): array
+    {
+        $this->init();
+        $sql = 'SELECT * FROM schedules WHERE `shop_id` = :shop_id ORDER BY `day` ASC';
+        $sth = $this->dbh->prepare($sql, array(\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY));
+        $sth->execute(array(':shop_id' => $ficheId));
+        $schedules = [];
+        while ($row = $sth->fetch(\PDO::FETCH_OBJ)) {
+            $row->isClosed = (bool)$row->is_closed;
+            $row->isRdv = (bool)$row->is_by_appointment;
+            $row->morningStart = $row->morning_start ? substr((string)$row->morning_start, 0, 5) : null;
+            $row->morningEnd = $row->morning_end ? substr((string)$row->morning_end, 0, 5) : null;
+            $row->noonStart = $row->noon_start ? substr((string)$row->noon_start, 0, 5) : null;
+            $row->noonEnd = $row->noon_end ? substr((string)$row->noon_end, 0, 5) : null;
+            $row->isOpenAtLunch = !$row->isClosed && $row->noonStart === null && $row->morningStart !== null;
+            $schedules[] = $row;
+        }
+
+        return $schedules;
+    }
+
     public function getTags(int $id): array
     {
         $sql = 'SELECT t.id, t.name, t.slug FROM shop_tag st JOIN tags t ON st.tag_id = t.id WHERE st.shop_id = '.$id;
