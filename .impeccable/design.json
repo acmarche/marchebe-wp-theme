@@ -1,0 +1,293 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-18T21:30:00.000Z",
+  "title": "Design System: Marche-en-Famenne",
+  "extensions": {
+    "colorMeta": {
+      "accent": {
+        "role": "primary",
+        "displayName": "Citoyen Ember",
+        "canonical": "oklch(64% 0.17 47)",
+        "legacyHex": "#e86a10",
+        "tonalRamp": [
+          "oklch(20% 0.05 47)",
+          "oklch(30% 0.08 47)",
+          "oklch(40% 0.11 47)",
+          "oklch(50% 0.14 47)",
+          "oklch(64% 0.17 47)",
+          "oklch(74% 0.15 47)",
+          "oklch(84% 0.10 47)",
+          "oklch(94% 0.04 47)"
+        ]
+      },
+      "accent-deep": {
+        "role": "primary",
+        "displayName": "Hearth Deep",
+        "canonical": "oklch(58% 0.16 47)",
+        "legacyHex": "#c0590a"
+      },
+      "support": {
+        "role": "secondary",
+        "displayName": "Ardennes Slate",
+        "canonical": "oklch(53% 0.05 215)",
+        "legacyHex": "#477e88",
+        "tonalRamp": [
+          "oklch(20% 0.02 215)",
+          "oklch(30% 0.03 215)",
+          "oklch(40% 0.04 215)",
+          "oklch(53% 0.05 215)",
+          "oklch(63% 0.045 215)",
+          "oklch(75% 0.035 215)",
+          "oklch(86% 0.02 215)",
+          "oklch(95% 0.01 215)"
+        ]
+      },
+      "support-soft": {
+        "role": "secondary",
+        "displayName": "Limestone Slate",
+        "canonical": "oklch(63% 0.045 215)",
+        "legacyHex": "#6B9CA5"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(25% 0.01 70)",
+        "legacyHex": "#312c25",
+        "tonalRamp": [
+          "oklch(15% 0.005 70)",
+          "oklch(25% 0.01 70)",
+          "oklch(35% 0.01 70)",
+          "oklch(45% 0.01 70)",
+          "oklch(58% 0.008 70)",
+          "oklch(75% 0.008 70)",
+          "oklch(88% 0.008 70)",
+          "oklch(96% 0.005 70)"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Ink Soft",
+        "canonical": "oklch(45% 0.01 70)",
+        "legacyHex": "#6a6359"
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted",
+        "canonical": "oklch(58% 0.008 70)",
+        "legacyHex": "#8e8780"
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "oklch(98% 0.005 70)",
+        "legacyHex": "#fbf9f6"
+      },
+      "vellum": {
+        "role": "neutral",
+        "displayName": "Vellum",
+        "canonical": "oklch(96% 0.008 70)",
+        "legacyHex": "#f4f1ec"
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "oklch(88% 0.01 70)",
+        "legacyHex": "#d9d3cb"
+      },
+      "field": {
+        "role": "neutral",
+        "displayName": "Field",
+        "canonical": "oklch(94% 0.008 70)",
+        "legacyHex": "#ece8e2"
+      },
+      "alert-bg": {
+        "role": "tertiary",
+        "displayName": "Alert Bg",
+        "canonical": "oklch(96% 0.04 85)",
+        "legacyHex": "#fbf2dd"
+      },
+      "alert-ink": {
+        "role": "tertiary",
+        "displayName": "Alert Ink",
+        "canonical": "oklch(35% 0.10 60)",
+        "legacyHex": "#7a4a18"
+      },
+      "focus": {
+        "role": "primary",
+        "displayName": "Focus Ring",
+        "canonical": "oklch(58% 0.16 47)"
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headlines, one per screen." },
+      "headline": { "displayName": "Headline", "purpose": "Article H1 and section H2." },
+      "title": { "displayName": "Title", "purpose": "Card and list-item titles." },
+      "body": { "displayName": "Body", "purpose": "Paragraph copy. 16px minimum, 65–75ch measure." },
+      "body-lead": { "displayName": "Body Lead", "purpose": "Article excerpt under the H1." },
+      "label": { "displayName": "Label", "purpose": "Chip text, date kickers, metadata." }
+    },
+    "shadows": [
+      {
+        "name": "at-rest",
+        "value": "0 1px 2px oklch(25% 0.01 70 / 0.04), 0 2px 8px oklch(25% 0.01 70 / 0.06)",
+        "purpose": "Cards, panels, lifted surfaces at rest."
+      },
+      {
+        "name": "hover",
+        "value": "0 2px 4px oklch(25% 0.01 70 / 0.06), 0 6px 16px oklch(25% 0.01 70 / 0.10)",
+        "purpose": "Hover state for linkable cards. No movement, only shadow shift."
+      },
+      {
+        "name": "overlay",
+        "value": "0 8px 24px oklch(25% 0.01 70 / 0.10), 0 20px 48px oklch(25% 0.01 70 / 0.18)",
+        "purpose": "Modal dialogs, search panel, mobile menu drawer."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.25, 1, 0.5, 1)",
+        "purpose": "Default easing for state transitions and entrances."
+      },
+      {
+        "name": "duration-quick",
+        "value": "120ms",
+        "purpose": "Hover state changes (shadow shift, colour shift)."
+      },
+      {
+        "name": "duration-base",
+        "value": "200ms",
+        "purpose": "Drawer slides, modal enters, focus ring."
+      },
+      {
+        "name": "duration-slow",
+        "value": "400ms",
+        "purpose": "Mega-menu open, large surface transitions."
+      },
+      {
+        "name": "reduced-motion-guard",
+        "value": "@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; animation-iteration-count: 1 !important; } }",
+        "purpose": "Required for WCAG 2.2 AA and PRODUCT.md accessibility commitment."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Citoyen action. Used for the single primary call on a screen.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\">Rechercher</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; background: oklch(64% 0.17 47); color: oklch(98% 0.005 70); padding: 12px 20px; min-height: 44px; border: 0; border-radius: 6px; font: 600 1rem/1.2 Montserrat, system-ui, sans-serif; cursor: pointer; transition: background-color 120ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-btn-primary:hover { background: oklch(58% 0.16 47); } .ds-btn-primary:focus-visible { outline: 2px solid oklch(58% 0.16 47); outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Quiet alternative to the primary. Bordered.",
+      "html": "<button class=\"ds-btn-secondary\" type=\"button\">Annuler</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: oklch(98% 0.005 70); color: oklch(25% 0.01 70); padding: 11px 19px; min-height: 44px; border: 1px solid oklch(88% 0.01 70); border-radius: 6px; font: 600 1rem/1.2 Montserrat, system-ui, sans-serif; cursor: pointer; transition: background-color 120ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-btn-secondary:hover { background: oklch(96% 0.008 70); } .ds-btn-secondary:focus-visible { outline: 2px solid oklch(58% 0.16 47); outline-offset: 2px; }"
+    },
+    {
+      "name": "Search Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "The homepage search field and any plain text input.",
+      "html": "<label class=\"ds-input-label\"><span class=\"ds-input-text\">Rechercher</span><input class=\"ds-input\" type=\"search\" placeholder=\"Que cherchez-vous ?\"/></label>",
+      "css": ".ds-input-label { display: flex; flex-direction: column; gap: 4px; } .ds-input-text { font: 500 0.8125rem/1.4 Montserrat, system-ui, sans-serif; letter-spacing: 0.04em; color: oklch(45% 0.01 70); } .ds-input { width: 100%; background: oklch(94% 0.008 70); color: oklch(25% 0.01 70); padding: 10px 14px; min-height: 44px; border: 1px solid oklch(88% 0.01 70); border-radius: 6px; font: 400 1rem/1.5 Montserrat, system-ui, sans-serif; transition: border-color 120ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-input::placeholder { color: oklch(58% 0.008 70); } .ds-input:focus { outline: 2px solid oklch(58% 0.16 47); outline-offset: 2px; border-color: oklch(58% 0.16 47); }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Category filter on the article archive. At-rest and active states.",
+      "html": "<a class=\"ds-chip\" href=\"#\">Tous</a><a class=\"ds-chip ds-chip--active\" href=\"#\" aria-current=\"page\">Vivre à Marche</a>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; padding: 6px 14px; min-height: 32px; background: oklch(96% 0.008 70); color: oklch(45% 0.01 70); border: 1px solid oklch(88% 0.01 70); border-radius: 9999px; font: 500 0.8125rem/1.4 Montserrat, system-ui, sans-serif; letter-spacing: 0.04em; text-decoration: none; transition: background-color 120ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-chip:hover { background: oklch(88% 0.01 70); } .ds-chip--active { background: oklch(25% 0.01 70); color: oklch(98% 0.005 70); border-color: oklch(25% 0.01 70); } .ds-chip:focus-visible { outline: 2px solid oklch(58% 0.16 47); outline-offset: 2px; }"
+    },
+    {
+      "name": "Content Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "News card, event card, partner card, bottin excerpt. Sits at rest; deepens shadow on hover; never translates.",
+      "html": "<a class=\"ds-card\" href=\"#\"><div class=\"ds-card__body\"><p class=\"ds-card__kicker\">14 mai</p><h3 class=\"ds-card__title\">Conseil communal du 14 mai 2026</h3><p class=\"ds-card__excerpt\">L'ordre du jour de la séance publique est disponible.</p></div></a>",
+      "css": ".ds-card { display: block; background: oklch(98% 0.005 70); color: oklch(25% 0.01 70); border: 1px solid oklch(88% 0.01 70); border-radius: 10px; box-shadow: 0 1px 2px oklch(25% 0.01 70 / 0.04), 0 2px 8px oklch(25% 0.01 70 / 0.06); text-decoration: none; transition: box-shadow 120ms cubic-bezier(0.25, 1, 0.5, 1), border-color 120ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-card:hover { border-color: transparent; box-shadow: 0 2px 4px oklch(25% 0.01 70 / 0.06), 0 6px 16px oklch(25% 0.01 70 / 0.10); } .ds-card:focus-visible { outline: 2px solid oklch(58% 0.16 47); outline-offset: 2px; } .ds-card__body { padding: 20px; } .ds-card__kicker { margin: 0 0 8px; font: 500 0.8125rem/1.4 Montserrat, system-ui, sans-serif; letter-spacing: 0.04em; color: oklch(58% 0.008 70); } .ds-card__title { margin: 0 0 8px; font: 600 1.125rem/1.3 Montserrat, system-ui, sans-serif; color: oklch(25% 0.01 70); } .ds-card__excerpt { margin: 0; font: 400 1rem/1.6 Montserrat, system-ui, sans-serif; color: oklch(45% 0.01 70); }"
+    },
+    {
+      "name": "Event Date Block",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Signature component. The day/month block on the left of an event card.",
+      "html": "<aside class=\"ds-date\"><span class=\"ds-date__day\">14</span><span class=\"ds-date__month\">mai</span></aside>",
+      "css": ".ds-date { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px 20px; background: oklch(96% 0.008 70); border-right: 1px solid oklch(88% 0.01 70); min-width: 88px; } .ds-date__day { font: 700 2rem/1 Montserrat, system-ui, sans-serif; color: oklch(25% 0.01 70); } .ds-date__month { margin-top: 4px; font: 500 0.8125rem/1.4 Montserrat, system-ui, sans-serif; letter-spacing: 0.04em; color: oklch(58% 0.008 70); }"
+    },
+    {
+      "name": "Top Navigation Link",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Desktop nav item; active route is marked by a 2px underline in Citoyen Ember.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav__link\" href=\"#\">Vivre à Marche</a><a class=\"ds-nav__link ds-nav__link--active\" href=\"#\" aria-current=\"page\">Agenda</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 24px; padding: 0 16px; background: oklch(98% 0.005 70); border-bottom: 1px solid oklch(88% 0.01 70); } .ds-nav__link { position: relative; display: inline-flex; align-items: center; height: 64px; padding: 0 4px; font: 600 1rem/1 Montserrat, system-ui, sans-serif; color: oklch(25% 0.01 70); text-decoration: none; transition: color 120ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-nav__link:hover { color: oklch(53% 0.05 215); } .ds-nav__link--active { color: oklch(25% 0.01 70); } .ds-nav__link--active::after { content: \"\"; position: absolute; left: 4px; right: 4px; bottom: 0; height: 2px; background: oklch(64% 0.17 47); } .ds-nav__link:focus-visible { outline: 2px solid oklch(58% 0.16 47); outline-offset: 2px; }"
+    },
+    {
+      "name": "Alert Strip",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Time-sensitive civic notice on the homepage. Rare; the only warm surface in the system.",
+      "html": "<section class=\"ds-alert\"><span class=\"ds-alert__icon\" aria-hidden=\"true\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\"><path d=\"M10 2 L18 17 H2 Z\"/><path d=\"M10 8 V12\"/><circle cx=\"10\" cy=\"14.5\" r=\"0.75\" fill=\"currentColor\"/></svg></span><div class=\"ds-alert__body\"><h2 class=\"ds-alert__title\">Collecte des déchets reportée</h2><p class=\"ds-alert__text\">La collecte du jeudi 14 mai est reportée au samedi 16 mai.</p></div><a class=\"ds-alert__cta\" href=\"#\">Lire la suite</a></section>",
+      "css": ".ds-alert { display: flex; align-items: flex-start; gap: 16px; padding: 16px 20px; background: oklch(96% 0.04 85); color: oklch(35% 0.10 60); } .ds-alert__icon { flex-shrink: 0; color: oklch(35% 0.10 60); } .ds-alert__body { flex: 1; } .ds-alert__title { margin: 0; font: 600 1.125rem/1.3 Montserrat, system-ui, sans-serif; color: oklch(35% 0.10 60); } .ds-alert__text { margin: 4px 0 0; font: 400 1rem/1.5 Montserrat, system-ui, sans-serif; color: oklch(35% 0.10 60); } .ds-alert__cta { display: inline-flex; align-items: center; padding: 8px 14px; min-height: 36px; background: oklch(35% 0.10 60); color: oklch(98% 0.005 70); border-radius: 6px; font: 600 0.875rem/1 Montserrat, system-ui, sans-serif; text-decoration: none; transition: background-color 120ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-alert__cta:hover { background: oklch(28% 0.09 60); } .ds-alert__cta:focus-visible { outline: 2px solid oklch(58% 0.16 47); outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Famenne Almanac",
+    "overview": "The site is the printed civic almanac of Marche-en-Famenne, rebuilt for screens. An almanac is grounded in the calendar, in the place, in the year's rhythm — the council meeting on Tuesday, the rubbish collection on Thursday, the carnival in March, the agricultural fair in July. Its job is to be useful, complete, and unmistakably of here. It does not market the town. It records it. That metaphor governs everything: the page is paper, not glass. Type carries the weight; one warm orange carries the action. Photography is of the real Famenne, never stock. Depth is light, layered rather than lifted. Hover gives feedback, never animation. This system explicitly rejects two things: the generic AI municipal template (triple slate gradient, extrabold Bienvenue à hero, rounded-xl icon-circle tiles, hover lift cards), and the 1990s administrative portal (dense tables, dark navy, no images, joyless prose). The Almanac sits between them.",
+    "keyCharacteristics": [
+      "Paper-tinted neutrals, not slate. Warmth lives in the substrate.",
+      "One accent. Citoyen Ember appears on action and on almost nothing else.",
+      "Type is the structure. Hierarchy comes from scale and weight, not from decorative borders or coloured stripes.",
+      "Cards sit. They do not lift, scale, or translate. Hover deepens the shadow by one step; nothing moves.",
+      "Real photography of Marche-en-Famenne. No stock, no agency cinematics.",
+      "WCAG 2.2 AA is the floor, not the target."
+    ],
+    "rules": [
+      { "name": "The One Ember Rule", "body": "Citoyen Ember appears on ≤10% of any rendered viewport. If two ember elements would touch or appear in the same eye-sweep, demote one to Ardennes Slate. The accent works because it is rare.", "section": "colors" },
+      { "name": "The Paper Rule", "body": "No #ffffff. No #000000. Every surface is tinted toward warmth (chroma 0.005–0.01 toward hue 47). The page is paper, not glass.", "section": "colors" },
+      { "name": "The Tinted-Neutral Rule", "body": "One neutral family. The current mix of gray-* and slate-* Tailwind classes is prohibited. New work uses the seven named neutrals and nothing else.", "section": "colors" },
+      { "name": "The Single-Family Rule", "body": "One face for the whole system. A second face enters only with a documented voice reason and a /impeccable typeset pass.", "section": "typography" },
+      { "name": "The Real-Weight Rule", "body": "Weight classes name actual weights. The current font-montserrat-thin / font-montserrat-bold aliases (all pointing at one weight) are prohibited.", "section": "typography" },
+      { "name": "The Measure Rule", "body": "Long-form body text caps at 75ch. Article bodies apply max-w-prose or equivalent; never full viewport width on prose.", "section": "typography" },
+      { "name": "The Single-Shadow Rule", "body": "Three shadow values exist. Components pick one of three: at-rest, hover, overlay. Never invent a fourth.", "section": "elevation" },
+      { "name": "The No-Translate Rule", "body": "Hover never moves an element. No translate-y, no scale-105, no translate-x. Only shadow opacity and (occasionally) background colour change on hover.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do treat Citoyen Ember as a finite resource. If the page has a primary button and an active filter chip, that's already two embers. Demote one.",
+      "Do tint every neutral toward the orange hue (chroma 0.005–0.01 at hue 47). The substrate is what makes the system feel civic-warm instead of generic-slate.",
+      "Do carry hierarchy through scale and weight. Headings step ≥1.25× in size, ≥100 in weight, between levels.",
+      "Do respect prefers-reduced-motion: reduce. Every animation in tailwind.css needs an override that disables it.",
+      "Do use the three-step shadow vocabulary. At-rest, hover, overlay. Nothing else.",
+      "Do ship real photography of Marche-en-Famenne. The market square, the Famenne hills, the Carnaval, the agricultural fair. Alt text is part of the voice.",
+      "Do cap body line length at 75ch. Long-form articles get max-w-prose or an equivalent column."
+    ],
+    "donts": [
+      "Don't ship the generic AI municipal template: no triple slate gradient, no centered extrabold Bienvenue à hero, no rounded-xl icon-circle shortcut tiles, no hover:-translate-y-1 shadow-lg cards.",
+      "Don't ship the 1990s administrative portal: no dense link tables, no dark-navy chrome, no joyless prose, no Cliquez ici.",
+      "Don't use side-stripe borders (border-l-4 or any border-l-/border-r- greater than 1px) as a coloured accent. Replace with full borders, background tints, or nothing.",
+      "Don't use #ffffff or #000000. Every neutral is tinted.",
+      "Don't mix gray-* and slate-* Tailwind utilities. One neutral family.",
+      "Don't translate, lift, or scale on hover. No hover:-translate-y-1, no group-hover:scale-105.",
+      "Don't ladder shadows beyond the three named levels. shadow-md, shadow-xl, shadow-2xl utilities are out.",
+      "Don't use gradient text. Single solid colour for every word on the page.",
+      "Don't use all-caps body or label copy. Sentence case for everything except acronyms.",
+      "Don't use em dashes in copy. Use commas, colons, semicolons, periods, or parentheses.",
+      "Don't use the fake font-montserrat-* weight aliases. They all point at one weight.",
+      "Don't load Google Fonts via @import url(...) in CSS. Self-host Montserrat with font-display: swap.",
+      "Don't repeat headings or restate intros. One of each, always.",
+      "Don't use the per-blog identity colours as dominant surfaces."
+    ]
+  }
+}
