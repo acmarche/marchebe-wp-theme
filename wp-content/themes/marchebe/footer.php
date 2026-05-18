@@ -16,7 +16,12 @@ try {
     echo $e->getMessage();
 }
 wp_footer();
-?>
+if (defined('WP_DEBUG') && WP_DEBUG) {
+    ?>
+    <!-- impeccable-live-start -->
+    <script src="http://localhost:8400/live.js"></script>
+    <!-- impeccable-live-end -->
+<?php } ?>
     </body>
     </html>
 <?php
