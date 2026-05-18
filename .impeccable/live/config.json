@@ -1,0 +1,6 @@
+{
+  "files": ["wp-content/themes/marchebe/footer.php"],
+  "insertBefore": "</body>",
+  "commentSyntax": "html",
+  "cspChecked": true
+}
