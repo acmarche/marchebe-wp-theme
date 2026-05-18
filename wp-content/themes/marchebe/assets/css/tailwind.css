@@ -28,6 +28,11 @@
     --color-cta-light: #6B9CA5;
     --color-cta-brown: #7B6B5F;
     --color-cta-dark: #477e88;
+    --color-paper: oklch(98% 0.005 70);
+    --color-ink: oklch(25% 0.01 70);
+    --color-ink-soft: oklch(45% 0.01 70);
+    --color-ink-muted: oklch(58% 0.008 70);
+    --color-rule: oklch(88% 0.01 70);
     --object-top-center: "top center";
     --object-center-center: "center center";
     --object-bottom-center: "bottom center";
@@ -207,6 +212,65 @@ article h2:not(:has(a)), article h3 {
 
 .musshadow {
     box-shadow: 0 -0.125rem 0.45rem rgba(0, 0, 0, 0.75);
+}
+
+/**
+ * Mobile bottom navigation (fixed below `lg`)
+ */
+.nav-bottom {
+    @apply grid grid-cols-4 items-stretch list-none m-0 p-0 bg-paper text-ink font-montserrat;
+    border-top: 1px solid var(--color-rule);
+    box-shadow: 0 -1px 2px oklch(25% 0.01 70 / 0.04), 0 -2px 8px oklch(25% 0.01 70 / 0.06);
+}
+
+.nav-bottom__cell {
+    @apply relative flex flex-col items-center justify-center gap-1 px-1 w-full text-ink no-underline cursor-pointer transition-colors;
+    background: transparent;
+    border: 0;
+    padding-block: 0.625rem;
+    min-height: 64px;
+}
+
+.nav-bottom__cell:hover {
+    @apply text-cta-dark;
+}
+
+.nav-bottom__cell:focus-visible {
+    outline: 2px solid var(--color-citoyen);
+    outline-offset: -2px;
+}
+
+.nav-bottom__ico {
+    width: 24px;
+    height: 24px;
+    stroke-width: 1.5;
+}
+
+.nav-bottom__lbl {
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    color: var(--color-ink-muted);
+}
+
+.nav-bottom__cell.is-active {
+    color: var(--color-ink);
+}
+
+.nav-bottom__cell.is-active .nav-bottom__lbl {
+    color: var(--color-ink);
+    font-weight: 600;
+}
+
+.nav-bottom__cell.is-active::after {
+    content: "";
+    position: absolute;
+    left: 18%;
+    right: 18%;
+    bottom: 0;
+    height: 2px;
+    background: var(--color-citoyen);
 }
 
 /**
