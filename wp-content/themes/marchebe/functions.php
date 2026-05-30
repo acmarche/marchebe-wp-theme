@@ -24,10 +24,12 @@ use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
  *
  */
 
-if (WP_DEBUG === false) {
+if (WP_DEBUG === false && class_exists(HtmlErrorRenderer::class)) {
     HtmlErrorRenderer::setTemplate(get_template_directory().'/error500.php');
 } else {
-    Debug::enable();
+    if (class_exists(Debug::class)) {
+        Debug::enable();
+    }
 }
 new SetupTheme();
 new Assets();
