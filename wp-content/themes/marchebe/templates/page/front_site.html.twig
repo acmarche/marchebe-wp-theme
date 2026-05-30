@@ -1,0 +1,18 @@
+<div class="bg-slate-50 mt-16">
+    <!-- HERO HEADER SECTION -->
+    {% include '@AcMarche/article/_header.html.twig' %}
+    <!-- MAIN CONTENT SECTION -->
+    <main id="main-content" class="relative z-20 -mt-16 md:-mt-24">
+        <section class="container mx-auto bg-white rounded-xl shadow-2xl mb-3 pb-16">
+            <div class="p-4 md:p-8">
+                <div class="text-center mb-10">
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-800"
+                        style="color: var(--color-{{ site }});">{{ title }}</h1>
+                    <span class="block mx-auto mt-4 h-1 w-20 rounded-full"
+                          style="background-color: var(--color-{{ site }});"></span>
+                </div>
+                {% include '@AcMarche/page/_front_site_menu.html.twig' %}
+            </div>
+        </section>
+    </main>
+</div>
