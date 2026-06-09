@@ -34,7 +34,7 @@ class Data
             'name' => 'Piscine',
             'description' => 'Horaires et tarifs.',
             'icon' => 'fas fa-person-swimming',
-            'url' => '/sport/?p=5153',
+            'url' => 'https://rca-marche-en-famenne.be/web/be/page/piscine',
             'id' => 3,
             'color' => 'text-white',
             'bgcolor' => 'bg-sport',
