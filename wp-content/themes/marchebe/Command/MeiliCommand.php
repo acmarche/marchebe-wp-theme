@@ -57,9 +57,7 @@ class MeiliCommand extends Command
 
         if ($reset) {
             $result = $this->meiliServer->createIndex();
-            dump($result);
             $result = $this->meiliServer->settings();
-            dump($result);
 
             return Command::SUCCESS;
         }
@@ -67,30 +65,30 @@ class MeiliCommand extends Command
         if ($update) {
             $this->dataForSearch = new DataForSearch();
 
-            $output->writeln('<info>Indexing posts...</info>');
+           // $output->writeln('<info>Indexing posts...</info>');
             $this->indexPosts($output);
             $this->freeMemory();
 
-            $output->writeln('<info>Indexing categories...</info>');
+           // $output->writeln('<info>Indexing categories...</info>');
             $this->indexCategories($output);
             $this->freeMemory();
 
-            $output->writeln('<info>Indexing bottin...</info>');
+          //  $output->writeln('<info>Indexing bottin...</info>');
             $this->indexBottin($output);
             $this->freeMemory();
 
-            $output->writeln('<info>Indexing enquetes...</info>');
+          //  $output->writeln('<info>Indexing enquetes...</info>');
             $this->indexEnquetes($output);
             $this->freeMemory();
 
-            $output->writeln('<info>Indexing publications...</info>');
+         //   $output->writeln('<info>Indexing publications...</info>');
             $this->indexPublications($output);
             $this->freeMemory();
 
-            $output->writeln('<info>Indexing ADL...</info>');
+         //   $output->writeln('<info>Indexing ADL...</info>');
             $this->indexAdl($output);
 
-            $output->writeln('<comment>Indexation complete!</comment>');
+          //  $output->writeln('<comment>Indexation complete!</comment>');
 
             return Command::SUCCESS;
         }
@@ -108,7 +106,7 @@ class MeiliCommand extends Command
         foreach (Theme::SITES as $idSite => $nom) {
             switch_to_blog($idSite);
             $posts = $this->dataForSearch->getPosts($idSite);
-            $output->writeln(sprintf('  - %s: %d posts', $nom, count($posts)));
+            //$output->writeln(sprintf('  - %s: %d posts', $nom, count($posts)));
             foreach ($posts as $document) {
                 $documents[] = $document;
             }
@@ -126,7 +124,7 @@ class MeiliCommand extends Command
         foreach (Theme::SITES as $idSite => $nom) {
             switch_to_blog($idSite);
             $categories = $this->dataForSearch->getCategoriesBySite($idSite);
-            $output->writeln(sprintf('  - %s: %d categories', $nom, count($categories)));
+            //$output->writeln(sprintf('  - %s: %d categories', $nom, count($categories)));
             foreach ($categories as $document) {
                 $documents[] = $document;
             }
@@ -140,9 +138,9 @@ class MeiliCommand extends Command
     private function indexBottin(OutputInterface $output): void
     {
         $documents = $this->dataForSearch->fiches();
-        $output->writeln(sprintf('  - %d fiches', count($documents)));
+        //$output->writeln(sprintf('  - %d fiches', count($documents)));
         $categories = $this->dataForSearch->indexCategoriesBottin();
-        $output->writeln(sprintf('  - %d categories bottin', count($categories)));
+        //$output->writeln(sprintf('  - %d categories bottin', count($categories)));
         $this->indexInBatches(array_merge($documents, $categories), $output);
     }
 
@@ -154,7 +152,7 @@ class MeiliCommand extends Command
             $documents[] = $document;
         }
         restore_current_blog();
-        $output->writeln(sprintf('  - %d enquetes', count($documents)));
+        //$output->writeln(sprintf('  - %d enquetes', count($documents)));
         $this->indexInBatches($documents, $output);
     }
 
@@ -166,7 +164,7 @@ class MeiliCommand extends Command
             $documents[] = $document;
         }
         restore_current_blog();
-        $output->writeln(sprintf('  - %d publications', count($documents)));
+        //$output->writeln(sprintf('  - %d publications', count($documents)));
         $this->indexInBatches($documents, $output);
     }
 
@@ -181,7 +179,7 @@ class MeiliCommand extends Command
         foreach ($adlIndexer->getAllPosts() as $document) {
             $documents[] = $document;
         }
-        $output->writeln(sprintf('  - %d ADL documents', count($documents)));
+        //$output->writeln(sprintf('  - %d ADL documents', count($documents)));
         $this->indexInBatches($documents, $output);
     }
 
