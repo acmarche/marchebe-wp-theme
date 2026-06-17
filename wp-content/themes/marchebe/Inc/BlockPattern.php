@@ -58,9 +58,9 @@ class BlockPattern
 <!-- wp:group {"className":"travaux-fiche"} -->
 <div class="wp-block-group travaux-fiche not-prose">
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading">Informations générales</h2>
-<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"travaux-row"} -->
+<p class="travaux-row">
+<!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"travaux-row"} -->
 <p class="travaux-row"><strong>Période des travaux</strong> Du [date] au [date]</p>
@@ -103,7 +103,7 @@ class BlockPattern
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"travaux-row"} -->
-<p class="travaux-row">📄 <strong>Ordonnance / arrêté de police</strong></p>
+<p class="travaux-row"><strong>Ordonnance / arrêté de police</strong></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->
@@ -113,10 +113,6 @@ class BlockPattern
 <!-- /wp:button -->
 </div>
 <!-- /wp:buttons -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading">Plans et déviations</h2>
-<!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"travaux-row"} -->
 <p class="travaux-row"><strong>Plan du chantier</strong></p>
