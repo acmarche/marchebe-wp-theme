@@ -87,10 +87,6 @@ class BlockPattern
 <!-- /wp:paragraph -->
 
 <!-- wp:heading -->
-<h2 class="wp-block-heading">Mesures de circulation et de stationnement</h2>
-<!-- /wp:heading -->
-
-<!-- wp:heading -->
 <h2 class="wp-block-heading">Informations complémentaires</h2>
 <!-- /wp:heading -->
 
