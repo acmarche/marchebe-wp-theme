@@ -94,14 +94,6 @@ class BlockPattern
 <p>Les mesures de circulation et de stationnement applicables durant les travaux sont définies par une ordonnance ou un arrêté de police.</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:buttons -->
-<div class="wp-block-buttons">
-<!-- wp:button -->
-<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">Télécharger le document</a></div>
-<!-- /wp:button -->
-</div>
-<!-- /wp:buttons -->
-
 <!-- wp:heading {"level":3} -->
 <h3 class="wp-block-heading">Autres informations</h3>
 <!-- /wp:heading -->
