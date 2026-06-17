@@ -26,6 +26,15 @@
                     <dd>Du {{ t.periode_debut|default('…') }} au {{ t.periode_fin|default('…') }}</dd>
                 </div>
             {% endif %}
+
+            <div class="flex gap-3 p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-sm leading-relaxed">
+                <p class="m-0">
+                    Les dates mentionnées sont données à titre indicatif et peuvent être adaptées en
+                    fonction des conditions météorologiques, des contraintes techniques ou de
+                    l'avancement du chantier.
+                </p>
+            </div>
+
             {% if t.localisation is defined %}
                 <div class="flex flex-wrap items-start gap-x-2 gap-y-1 py-2.5 px-3 rounded-md odd:bg-slate-50 text-slate-700 leading-relaxed">
                     <dt class="font-semibold text-slate-900">Localisation</dt>
@@ -62,13 +71,6 @@
         <h2 class="text-xl md:text-2xl font-semibold text-cta-dark mb-4 pb-2 border-b-2 border-cta-dark/20">
             Informations complémentaires
         </h2>
-        <div class="flex gap-3 p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-sm leading-relaxed">
-            <p class="m-0">
-                Les dates mentionnées sont données à titre indicatif et peuvent être adaptées en
-                fonction des conditions météorologiques, des contraintes techniques ou de
-                l'avancement du chantier.
-            </p>
-        </div>
     </section>
 
     {# ---- Mesures de circulation et de stationnement ---- #}
