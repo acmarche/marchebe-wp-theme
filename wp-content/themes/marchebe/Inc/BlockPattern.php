@@ -90,12 +90,12 @@ class BlockPattern
 <h2 class="wp-block-heading">Informations complémentaires</h2>
 <!-- /wp:heading -->
 
-<!-- wp:paragraph -->
-<p>Les mesures de circulation applicables durant les travaux sont définies par une ordonnance ou un arrêté de police.</p>
-<!-- /wp:paragraph -->
-
 <!-- wp:paragraph {"className":"travaux-row"} -->
 <p class="travaux-row"><strong>Ordonnance / arrêté de police</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Les mesures de circulation applicables durant les travaux sont définies par une ordonnance ou un arrêté de police.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->

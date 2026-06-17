@@ -76,13 +76,13 @@
     {# ---- Mesures de circulation et de stationnement ---- #}
     {% if t.ordonnance_url is defined %}
         <section>
+            <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2 text-slate-700">
+                <span class="font-semibold text-slate-900">Ordonnance / arrêté de police</span>
+            </div>
             <p class="text-slate-700 leading-relaxed mb-4">
                 Les mesures de circulation applicables durant les travaux sont définies par une
                 ordonnance ou un arrêté de police.
             </p>
-            <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2 text-slate-700">
-                <span class="font-semibold text-slate-900">Ordonnance / arrêté de police</span>
-            </div>
             <a href="{{ t.ordonnance_url }}"
                class="inline-flex items-center gap-1.5 rounded-md bg-cta-dark/10 py-1.5 pr-3 pl-2.5 text-sm font-medium text-cta-dark no-underline hover:bg-cta-dark/15 transition-colors">
                 <i class="fa-solid fa-download text-xs shrink-0" aria-hidden="true"></i> Télécharger le document
