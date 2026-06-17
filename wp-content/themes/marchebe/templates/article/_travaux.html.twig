@@ -71,10 +71,12 @@ Expected keys (all optional):
         <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2 text-slate-700">
             <span class="font-semibold text-slate-900">Ordonnance / arrêté de police</span>
         </div>
-        <p class="text-slate-700 leading-relaxed mb-4">
-            Les mesures de circulation et de stationnement applicables durant les travaux sont définies par une
-            ordonnance ou un arrêté de police.
-        </p>
+        <div class="flex gap-3 p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-sm leading-relaxed">
+            <p class="m-0">
+                Les mesures de circulation et de stationnement applicables durant les travaux sont définies par une
+                ordonnance ou un arrêté de police.
+            </p>
+        </div>
         <a href="{{ t.ordonnance_url }}"
            class="inline-flex items-center gap-1.5 rounded-md bg-cta-dark/10 py-1.5 pr-3 pl-2.5 text-sm font-medium text-cta-dark no-underline hover:bg-cta-dark/15 transition-colors">
             <i class="fa-solid fa-download text-xs shrink-0" aria-hidden="true"></i> Télécharger le document
@@ -98,5 +100,11 @@ Expected keys (all optional):
                 </li>
             {% endfor %}
         </ul>
+    </section>
+    {# ---- Autres documents ---- #}
+    <section>
+        <h2 class="text-xl md:text-2xl font-semibold text-cta-dark mb-4 pb-2 border-b-2 border-cta-dark/20">
+            Autres documents
+        </h2>
     </section>
 </div>

@@ -90,12 +90,21 @@ class BlockPattern
 <p class="travaux-row"><strong>Ordonnance / arrêté de police</strong></p>
 <!-- /wp:paragraph -->
 
+
+<!-- wp:group {"className":"travaux-note"} -->
+<div class="wp-block-group travaux-note not-prose">
 <!-- wp:paragraph -->
 <p>Les mesures de circulation et de stationnement applicables durant les travaux sont définies par une ordonnance ou un arrêté de police.</p>
 <!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
 
 <!-- wp:heading {"level":3} -->
 <h3 class="wp-block-heading">Autres informations</h3>
+<!-- /wp:heading -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Autres documents</h3>
 <!-- /wp:heading -->
 
 </div>
