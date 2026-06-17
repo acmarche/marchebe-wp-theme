@@ -59,10 +59,6 @@ class BlockPattern
 <div class="wp-block-group travaux-fiche not-prose">
 
 <!-- wp:paragraph {"className":"travaux-row"} -->
-<p class="travaux-row">
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph {"className":"travaux-row"} -->
 <p class="travaux-row"><strong>Période des travaux</strong> Du [date] au [date]</p>
 <!-- /wp:paragraph -->
 
