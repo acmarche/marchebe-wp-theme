@@ -1,17 +1,17 @@
 {#
-  Display template for the "Travaux en cours" article type (see data/Article-type.pdf).
+Display template for the "Travaux en cours" article type (see data/Article-type.pdf).
 
-  Companion of the editor block pattern registered in Inc/BlockPattern.php.
+Companion of the editor block pattern registered in Inc/BlockPattern.php.
 
-  Renders a structured roadworks fiche from a `travaux` map. Every field is
-  optional; rows with no value are skipped. Include it from a single template with:
+Renders a structured roadworks fiche from a `travaux` map. Every field is
+optional; rows with no value are skipped. Include it from a single template with:
 
-      {% include '@AcMarche/article/_travaux.html.twig' with { travaux: travaux } %}
+    {% include '@AcMarche/article/_travaux.html.twig' with { travaux: travaux } %}
 
-  Expected keys (all optional):
-    periode_debut, periode_fin, localisation, type, objet, maitre_ouvrage,
-    mise_a_jour, ordonnance_url, plan_chantier_url, plan_deviation_url,
-    autres_documents (list of { label, url })
+Expected keys (all optional):
+  periode_debut, periode_fin, localisation, type, objet, maitre_ouvrage,
+  mise_a_jour, ordonnance_url, plan_chantier_url, plan_deviation_url,
+  autres_documents (list of { label, url })
 #}
 {% set t = travaux|default({}) %}
 
@@ -66,13 +66,6 @@
         {% endif %}
     </section>
 
-    {# ---- Informations complémentaires ---- #}
-    <section>
-        <h2 class="text-xl md:text-2xl font-semibold text-cta-dark mb-4 pb-2 border-b-2 border-cta-dark/20">
-            Informations complémentaires
-        </h2>
-    </section>
-
     {# ---- Mesures de circulation et de stationnement ---- #}
     {% if t.ordonnance_url is defined %}
         <section>
@@ -80,7 +73,7 @@
                 <span class="font-semibold text-slate-900">Ordonnance / arrêté de police</span>
             </div>
             <p class="text-slate-700 leading-relaxed mb-4">
-                Les mesures de circulation applicables durant les travaux sont définies par une
+                Les mesures de circulation et de stationnement applicables durant les travaux sont définies par une
                 ordonnance ou un arrêté de police.
             </p>
             <a href="{{ t.ordonnance_url }}"
@@ -91,35 +84,11 @@
     {% endif %}
 
     {# ---- Plans et déviations ---- #}
-    {% if t.plan_chantier_url is defined or t.plan_deviation_url is defined or t.autres_documents is defined %}
+    {% if t.autres_documents is defined %}
         <section>
             <h2 class="text-xl md:text-2xl font-semibold text-cta-dark mb-4 pb-2 border-b-2 border-cta-dark/20">
-                Plans et déviations
+                Documents
             </h2>
-            <div class="space-y-4">
-                {% if t.plan_chantier_url is defined %}
-                    <div>
-                        <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2 text-slate-700">
-                            <span class="font-semibold text-slate-900">Plan du chantier</span>
-                        </div>
-                        <a href="{{ t.plan_chantier_url }}"
-                           class="inline-flex items-center gap-1.5 rounded-md bg-cta-dark/10 py-1.5 pr-3 pl-2.5 text-sm font-medium text-cta-dark no-underline hover:bg-cta-dark/15 transition-colors">
-                            <i class="fa-solid fa-download text-xs shrink-0" aria-hidden="true"></i> Télécharger le plan
-                        </a>
-                    </div>
-                {% endif %}
-                {% if t.plan_deviation_url is defined %}
-                    <div>
-                        <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2 text-slate-700">
-                            <span class="font-semibold text-slate-900">Plan de déviation</span>
-                        </div>
-                        <a href="{{ t.plan_deviation_url }}"
-                           class="inline-flex items-center gap-1.5 rounded-md bg-cta-dark/10 py-1.5 pr-3 pl-2.5 text-sm font-medium text-cta-dark no-underline hover:bg-cta-dark/15 transition-colors">
-                            <i class="fa-solid fa-download text-xs shrink-0" aria-hidden="true"></i> Télécharger le plan
-                        </a>
-                    </div>
-                {% endif %}
-            </div>
             {% if t.autres_documents is defined and t.autres_documents|length > 0 %}
                 <h3 class="text-lg font-semibold text-cta-light mt-6 mb-2">Autres documents</h3>
                 <ul class="flex flex-wrap gap-2 list-none p-0 m-0">
@@ -127,7 +96,8 @@
                         <li>
                             <a href="{{ doc.url }}"
                                class="inline-flex items-center gap-1.5 rounded-md bg-cta-dark/10 py-1.5 pr-3 pl-2.5 text-sm font-medium text-cta-dark no-underline hover:bg-cta-dark/15 transition-colors">
-                                <i class="fa-solid fa-file-arrow-down text-xs shrink-0" aria-hidden="true"></i> {{ doc.label }}
+                                <i class="fa-solid fa-file-arrow-down text-xs shrink-0"
+                                   aria-hidden="true"></i> {{ doc.label }}
                             </a>
                         </li>
                     {% endfor %}

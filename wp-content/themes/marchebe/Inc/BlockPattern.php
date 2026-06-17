@@ -86,16 +86,12 @@ class BlockPattern
 <p class="travaux-row"><strong>Maître d'ouvrage</strong> [Ville de Marche-en-Famenne / SPW Mobilité et Infrastructures / SWDE / ORES / Proximus / Infrabel / Autre]</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading">Informations complémentaires</h2>
-<!-- /wp:heading -->
-
 <!-- wp:paragraph {"className":"travaux-row"} -->
 <p class="travaux-row"><strong>Ordonnance / arrêté de police</strong></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Les mesures de circulation applicables durant les travaux sont définies par une ordonnance ou un arrêté de police.</p>
+<p>Les mesures de circulation et de stationnement applicables durant les travaux sont définies par une ordonnance ou un arrêté de police.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->
@@ -106,32 +102,8 @@ class BlockPattern
 </div>
 <!-- /wp:buttons -->
 
-<!-- wp:paragraph {"className":"travaux-row"} -->
-<p class="travaux-row"><strong>Plan du chantier</strong></p>
-<!-- /wp:paragraph -->
-
-<!-- wp:buttons -->
-<div class="wp-block-buttons">
-<!-- wp:button -->
-<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">Télécharger le plan</a></div>
-<!-- /wp:button -->
-</div>
-<!-- /wp:buttons -->
-
-<!-- wp:paragraph {"className":"travaux-row"} -->
-<p class="travaux-row"><strong>Plan de déviation</strong></p>
-<!-- /wp:paragraph -->
-
-<!-- wp:buttons -->
-<div class="wp-block-buttons">
-<!-- wp:button -->
-<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">Télécharger le plan</a></div>
-<!-- /wp:button -->
-</div>
-<!-- /wp:buttons -->
-
 <!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">Autres documents</h3>
+<h3 class="wp-block-heading">Documents</h3>
 <!-- /wp:heading -->
 
 <!-- wp:buttons -->
