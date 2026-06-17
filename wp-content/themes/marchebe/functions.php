@@ -4,6 +4,7 @@ namespace AcMarche\Theme;
 
 use AcMarche\Theme\Inc\Ajax;
 use AcMarche\Theme\Inc\Assets;
+use AcMarche\Theme\Inc\BlockPattern;
 use AcMarche\Theme\Inc\BottinCategoryMetaBox;
 use AcMarche\Theme\Inc\OpenGraph;
 use AcMarche\Theme\Inc\RestApi;
@@ -38,6 +39,7 @@ new RouterEvent();
 new RouterBottin();
 new RouterEnquete();
 new BottinCategoryMetaBox();
+new BlockPattern();
 new SecurityConfig();
 new Seo();
 new OpenGraph();

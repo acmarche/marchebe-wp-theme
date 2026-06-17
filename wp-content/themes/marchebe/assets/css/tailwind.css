@@ -312,6 +312,56 @@ article h2:not(:has(a)), article h3 {
 }
 
 /**
+ * "Travaux en cours" article type
+ * Styles the rendered body of posts created with the "Travaux en cours"
+ * block pattern (Inc/BlockPattern.php). The Twig display counterpart is
+ * templates/article/_travaux.html.twig.
+ */
+.travaux-fiche {
+    @apply space-y-6 mt-6;
+}
+
+.travaux-fiche h2.wp-block-heading {
+    @apply text-xl md:text-2xl font-semibold text-cta-dark mb-4 pb-2 border-b-2 border-cta-dark/20;
+}
+
+.travaux-fiche h3.wp-block-heading {
+    @apply text-lg font-semibold text-cta-light mt-6 mb-2;
+}
+
+.travaux-row {
+    @apply flex flex-wrap items-start gap-x-2 gap-y-1 py-2.5 px-3 rounded-md odd:bg-slate-50 text-slate-700 leading-relaxed;
+}
+
+.travaux-row strong {
+    @apply text-slate-900 font-semibold;
+}
+
+.travaux-fiche .wp-block-buttons {
+    @apply my-3;
+}
+
+.travaux-fiche .wp-block-button__link {
+    @apply inline-flex items-center gap-2 bg-cta-dark text-white px-4 py-2 rounded-md no-underline hover:bg-cta-light transition-colors;
+}
+
+.travaux-fiche .is-style-outline .wp-block-button__link {
+    @apply bg-transparent border border-cta-dark text-cta-dark hover:bg-cta-dark hover:text-white;
+}
+
+.travaux-fiche .wp-block-separator {
+    @apply my-6 border-t border-slate-200;
+}
+
+.travaux-note {
+    @apply flex gap-3 p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-sm leading-relaxed;
+}
+
+.travaux-note p {
+    @apply m-0;
+}
+
+/**
  * Search results highlighting
  */
 mark {
