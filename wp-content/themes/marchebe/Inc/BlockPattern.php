@@ -97,7 +97,7 @@ class BlockPattern
 <!-- /wp:paragraph -->
 </div>
 <!-- wp:paragraph {"className":"travaux-row"} -->
-<p class="travaux-row"><strong>mon texte</strong></p>
+<p class="travaux-row">mon texte</p>
 <!-- /wp:paragraph -->
 
 <!-- /wp:group -->
