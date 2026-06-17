@@ -63,40 +63,40 @@ class BlockPattern
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"travaux-row"} -->
-<p class="travaux-row">📅 <strong>Période des travaux</strong> Du [date] au [date]</p>
+<p class="travaux-row"><strong>Période des travaux</strong> Du [date] au [date]</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"travaux-row"} -->
-<p class="travaux-row">📍 <strong>Localisation</strong> [Rue(s), quartier ou village concerné(s)]</p>
+<p class="travaux-row"><strong>Localisation</strong> [Rue(s), quartier ou village concerné(s)]</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"travaux-row"} -->
-<p class="travaux-row">🚧 <strong>Type de chantier</strong> [Voirie / Trottoirs / Égouttage / Impétrants / Éclairage public / Construction / Aménagement de sécurité / Autre]</p>
+<p class="travaux-row"><strong>Type de chantier</strong> [Voirie / Trottoirs / Égouttage / Impétrants / Éclairage public / Construction / Aménagement de sécurité / Autre]</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"travaux-row"} -->
-<p class="travaux-row">🎯 <strong>Objet des travaux</strong> [Brève description en une ou deux phrases]</p>
+<p class="travaux-row"><strong>Objet des travaux</strong> [Brève description en une ou deux phrases]</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"travaux-row"} -->
-<p class="travaux-row">🏗️ <strong>Maître d'ouvrage</strong> [Ville de Marche-en-Famenne / SPW Mobilité et Infrastructures / SWDE / ORES / Proximus / Infrabel / Autre]</p>
+<p class="travaux-row"><strong>Maître d'ouvrage</strong> [Ville de Marche-en-Famenne / SPW Mobilité et Infrastructures / SWDE / ORES / Proximus / Infrabel / Autre]</p>
 <!-- /wp:paragraph -->
-
-<!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">Mises à jour</h3>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph {"placeholder":"Ajoutez ici les mises à jour de l'avancement du chantier."} -->
-<p></p>
-<!-- /wp:paragraph -->
-
-<!-- wp:separator -->
-<hr class="wp-block-separator has-alpha-channel-opacity"/>
-<!-- /wp:separator -->
 
 <!-- wp:heading -->
 <h2 class="wp-block-heading">Mesures de circulation et de stationnement</h2>
 <!-- /wp:heading -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Informations complémentaires</h2>
+<!-- /wp:heading -->
+
+<!-- wp:group {"className":"travaux-note"} -->
+<div class="wp-block-group travaux-note not-prose">
+<!-- wp:paragraph -->
+<p>Les dates mentionnées sont données à titre indicatif et peuvent être adaptées en fonction des conditions météorologiques, des contraintes techniques ou de l'avancement du chantier.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
 
 <!-- wp:paragraph -->
 <p>Les mesures de circulation applicables durant les travaux sont définies par une ordonnance ou un arrêté de police.</p>
@@ -114,16 +114,12 @@ class BlockPattern
 </div>
 <!-- /wp:buttons -->
 
-<!-- wp:separator -->
-<hr class="wp-block-separator has-alpha-channel-opacity"/>
-<!-- /wp:separator -->
-
 <!-- wp:heading -->
 <h2 class="wp-block-heading">Plans et déviations</h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"travaux-row"} -->
-<p class="travaux-row">🗺️ <strong>Plan du chantier</strong></p>
+<p class="travaux-row"><strong>Plan du chantier</strong></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->
@@ -135,7 +131,7 @@ class BlockPattern
 <!-- /wp:buttons -->
 
 <!-- wp:paragraph {"className":"travaux-row"} -->
-<p class="travaux-row">🔄 <strong>Plan de déviation</strong></p>
+<p class="travaux-row"><strong>Plan de déviation</strong></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->
@@ -165,18 +161,6 @@ class BlockPattern
 <!-- wp:separator -->
 <hr class="wp-block-separator has-alpha-channel-opacity"/>
 <!-- /wp:separator -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading">Informations complémentaires</h2>
-<!-- /wp:heading -->
-
-<!-- wp:group {"className":"travaux-note"} -->
-<div class="wp-block-group travaux-note not-prose">
-<!-- wp:paragraph -->
-<p>ℹ️ Les dates mentionnées sont données à titre indicatif et peuvent être adaptées en fonction des conditions météorologiques, des contraintes techniques ou de l'avancement du chantier.</p>
-<!-- /wp:paragraph -->
-</div>
-<!-- /wp:group -->
 
 </div>
 <!-- /wp:group -->

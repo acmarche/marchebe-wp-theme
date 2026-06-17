@@ -19,41 +19,33 @@
 
     {# ---- Informations générales ---- #}
     <section>
-        <h2 class="text-xl md:text-2xl font-semibold text-cta-dark mb-4 pb-2 border-b-2 border-cta-dark/20">
-            Informations générales
-        </h2>
         <dl class="space-y-1">
             {% if t.periode_debut is defined or t.periode_fin is defined %}
                 <div class="flex flex-wrap items-start gap-x-2 gap-y-1 py-2.5 px-3 rounded-md odd:bg-slate-50 text-slate-700 leading-relaxed">
-                    <span aria-hidden="true">📅</span>
                     <dt class="font-semibold text-slate-900">Période des travaux</dt>
                     <dd>Du {{ t.periode_debut|default('…') }} au {{ t.periode_fin|default('…') }}</dd>
                 </div>
             {% endif %}
             {% if t.localisation is defined %}
                 <div class="flex flex-wrap items-start gap-x-2 gap-y-1 py-2.5 px-3 rounded-md odd:bg-slate-50 text-slate-700 leading-relaxed">
-                    <span aria-hidden="true">📍</span>
                     <dt class="font-semibold text-slate-900">Localisation</dt>
                     <dd>{{ t.localisation }}</dd>
                 </div>
             {% endif %}
             {% if t.type is defined %}
                 <div class="flex flex-wrap items-start gap-x-2 gap-y-1 py-2.5 px-3 rounded-md odd:bg-slate-50 text-slate-700 leading-relaxed">
-                    <span aria-hidden="true">🚧</span>
                     <dt class="font-semibold text-slate-900">Type de chantier</dt>
                     <dd>{{ t.type }}</dd>
                 </div>
             {% endif %}
             {% if t.objet is defined %}
                 <div class="flex flex-wrap items-start gap-x-2 gap-y-1 py-2.5 px-3 rounded-md odd:bg-slate-50 text-slate-700 leading-relaxed">
-                    <span aria-hidden="true">🎯</span>
                     <dt class="font-semibold text-slate-900">Objet des travaux</dt>
                     <dd>{{ t.objet }}</dd>
                 </div>
             {% endif %}
             {% if t.maitre_ouvrage is defined %}
                 <div class="flex flex-wrap items-start gap-x-2 gap-y-1 py-2.5 px-3 rounded-md odd:bg-slate-50 text-slate-700 leading-relaxed">
-                    <span aria-hidden="true">🏗️</span>
                     <dt class="font-semibold text-slate-900">Maître d'ouvrage</dt>
                     <dd>{{ t.maitre_ouvrage }}</dd>
                 </div>
@@ -63,6 +55,20 @@
             <h3 class="text-lg font-semibold text-cta-light mt-6 mb-2">Mises à jour</h3>
             <div class="text-slate-700 leading-relaxed">{{ t.mise_a_jour|raw }}</div>
         {% endif %}
+    </section>
+
+    {# ---- Informations complémentaires ---- #}
+    <section>
+        <h2 class="text-xl md:text-2xl font-semibold text-cta-dark mb-4 pb-2 border-b-2 border-cta-dark/20">
+            Informations complémentaires
+        </h2>
+        <div class="flex gap-3 p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-sm leading-relaxed">
+            <p class="m-0">
+                Les dates mentionnées sont données à titre indicatif et peuvent être adaptées en
+                fonction des conditions météorologiques, des contraintes techniques ou de
+                l'avancement du chantier.
+            </p>
+        </div>
     </section>
 
     {# ---- Mesures de circulation et de stationnement ---- #}
@@ -76,7 +82,6 @@
                 ordonnance ou un arrêté de police.
             </p>
             <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2 text-slate-700">
-                <span aria-hidden="true">📄</span>
                 <span class="font-semibold text-slate-900">Ordonnance / arrêté de police</span>
             </div>
             <a href="{{ t.ordonnance_url }}"
@@ -96,7 +101,6 @@
                 {% if t.plan_chantier_url is defined %}
                     <div>
                         <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2 text-slate-700">
-                            <span aria-hidden="true">🗺️</span>
                             <span class="font-semibold text-slate-900">Plan du chantier</span>
                         </div>
                         <a href="{{ t.plan_chantier_url }}"
@@ -108,7 +112,6 @@
                 {% if t.plan_deviation_url is defined %}
                     <div>
                         <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2 text-slate-700">
-                            <span aria-hidden="true">🔄</span>
                             <span class="font-semibold text-slate-900">Plan de déviation</span>
                         </div>
                         <a href="{{ t.plan_deviation_url }}"
@@ -133,20 +136,4 @@
             {% endif %}
         </section>
     {% endif %}
-
-    {# ---- Informations complémentaires ---- #}
-    <section>
-        <h2 class="text-xl md:text-2xl font-semibold text-cta-dark mb-4 pb-2 border-b-2 border-cta-dark/20">
-            Informations complémentaires
-        </h2>
-        <div class="flex gap-3 p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-sm leading-relaxed">
-            <span aria-hidden="true">ℹ️</span>
-            <p class="m-0">
-                Les dates mentionnées sont données à titre indicatif et peuvent être adaptées en
-                fonction des conditions météorologiques, des contraintes techniques ou de
-                l'avancement du chantier.
-            </p>
-        </div>
-    </section>
-
 </div>
