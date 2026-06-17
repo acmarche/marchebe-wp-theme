@@ -103,24 +103,8 @@ class BlockPattern
 <!-- /wp:buttons -->
 
 <!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">Documents</h3>
+<h3 class="wp-block-heading">Autres informations</h3>
 <!-- /wp:heading -->
-
-<!-- wp:buttons -->
-<div class="wp-block-buttons">
-<!-- wp:button -->
-<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">Courrier riverains</a></div>
-<!-- /wp:button -->
-
-<!-- wp:button -->
-<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">Autre</a></div>
-<!-- /wp:button -->
-</div>
-<!-- /wp:buttons -->
-
-<!-- wp:separator -->
-<hr class="wp-block-separator has-alpha-channel-opacity"/>
-<!-- /wp:separator -->
 
 </div>
 <!-- /wp:group -->
