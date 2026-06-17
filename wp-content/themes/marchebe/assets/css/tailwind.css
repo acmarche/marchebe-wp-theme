@@ -342,11 +342,7 @@ article h2:not(:has(a)), article h3 {
 }
 
 .travaux-fiche .wp-block-button__link {
-    @apply inline-flex items-center gap-2 bg-cta-dark text-white px-4 py-2 rounded-md no-underline hover:bg-cta-light transition-colors;
-}
-
-.travaux-fiche .is-style-outline .wp-block-button__link {
-    @apply bg-transparent border border-cta-dark text-cta-dark hover:bg-cta-dark hover:text-white;
+    @apply inline-flex items-center gap-1.5 rounded-md bg-cta-dark/10 py-1.5 pr-3 pl-2.5 text-sm font-medium text-cta-dark no-underline hover:bg-cta-dark/15 transition-colors;
 }
 
 .travaux-fiche .wp-block-separator {
