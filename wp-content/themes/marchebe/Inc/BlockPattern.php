@@ -101,11 +101,11 @@ des contraintes techniques ou de l'avancement du chantier.</p>
 <p>Les mesures de circulation et de stationnement applicables durant les travaux sont définies par une ordonnance ou un arrêté de police.</p>
 <!-- /wp:paragraph -->
 </div>
+<!-- /wp:group -->
+
 <!-- wp:paragraph {"className":"travaux-row"} -->
 <p class="travaux-row">mon texte</p>
 <!-- /wp:paragraph -->
-
-<!-- /wp:group -->
 
 <!-- wp:heading {"level":3} -->
 <h3 class="wp-block-heading">Autres informations</h3>
