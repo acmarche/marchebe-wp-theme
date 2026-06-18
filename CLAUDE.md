@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-WordPress multisite (subdirectory-based) for the municipality of Marche-en-Famenne, Belgium. The custom `marchebe` theme in `wp-content/themes/marchebe/` contains all custom code. PHP 8.4+ required, Symfony 8.0 components.
+WordPress 7.0 multisite (subdirectory-based) for the municipality of Marche-en-Famenne, Belgium. The custom `marchebe` theme in `wp-content/themes/marchebe/` contains all custom code. PHP 8.4+ required, Symfony 8.0 components.
 
 ## Development Commands
 
