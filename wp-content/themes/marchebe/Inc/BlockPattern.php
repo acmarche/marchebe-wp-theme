@@ -103,14 +103,6 @@ des contraintes techniques ou de l'avancement du chantier.</p>
 <p class="travaux-row">mon texte</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">Autres informations</h3>
-<!-- /wp:heading -->
-
-<!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">Autres documents</h3>
-<!-- /wp:heading -->
-
 </div>
 <!-- /wp:group -->
 HTML;
