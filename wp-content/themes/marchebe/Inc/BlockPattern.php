@@ -55,15 +55,15 @@ class BlockPattern
     private function travauxContent(): string
     {
         return <<<'HTML'
-<!-- wp:group {"className":"travaux-fiche"} -->
+<!-- wp:group {"className":"travaux-fiche not-prose"} -->
 <div class="wp-block-group travaux-fiche not-prose">
 
 <!-- wp:paragraph {"className":"travaux-row"} -->
 <p class="travaux-row"><strong>Période des travaux</strong> Du [date] au [date]</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:group {"className":"travaux-note"} -->
-<div class="wp-block-group travaux-note not-prose flex-col ">
+<!-- wp:group {"className":"travaux-note not-prose flex-col"} -->
+<div class="wp-block-group travaux-note not-prose flex-col">
 <!-- wp:paragraph -->
 <p>Les dates mentionnées sont données à titre indicatif et peuvent être adaptées en fonction des conditions météorologiques, 
 des contraintes techniques ou de l'avancement du chantier.</p>
@@ -91,7 +91,7 @@ des contraintes techniques ou de l'avancement du chantier.</p>
 <p class="travaux-row"><strong>Ordonnance / arrêté de police</strong></p>
 <!-- /wp:paragraph -->
 
-<!-- wp:group {"className":"travaux-note"} -->
+<!-- wp:group {"className":"travaux-note not-prose flex-col"} -->
 <div class="wp-block-group travaux-note not-prose flex-col">
 <!-- wp:paragraph -->
 <p>Les mesures de circulation et de stationnement applicables durant les travaux sont définies par une ordonnance ou un arrêté de police.</p>
