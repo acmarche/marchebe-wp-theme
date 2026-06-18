@@ -72,10 +72,6 @@ des contraintes techniques ou de l'avancement du chantier.</p>
 <!-- /wp:group -->
 
 <!-- wp:paragraph {"className":"travaux-row"} -->
-<p class="travaux-row">mon texte</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph {"className":"travaux-row"} -->
 <p class="travaux-row"><strong>Localisation</strong> [Rue(s), quartier ou village concerné(s)]</p>
 <!-- /wp:paragraph -->
 
