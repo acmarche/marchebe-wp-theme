@@ -41,7 +41,7 @@ class Assets
         wp_enqueue_style(
             'marchebe-primary',
             $themeUri.'/assets/css/marchebe.css',
-            [],'2.1'
+            [],'2.2'
             //wp_get_theme()->get('Version')
         );
         wp_enqueue_style(
