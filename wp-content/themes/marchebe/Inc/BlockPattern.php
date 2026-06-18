@@ -63,12 +63,17 @@ class BlockPattern
 <!-- /wp:paragraph -->
 
 <!-- wp:group {"className":"travaux-note"} -->
-<div class="wp-block-group travaux-note not-prose">
+<div class="wp-block-group travaux-note not-prose flex-col ">
 <!-- wp:paragraph -->
-<p>Les dates mentionnées sont données à titre indicatif et peuvent être adaptées en fonction des conditions météorologiques, des contraintes techniques ou de l'avancement du chantier.</p>
+<p>Les dates mentionnées sont données à titre indicatif et peuvent être adaptées en fonction des conditions météorologiques, 
+des contraintes techniques ou de l'avancement du chantier.</p>
 <!-- /wp:paragraph -->
 </div>
 <!-- /wp:group -->
+
+<!-- wp:paragraph {"className":"travaux-row"} -->
+<p class="travaux-row">mon texte</p>
+<!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"travaux-row"} -->
 <p class="travaux-row"><strong>Localisation</strong> [Rue(s), quartier ou village concerné(s)]</p>
@@ -91,7 +96,7 @@ class BlockPattern
 <!-- /wp:paragraph -->
 
 <!-- wp:group {"className":"travaux-note"} -->
-<div class="wp-block-group travaux-note not-prose">
+<div class="wp-block-group travaux-note not-prose flex-col">
 <!-- wp:paragraph -->
 <p>Les mesures de circulation et de stationnement applicables durant les travaux sont définies par une ordonnance ou un arrêté de police.</p>
 <!-- /wp:paragraph -->
