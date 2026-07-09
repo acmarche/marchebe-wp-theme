@@ -13,7 +13,7 @@ class ConseilRepository
         global $wpdb;
 
         $results = $wpdb->get_results(
-            'SELECT * FROM conseil.ordre_jour ORDER BY `date_ordre` DESC',
+            'SELECT * FROM conseil.agendas ORDER BY `agenda_date` DESC',
             OBJECT
         );
 
