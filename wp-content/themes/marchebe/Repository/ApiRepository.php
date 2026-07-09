@@ -58,13 +58,13 @@ class ApiRepository
     {
         global $wpdb;
 
-        $categories = $wpdb->get_results("SELECT * FROM publication.category");
+        $categories = $wpdb->get_results("SELECT * FROM publication.publication_categories");
 
         $publications = [];
         foreach ($categories as $category) {
             $results = $wpdb->get_results(
                 $wpdb->prepare(
-                    "SELECT * FROM publication.publication WHERE publication.category_id = %d ORDER BY createdAt DESC",
+                    "SELECT * FROM publication.publications WHERE publication.category_id = %d ORDER BY created_at DESC",
                     $category->id
                 ),
                 OBJECT
@@ -89,7 +89,7 @@ class ApiRepository
 
         $category = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT * FROM publication.category WHERE publication.category.wpCategoryId = %d",
+                "SELECT * FROM publication.publication_categories WHERE publication.publication_categories.wpCategoryId = %d",
                 $wpCategoryId
             ),
             OBJECT
@@ -106,7 +106,7 @@ class ApiRepository
 
         $results = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT * FROM publication.publication WHERE publication.publication.category_id = %d ORDER BY createdAt DESC",
+                "SELECT * FROM publication.publications WHERE publication.publications.category_id = %d ORDER BY created_at DESC",
                 $categoryId
             ),
             OBJECT
