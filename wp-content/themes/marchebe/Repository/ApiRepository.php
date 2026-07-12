@@ -64,7 +64,7 @@ class ApiRepository
         foreach ($categories as $category) {
             $results = $wpdb->get_results(
                 $wpdb->prepare(
-                    "SELECT * FROM publication.publications WHERE publication.category_id = %d ORDER BY created_at DESC",
+                    "SELECT * FROM publication.publications WHERE publication.publications.category_id = %d ORDER BY created_at DESC",
                     $category->id
                 ),
                 OBJECT
