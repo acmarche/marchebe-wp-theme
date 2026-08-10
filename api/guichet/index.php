@@ -252,7 +252,7 @@ if ($isPartial) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File d'attente - Ville de Marche-en-Famenne</title>
-    <link rel="stylesheet" href="/api/guichet/guichet.css">
+    <link rel="stylesheet" href="/api/guichet/guichet.css?v=2">
     <noscript><meta http-equiv="refresh" content="20"></noscript>
 </head>
 <body>
