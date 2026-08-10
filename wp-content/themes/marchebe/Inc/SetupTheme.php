@@ -8,6 +8,8 @@ class SetupTheme
     {
         $this->setup();
         add_filter('upload_mimes', [$this, 'allow_svg_upload']);
+        // override the version-control detection.
+        add_filter('automatic_updater_disabled', fn() => false);
     }
 
     /**
