@@ -23,6 +23,12 @@
     --ink: #312c25;
     /* Citoyen Ember survives only as the wash behind a newly called number. */
     --ember-wash: #ffe6d2;
+    /*
+     * Deliberately outside the DESIGN.md palette. The test ribbon's whole job is
+     * to look alien to the board; if it read as brand colour it would fail.
+     * White on this red is 5.9:1.
+     */
+    --alarm: #c8102e;
 
     /* Type scale. Second term keeps the board sane on non-16:9 panels. */
     --size-number: min(9.6vw, 17.1vh);
@@ -471,6 +477,51 @@ ul {
 .history__office {
     color: var(--ink-muted);
     font-weight: 500;
+}
+
+/* ----------------------------------------------------------------- ribbon --- */
+
+/*
+ * Corner ribbon shown only when GUICHET_TEST_MODE is set. It exists so nobody
+ * in the plaza trusts a number on a board that is being trialled, so it is
+ * sized to be read at the same distance as the numbers themselves.
+ *
+ * The square wrapper clips the rotated band, which keeps a 45-degree element
+ * from pushing the page wider and triggering a scrollbar.
+ */
+.ribbon {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: min(22vw, 39vh);
+    height: min(22vw, 39vh);
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.ribbon__label {
+    position: absolute;
+    top: 24%;
+    left: -50%;
+    width: 200%;
+    padding: calc(var(--gap) * 0.4) 0;
+    transform: rotate(-45deg);
+    background-color: var(--alarm);
+    color: #fff;
+    font-size: var(--size-office);
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    line-height: 1.2;
+    text-align: center;
+    /* One-word badge: the single case DESIGN.md allows uppercase. The DOM keeps
+       sentence case so assistive tech does not spell it out. */
+    text-transform: uppercase;
+}
+
+/* Clears the identity out from under the ribbon rather than letting it hide. */
+.board--test .rail__identity {
+    padding-left: min(18vw, 32vh);
 }
 
 /* ---------------------------------------------------------------- offline --- */

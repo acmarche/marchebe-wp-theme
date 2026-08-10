@@ -25,6 +25,13 @@ const WAITING_SLOTS = 12;
 
 $isPartial = isset($_GET['partial']);
 
+/*
+ * Marks the board as a test display. Driven only by `GUICHET_TEST_MODE=1` in
+ * `.env`, never by a query parameter: the board is served over HTTP, and a
+ * toggle in the URL would let anyone make the real board look untrustworthy.
+ */
+$isTest = filter_var($_ENV['GUICHET_TEST_MODE'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 
@@ -133,7 +140,13 @@ $waitingShown = $waitingOverflow > 0
 
 ob_start();
 ?>
-<main class="board" id="board">
+<main class="board<?= $isTest ? ' board--test' : '' ?>" id="board">
+
+    <?php if ($isTest): ?>
+        <div class="ribbon">
+            <p class="ribbon__label">Test</p>
+        </div>
+    <?php endif; ?>
 
     <header class="rail">
         <div class="rail__identity">
@@ -249,7 +262,7 @@ if ($isPartial) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File d'attente - Ville de Marche-en-Famenne</title>
+    <title><?= $isTest ? '[Test] ' : '' ?>File d'attente - Ville de Marche-en-Famenne</title>
     <link rel="stylesheet" href="/api/guichet/guichet.css?v=2">
     <noscript>
         <meta http-equiv="refresh" content="20">

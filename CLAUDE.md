@@ -99,12 +99,18 @@ the plaza at several metres. `index.php` holds both the queries and the markup;
 swaps the fragment in, so the screen updates without the full-reload flash.
 `<meta http-equiv="refresh">` remains as a `<noscript>` fallback.
 
+Set `GUICHET_TEST_MODE=1` in `.env` to overlay a red "Test" corner ribbon and
+prefix the page title, so nobody trusts the numbers on a board being trialled.
+Off unless the variable is set, and deliberately not switchable by query string:
+the board is served over HTTP, and a URL toggle would let anyone make the real
+board look untrustworthy.
+
 Constraints that drive the design: nothing below ~30px (distance reading), a
 bright surface (the panel catches a specular reflection, so a dark board acts as
 a mirror), and the board must fit `100vh` with no scrollbar at any ticket count.
 
 ### Environment (`.env`)
-Key variables: `PIVOT_BASE_URI`, `PIVOT_WS_KEY`, `PIVOT_CODE`, `MEILI_INDEX_NAME`, `MEILI_MASTER_KEY`, `MEILI_API_KEY`, `WP_URL_HOME`, `DB_BOTTIN_USER`, `DB_BOTTIN_PASS`, `DB_GUICHET_USER`, `DB_GUICHET_PASS`, `APP_CACHE_DIR`.
+Key variables: `PIVOT_BASE_URI`, `PIVOT_WS_KEY`, `PIVOT_CODE`, `MEILI_INDEX_NAME`, `MEILI_MASTER_KEY`, `MEILI_API_KEY`, `WP_URL_HOME`, `DB_BOTTIN_USER`, `DB_BOTTIN_PASS`, `DB_GUICHET_USER`, `DB_GUICHET_PASS`, `GUICHET_TEST_MODE` (optional), `APP_CACHE_DIR`.
 
 ### Asset URL Handling
 `Assets::getThemeUri()` builds theme URLs from `$_ENV['WP_URL_HOME']` instead of `get_template_directory_uri()` to fix multisite subdirectory path issues. A filter also strips subsite paths from `wp-includes`/`wp-content` URLs.
