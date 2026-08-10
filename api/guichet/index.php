@@ -27,8 +27,8 @@ $today = date('Y-m-d');
 $sql = <<<SQL
 SELECT t.id, t.number, t.reason, t.service, t.office_id, t.createdAt, t.archive,
        o.name AS office_name
-FROM ticket t
-LEFT JOIN office o ON t.office_id = o.id
+FROM tickets t
+LEFT JOIN offices o ON t.office_id = o.id
 WHERE t.created_date = :today AND t.archive = 0
 ORDER BY t.createdAt DESC
 SQL;
