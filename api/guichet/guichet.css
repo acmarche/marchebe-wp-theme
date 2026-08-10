@@ -1,135 +1,538 @@
-/* Guichet - old-school CSS for legacy TV browsers */
-* {
+/*
+ * Queue board, Ville de Marche-en-Famenne.
+ *
+ * Read from a plaza at 3-10 m, from below, off a panel that catches a hard
+ * specular reflection. Two consequences drive this file:
+ *
+ *  1. The surface is bright. A dark board at that mounting position acts as a
+ *     mirror; emitted luminance is what beats the reflection.
+ *  2. Nothing on screen is smaller than ~30 px at 1080p, and every size is
+ *     expressed as min(vw, vh) so a 4K panel scales instead of shrinking.
+ *
+ * Tokens follow DESIGN.md (Paper / Ink / Citoyen Ember). Hex first so the
+ * board survives an old kiosk browser; OKLCH takes over where supported.
+ */
+
+:root {
+    --paper: #fbf9f6;
+    --vellum: #f4f1ec;
+    --field: #ece8e2;
+    --rule: #d9d3cb;
+    --ink-muted: #8e8780;
+    --ink-soft: #6a6359;
+    --ink: #312c25;
+    --ember: #e86a10;
+    --ember-wash: #ffe6d2;
+    --hearth: #c0590a;
+
+    /* Type scale. Second term keeps the board sane on non-16:9 panels. */
+    --size-number: min(9.6vw, 17.1vh);
+    --size-office: min(2.3vw, 4.1vh);
+    --size-service: min(1.7vw, 3vh);
+    --size-wait-number: min(3.8vw, 6.8vh);
+    --size-section: min(1.85vw, 3.3vh);
+    --size-rail: min(1.6vw, 2.85vh);
+    --size-clock: min(2.3vw, 4.1vh);
+    --size-tag: min(1.6vw, 2.85vh);
+    --size-history: min(1.55vw, 2.75vh);
+
+    --gap: min(1.25vw, 2.2vh);
+    --pad: min(1.7vw, 3vh);
+    --pad-counter: calc(var(--pad) * 0.7);
+
+    --radius: 10px;
+    --border: 2px;
+}
+
+@supports (color: oklch(50% 0.1 50)) {
+    :root {
+        --paper: oklch(98% 0.005 70);
+        --vellum: oklch(96% 0.008 70);
+        --field: oklch(94% 0.008 70);
+        --rule: oklch(88% 0.01 70);
+        --ink-muted: oklch(58% 0.008 70);
+        --ink-soft: oklch(45% 0.01 70);
+        --ink: oklch(25% 0.01 70);
+        --ember: oklch(64% 0.17 47);
+        --ember-wash: oklch(93% 0.055 47);
+        --hearth: oklch(58% 0.16 47);
+    }
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+html,
 body {
-    background-color: #111827;
-    color: #ffffff;
-    font-family: Arial, Helvetica, sans-serif;
-    min-height: 100%;
-}
-
-.container {
-    padding: 32px;
-}
-
-/* Header */
-.header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.header h1 {
-    font-size: 48px;
-    font-weight: bold;
-    letter-spacing: -1px;
-}
-
-.header .date {
-    font-size: 24px;
-    color: #9ca3af;
-    margin-top: 8px;
-}
-
-/* Section titles */
-.section {
-    margin-bottom: 48px;
-}
-
-.section-title {
-    font-size: 30px;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 24px;
-}
-
-.section-title-green {
-    color: #4ade80;
-}
-
-.section-title-yellow {
-    color: #facc15;
-}
-
-/* Grid layout using floats */
-.grid {
-    max-width: 1280px;
-    margin-left: auto;
-    margin-right: auto;
+    height: 100%;
+    /* The board must never scroll: whatever does not fit is a layout bug. */
     overflow: hidden;
 }
 
-.grid:after {
+body {
+    background-color: var(--vellum);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+ul {
+    list-style: none;
+}
+
+/* ---------------------------------------------------------------- board --- */
+
+.board {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    gap: var(--gap);
+    height: 100vh;
+    padding: var(--pad);
+}
+
+/* ----------------------------------------------------------------- rail --- */
+
+.rail {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--gap);
+    padding-bottom: calc(var(--gap) * 0.6);
+    border-bottom: 1px solid var(--rule);
+}
+
+.rail__town,
+.rail__date {
+    color: var(--ink-soft);
+    font-size: var(--size-rail);
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.rail__title {
+    color: var(--ink);
+    font-size: var(--size-rail);
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.rail__identity {
+    display: flex;
+    align-items: baseline;
+    gap: calc(var(--gap) * 0.6);
+}
+
+.rail__time {
+    display: flex;
+    align-items: baseline;
+    gap: var(--gap);
+}
+
+.rail__clock {
+    color: var(--ink);
+    font-size: var(--size-clock);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1;
+}
+
+/* -------------------------------------------------------- section chrome --- */
+
+.section-title {
+    display: flex;
+    align-items: baseline;
+    gap: calc(var(--gap) * 0.5);
+    margin-bottom: calc(var(--gap) * 0.75);
+    color: var(--ink-soft);
+    font-size: var(--size-section);
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.section-title__count {
+    color: var(--ink);
+    font-weight: 700;
+}
+
+/* --------------------------------------------------------------- counters --- */
+
+.counters {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.counters__list {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    /* Quiet mornings leave this band most of the board; centring the row keeps
+       the panels a sane height instead of stretching them into empty columns. */
+    align-content: center;
+    gap: var(--gap);
+    min-height: 0;
+    /*
+     * Sizing container for the number below: the band is sized by the board
+     * grid, and the digits scale to whatever height that leaves.
+     */
+    container-type: size;
+}
+
+/*
+ * Four fixed rows (name / number / service / state) in every panel, filled or
+ * empty. Without them a panel carrying the "Appelé maintenant" line pushes its
+ * number off the baseline its neighbours sit on, and the band stops scanning
+ * cleanly left to right.
+ */
+.counter {
+    display: grid;
+    flex: 1 1 min(20rem, 100%);
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    align-items: center;
+    min-width: 0;
+    /* Fill the band, but stop short of the stretched-column look on a quiet
+       morning when the band is most of the screen. */
+    height: 100%;
+    max-height: 42vh;
+    overflow: hidden;
+    padding: var(--pad-counter) var(--pad);
+    border: var(--border) solid var(--rule);
+    border-radius: var(--radius);
+    background-color: var(--paper);
+    text-align: center;
+}
+
+.counter--idle {
+    border-style: dashed;
+    background-color: var(--field);
+}
+
+/*
+ * The one place Citoyen Ember appears. It marks the most recent call only, as
+ * a rule rather than as type: Ember on Paper is 3.1:1, fine for a solid bar
+ * and not enough for a number that has to survive glare.
+ */
+.counter--latest {
+    border-color: var(--ember);
+    box-shadow: inset 0 calc(var(--border) * 3) 0 0 var(--ember);
+}
+
+/*
+ * Office names and services are free-text varchars. Held to a single line so a
+ * long one truncates instead of wrapping down over the number. CSS truncation
+ * keeps the full string in the DOM for assistive tech.
+ */
+.counter__name {
+    overflow: hidden;
+    max-width: 100%;
+    color: var(--ink-soft);
+    font-size: var(--size-office);
+    font-weight: 600;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.counter__number {
+    color: var(--ink);
+    font-size: var(--size-number);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+@supports (container-type: size) {
+    .counter__number {
+        font-size: min(var(--size-number), 42cqh);
+    }
+}
+
+/*
+ * A free window says so in words, centred where its number would be. A muted
+ * placeholder glyph in that slot just reads as a stray mark from the plaza.
+ * Declared after the @supports block so it wins on source order.
+ */
+.counter__number--idle {
+    color: var(--ink-soft);
+    font-size: var(--size-office);
+    font-weight: 600;
+    letter-spacing: normal;
+    line-height: 1.2;
+}
+
+.counter__service,
+.counter__state {
+    /* Held open when empty so all four panels keep identical row positions. */
+    min-height: calc(var(--size-service) * 1.2);
+    overflow: hidden;
+    max-width: 100%;
+    color: var(--ink-soft);
+    font-size: var(--size-service);
+    font-weight: 500;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.counter__state {
+    color: var(--ink-muted);
+}
+
+/* Paired with the Ember rule so the state never rests on colour alone. */
+.counter__state--latest {
+    color: var(--hearth);
+    font-weight: 700;
+}
+
+@keyframes call-flash {
+    from {
+        background-color: var(--ember-wash);
+    }
+
+    to {
+        background-color: var(--paper);
+    }
+}
+
+.counter.is-new {
+    animation: call-flash 1000ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------------------------------------------------------------- waiting --- */
+
+.waiting__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--gap);
+}
+
+/* Six per row: one row at the usual load, two at the twelve-ticket maximum. */
+.ticket {
+    display: flex;
+    flex: 0 1 calc((100% - 5 * var(--gap)) / 6);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    padding: calc(var(--pad) * 0.5) calc(var(--pad) * 0.4);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background-color: var(--paper);
+    text-align: center;
+}
+
+/*
+ * The head of the queue is inverted rather than tinted. A single dark cell in a
+ * row of light ones is the strongest signal available at this distance, and it
+ * spends no new colour: Ink on Paper is already the system's chip-active pair.
+ */
+.ticket--next {
+    border-color: var(--ink);
+    background-color: var(--ink);
+}
+
+.ticket--next .ticket__number,
+.ticket--next .ticket__tag {
+    color: var(--paper);
+}
+
+.ticket--overflow {
+    border-style: dashed;
+    background-color: var(--field);
+    color: var(--ink-soft);
+}
+
+.ticket__number {
+    color: var(--ink);
+    font-size: var(--size-wait-number);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+.ticket--overflow .ticket__number {
+    color: var(--ink-soft);
+}
+
+.ticket__service {
+    margin-top: calc(var(--gap) * 0.25);
+    overflow: hidden;
+    color: var(--ink-soft);
+    font-size: var(--size-tag);
+    font-weight: 500;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.ticket__tag {
+    margin-top: calc(var(--gap) * 0.25);
+    font-size: var(--size-tag);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+/* --------------------------------------------------- empty and error state --- */
+
+.section-empty {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--gap) * 0.35);
+    padding: calc(var(--pad) * 0.8) var(--pad);
+    border: 1px dashed var(--rule);
+    border-radius: var(--radius);
+    background-color: var(--paper);
+    text-align: center;
+}
+
+.section-empty__lead {
+    color: var(--ink);
+    font-size: var(--size-office);
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.section-empty__hint {
+    color: var(--ink-soft);
+    font-size: var(--size-service);
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.notice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap);
+    grid-row: span 3;
+    padding: var(--pad);
+    border: var(--border) solid var(--rule);
+    border-radius: var(--radius);
+    background-color: var(--paper);
+    text-align: center;
+}
+
+.notice__title {
+    color: var(--ink);
+    font-size: var(--size-office);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.notice__body {
+    color: var(--ink-soft);
+    font-size: var(--size-service);
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+/* ---------------------------------------------------------------- history --- */
+
+.history {
+    display: flex;
+    position: relative;
+    align-items: baseline;
+    gap: calc(var(--gap) * 0.75);
+    padding-top: calc(var(--gap) * 0.6);
+    border-top: 1px solid var(--rule);
+    min-width: 0;
+}
+
+/*
+ * Fades the tail only when the day's calls actually reach the right edge. A
+ * mask on the list itself would dim the last entry even on a quiet morning,
+ * because it has no way to know whether anything overflowed.
+ */
+.history::after {
     content: "";
-    display: table;
-    clear: both;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(6vw, 10.7vh);
+    background: linear-gradient(to right, rgb(244 241 236 / 0), var(--vellum));
+    pointer-events: none;
 }
 
-/* Called tickets: 3 columns */
-.card-called {
-    float: left;
-    width: 30.66%;
-    margin: 0 1.5% 24px 1.5%;
-    background-color: #14532d;
-    border: 2px solid #22c55e;
-    border-radius: 16px;
-    padding: 32px;
-    text-align: center;
+.history__title {
+    flex: none;
+    color: var(--ink-soft);
+    font-size: var(--size-history);
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
 }
 
-.card-called .number {
-    font-size: 72px;
-    font-weight: 900;
-    margin-bottom: 16px;
+.history__list {
+    display: flex;
+    gap: calc(var(--gap) * 0.75);
+    overflow: hidden;
+    min-width: 0;
 }
 
-.card-called .office {
-    font-size: 30px;
-    font-weight: bold;
-    color: #86efac;
+.history__item {
+    flex: none;
+    color: var(--ink-soft);
+    font-size: var(--size-history);
+    font-weight: 700;
+    line-height: 1.3;
+    white-space: nowrap;
 }
 
-.card-called .service {
-    font-size: 20px;
-    color: #d1d5db;
-    margin-top: 8px;
+.history__office {
+    color: var(--ink-muted);
+    font-weight: 500;
 }
 
-/* Waiting tickets: 4 columns */
-.card-waiting {
-    float: left;
-    width: 22%;
-    margin: 0 1.5% 16px 1.5%;
-    background-color: #422006;
-    border: 1px solid #ca8a04;
-    border-radius: 12px;
-    padding: 24px;
-    text-align: center;
+/* ---------------------------------------------------------------- offline --- */
+
+/*
+ * Shown only after three consecutive failed polls, so staff can tell a frozen
+ * board from a quiet one. Occupies no space while the board is healthy.
+ */
+.offline {
+    display: none;
+    position: fixed;
+    right: var(--pad);
+    bottom: var(--pad);
+    padding: calc(var(--gap) * 0.4) calc(var(--gap) * 0.8);
+    border-radius: var(--radius);
+    background-color: var(--ember-wash);
+    /* Ink rather than Hearth: the wash already carries the alert colour, and
+       this has to stay readable off a panel that is catching a reflection. */
+    color: var(--ink);
+    font-size: var(--size-history);
+    font-weight: 600;
+    line-height: 1.3;
 }
 
-.card-waiting .number {
-    font-size: 48px;
-    font-weight: 900;
-    margin-bottom: 8px;
+.is-offline .offline {
+    display: block;
 }
 
-.card-waiting .status {
-    font-size: 24px;
-    color: #fde047;
+/* ------------------------------------------------------------ preferences --- */
+
+@media (prefers-reduced-motion: reduce) {
+    .counter.is-new {
+        animation: none;
+    }
 }
 
-.card-waiting .service {
-    font-size: 18px;
-    color: #9ca3af;
-    margin-top: 4px;
-}
-
-/* Empty state */
-.empty {
-    text-align: center;
-    font-size: 36px;
-    color: #6b7280;
-    margin-top: 128px;
+@media (prefers-contrast: more) {
+    :root {
+        --rule: #a89f93;
+        --ink-muted: #6a6359;
+        --ink-soft: #4a443c;
+    }
 }
