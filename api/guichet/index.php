@@ -30,7 +30,7 @@ header('Cache-Control: no-store, no-cache, must-revalidate');
 
 function esc(?string $value): string
 {
-    return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+    return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
 }
 
 /**
@@ -40,16 +40,26 @@ function frenchDate(DateTimeImmutable $date): string
 {
     $days = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
     $months = [
-        1 => 'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-        'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre',
+            1 => 'janvier',
+            'février',
+            'mars',
+            'avril',
+            'mai',
+            'juin',
+            'juillet',
+            'août',
+            'septembre',
+            'octobre',
+            'novembre',
+            'décembre',
     ];
 
     return sprintf(
-        '%s %d %s %s',
-        $days[(int) $date->format('w')],
-        (int) $date->format('j'),
-        $months[(int) $date->format('n')],
-        $date->format('Y'),
+            '%s %d %s %s',
+            $days[(int)$date->format('w')],
+            (int)$date->format('j'),
+            $months[(int)$date->format('n')],
+            $date->format('Y'),
     );
 }
 
@@ -64,13 +74,13 @@ $hasError = false;
 
 try {
     $pdo = new PDO(
-        'mysql:host=127.0.0.1;dbname=guichet',
-        $_ENV['DB_GUICHET_USER'] ?? '',
-        $_ENV['DB_GUICHET_PASS'] ?? '',
-        [
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        ],
+            'mysql:host=127.0.0.1;dbname=guichet',
+            $_ENV['DB_GUICHET_USER'] ?? '',
+            $_ENV['DB_GUICHET_PASS'] ?? '',
+            [
+                    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            ],
     );
 
     $offices = $pdo->query('SELECT id, name FROM offices ORDER BY name')->fetchAll(PDO::FETCH_ASSOC);
@@ -97,15 +107,15 @@ try {
     }
 
     // The queue reads in the order people will be served: oldest ticket first.
-    usort($waiting, static fn(array $a, array $b): int => strcmp((string) $a['createdAt'], (string) $b['createdAt']));
+    usort($waiting, static fn(array $a, array $b): int => strcmp((string)$a['createdAt'], (string)$b['createdAt']));
 
     // A call ranks by when it was assigned to a window, not by when the ticket
     // was printed.
-    $callTime = static fn(array $t): string => (string) ($t['assigned_date'] ?? $t['createdAt']);
+    $callTime = static fn(array $t): string => (string)($t['assigned_date'] ?? $t['createdAt']);
     usort($called, static fn(array $a, array $b): int => strcmp($callTime($b), $callTime($a)));
 
     foreach ($called as $ticket) {
-        $officeId = (int) $ticket['office_id'];
+        $officeId = (int)$ticket['office_id'];
         if (isset($currentByOffice[$officeId])) {
             $earlierCalls[] = $ticket;
         } else {
@@ -121,8 +131,8 @@ try {
 $waitingTotal = count($waiting);
 $waitingOverflow = max(0, $waitingTotal - WAITING_SLOTS);
 $waitingShown = $waitingOverflow > 0
-    ? array_slice($waiting, 0, WAITING_SLOTS - 1)
-    : $waiting;
+        ? array_slice($waiting, 0, WAITING_SLOTS - 1)
+        : $waiting;
 
 ob_start();
 ?>
@@ -157,11 +167,11 @@ ob_start();
                 <ul class="counters__list">
                     <?php foreach ($offices as $office): ?>
                         <?php
-                        $ticket = $currentByOffice[(int) $office['id']] ?? null;
+                        $ticket = $currentByOffice[(int)$office['id']] ?? null;
                         $isLatest = $ticket !== null && $ticket['id'] === $latestCallId;
                         ?>
                         <li class="counter<?= $ticket === null ? ' counter--idle' : '' ?><?= $isLatest ? ' counter--latest' : '' ?>"
-                            data-office="<?= esc((string) $office['id']) ?>"
+                            data-office="<?= esc((string)$office['id']) ?>"
                             data-ticket="<?= esc($ticket['number'] ?? '') ?>">
                             <?php /* Every panel renders the same four rows, empty where it has
                                      nothing to say, so numbers align across the whole band. */ ?>
@@ -199,13 +209,7 @@ ob_start();
                     <?php foreach ($waitingShown as $index => $ticket): ?>
                         <li class="ticket<?= $index === 0 ? ' ticket--next' : '' ?>">
                             <p class="ticket__number"><?= esc($ticket['number']) ?></p>
-                            <?php /* The head of the queue trades its service label for the
-                                     word "Prochain", so the cell keeps the same height. */ ?>
-                            <?php if ($index === 0): ?>
-                                <p class="ticket__tag">Prochain</p>
-                            <?php else: ?>
-                                <p class="ticket__service"><?= esc($ticket['service']) ?></p>
-                            <?php endif; ?>
+                            <p class="ticket__service"><?= esc($ticket['service']) ?></p>
                         </li>
                     <?php endforeach; ?>
                     <?php if ($waitingOverflow > 0): ?>
@@ -253,7 +257,9 @@ if ($isPartial) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File d'attente - Ville de Marche-en-Famenne</title>
     <link rel="stylesheet" href="/api/guichet/guichet.css?v=2">
-    <noscript><meta http-equiv="refresh" content="20"></noscript>
+    <noscript>
+        <meta http-equiv="refresh" content="20">
+    </noscript>
 </head>
 <body>
 
@@ -301,7 +307,7 @@ if ($isPartial) {
                 const clear = function () {
                     counter.classList.remove('is-new');
                 };
-                counter.addEventListener('animationend', clear, { once: true });
+                counter.addEventListener('animationend', clear, {once: true});
                 // Reduced motion removes the animation, so animationend never
                 // arrives and the class would otherwise stick.
                 setTimeout(clear, 1500);
@@ -309,7 +315,7 @@ if ($isPartial) {
         }
 
         function poll() {
-            fetch('?partial=1&t=' + Date.now(), { cache: 'no-store' })
+            fetch('?partial=1&t=' + Date.now(), {cache: 'no-store'})
                 .then(function (response) {
                     if (!response.ok) {
                         throw new Error(String(response.status));
