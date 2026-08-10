@@ -214,7 +214,7 @@ ob_start();
             <?php else: ?>
                 <ul class="waiting__list">
                     <?php foreach ($waitingShown as $index => $ticket): ?>
-                        <li class="ticket<?= $index === 0 ? ' ticket--next' : '' ?>">
+                        <li class="ticket">
                             <p class="ticket__number"><?= esc($ticket['number']) ?></p>
                             <p class="ticket__service"><?= esc($ticket['service']) ?></p>
                         </li>
