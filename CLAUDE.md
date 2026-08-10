@@ -17,9 +17,11 @@ npx @tailwindcss/cli -i wp-content/themes/marchebe/assets/css/tailwind.css -o wp
 npx @tailwindcss/cli -i wp-content/themes/marchebe/assets/css/tailwind.css -o wp-content/themes/marchebe/assets/css/marchebe.css
 ```
 
-```bash
-npx @tailwindcss/cli -c tailwind.guichet.config.js -i api/guichet/tailwind.css -o api/guichet/guichet.css                                                                                                                     
-```
+**The queue board has no CSS build.** `api/guichet/guichet.css` is hand-written
+and is *not* generated output. Commit `53dec11` deliberately dropped the Tailwind
+dependency there. Edit that file directly, and do not point a Tailwind build at
+it: the output would overwrite the board's stylesheet.
+
 ### Console Commands
 ```bash
 php console pivot:cache          # Fetch & cache Pivot tourism API data (--all, --parse, --purge)
@@ -86,8 +88,23 @@ Redis via `Symfony\Component\Cache\Adapter\RedisTagAwareAdapter`, namespace `mar
 ### REST API
 Custom endpoint: `GET /wp-json/pivot/events` (returns all Pivot events).
 
+### Queue Board (`api/guichet/`)
+Standalone page, outside WordPress and outside the theme. Reads the separate
+`guichet` MySQL database (`offices`, `tickets`) by direct PDO and renders the
+waiting-room board shown on a screen mounted above the entrance door, read from
+the plaza at several metres. `index.php` holds both the queries and the markup;
+`guichet.css` is hand-written (see the build-command warning above).
+
+`?partial=1` returns the board fragment only; the page polls it every 10s and
+swaps the fragment in, so the screen updates without the full-reload flash.
+`<meta http-equiv="refresh">` remains as a `<noscript>` fallback.
+
+Constraints that drive the design: nothing below ~30px (distance reading), a
+bright surface (the panel catches a specular reflection, so a dark board acts as
+a mirror), and the board must fit `100vh` with no scrollbar at any ticket count.
+
 ### Environment (`.env`)
-Key variables: `PIVOT_BASE_URI`, `PIVOT_WS_KEY`, `PIVOT_CODE`, `MEILI_INDEX_NAME`, `MEILI_MASTER_KEY`, `MEILI_API_KEY`, `WP_URL_HOME`, `DB_BOTTIN_USER`, `DB_BOTTIN_PASS`, `APP_CACHE_DIR`.
+Key variables: `PIVOT_BASE_URI`, `PIVOT_WS_KEY`, `PIVOT_CODE`, `MEILI_INDEX_NAME`, `MEILI_MASTER_KEY`, `MEILI_API_KEY`, `WP_URL_HOME`, `DB_BOTTIN_USER`, `DB_BOTTIN_PASS`, `DB_GUICHET_USER`, `DB_GUICHET_PASS`, `APP_CACHE_DIR`.
 
 ### Asset URL Handling
 `Assets::getThemeUri()` builds theme URLs from `$_ENV['WP_URL_HOME']` instead of `get_template_directory_uri()` to fix multisite subdirectory path issues. A filter also strips subsite paths from `wp-includes`/`wp-content` URLs.
