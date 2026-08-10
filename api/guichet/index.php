@@ -69,7 +69,6 @@ $offices = [];
 $waiting = [];
 $currentByOffice = [];
 $earlierCalls = [];
-$latestCallId = null;
 $hasError = false;
 
 try {
@@ -122,8 +121,6 @@ try {
             $currentByOffice[$officeId] = $ticket;
         }
     }
-
-    $latestCallId = $called[0]['id'] ?? null;
 } catch (PDOException) {
     $hasError = true;
 }
@@ -172,17 +169,15 @@ ob_start();
                         <li class="counter<?= $ticket === null ? ' counter--idle' : '' ?>"
                             data-office="<?= esc((string)$office['id']) ?>"
                             data-ticket="<?= esc($ticket['number'] ?? '') ?>">
-                            <?php /* Every panel renders the same four rows, empty where it has
+                            <?php /* Every panel renders the same three rows, empty where it has
                                      nothing to say, so numbers align across the whole band. */ ?>
                             <p class="counter__name"><?= esc($office['name']) ?></p>
                             <?php if ($ticket === null): ?>
                                 <p class="counter__number counter__number--idle">Libre</p>
                                 <p class="counter__service"></p>
-                                <p class="counter__state"></p>
                             <?php else: ?>
                                 <p class="counter__number"><?= esc($ticket['number']) ?></p>
                                 <p class="counter__service"><?= esc($ticket['service']) ?></p>
-                                <p class="counter__state<?= ' counter__state--latest' ?>"></p>
                             <?php endif; ?>
                         </li>
                     <?php endforeach; ?>
