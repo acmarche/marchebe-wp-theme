@@ -18,11 +18,18 @@
     --vellum: #f4f1ec;
     --field: #ece8e2;
     --rule: #d9d3cb;
-    --ink-muted: #8e8780;
     --ink-soft: #6a6359;
     --ink: #312c25;
     /* Citoyen Ember survives only as the wash behind a newly called number. */
     --ember-wash: #ffe6d2;
+    /*
+     * Ardennes Slate, the DESIGN.md supporting voice, carries the waiting zone.
+     * Cool against a warm board, so the two halves separate by hue as well as
+     * by frame, and it leaves Citoyen Ember free to mean "just called".
+     */
+    --wait-wash: #dff1f5;
+    --wait-rule: #5191a1;
+    --wait-ink: #0f505d;
     /*
      * Deliberately outside the DESIGN.md palette. The test ribbon's whole job is
      * to look alien to the board; if it read as brand colour it would fail.
@@ -55,10 +62,12 @@
         --vellum: oklch(96% 0.008 70);
         --field: oklch(94% 0.008 70);
         --rule: oklch(88% 0.01 70);
-        --ink-muted: oklch(58% 0.008 70);
         --ink-soft: oklch(45% 0.01 70);
         --ink: oklch(25% 0.01 70);
         --ember-wash: oklch(93% 0.055 47);
+        --wait-wash: oklch(94.5% 0.02 215);
+        --wait-rule: oklch(62% 0.07 215);
+        --wait-ink: oklch(40% 0.065 215);
     }
 }
 
@@ -89,6 +98,20 @@ body {
 
 ul {
     list-style: none;
+}
+
+/*
+ * Kept out of sight, kept in the accessibility tree. `display: none` would drop
+ * the heading that names the called-numbers band and leave the page with an
+ * h1 and a single h2.
+ */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
 }
 
 /* ---------------------------------------------------------------- board --- */
@@ -147,25 +170,6 @@ ul {
     line-height: 1;
 }
 
-/* -------------------------------------------------------- section chrome --- */
-
-.section-title {
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: calc(var(--gap) * 0.5);
-    margin-bottom: calc(var(--gap) * 0.75);
-    color: var(--ink-soft);
-    font-size: var(--size-section);
-    font-weight: 600;
-    line-height: 1.2;
-}
-
-.section-title__count {
-    color: var(--ink);
-    font-weight: 700;
-}
-
 /* --------------------------------------------------------------- counters --- */
 
 .counters {
@@ -181,6 +185,7 @@ ul {
     /* Quiet mornings leave this band most of the board; centring the row keeps
        the panels a sane height instead of stretching them into empty columns. */
     align-content: center;
+    justify-content: center;
     gap: var(--gap);
     min-height: 0;
     /*
@@ -192,9 +197,8 @@ ul {
 
 /*
  * Three fixed rows (name / number / service) in every panel, filled or empty.
- * Without them an idle panel, which has no service line, pulls its number off
- * the baseline its neighbours sit on and the band stops scanning cleanly left
- * to right.
+ * Without them a ticket carrying no service pulls its number off the baseline
+ * its neighbours sit on and the band stops scanning cleanly left to right.
  */
 .counter {
     display: grid;
@@ -203,20 +207,18 @@ ul {
     align-items: center;
     min-width: 0;
     /* Fill the band, but stop short of the stretched-column look on a quiet
-       morning when the band is most of the screen. */
+       morning when the band is most of the screen. The width cap does the same
+       job sideways: one window in service gets a proportioned panel in the
+       middle of the board, not a letterbox with a number lost inside it. */
     height: 100%;
     max-height: 42vh;
+    max-width: min(46vw, 82vh);
     overflow: hidden;
     padding: var(--pad-counter) var(--pad);
     border: var(--border) solid var(--rule);
     border-radius: var(--radius);
     background-color: var(--paper);
     text-align: center;
-}
-
-.counter--idle {
-    border-style: dashed;
-    background-color: var(--field);
 }
 
 /*
@@ -249,21 +251,8 @@ ul {
     }
 }
 
-/*
- * A free window says so in words, centred where its number would be. A muted
- * placeholder glyph in that slot just reads as a stray mark from the plaza.
- * Declared after the @supports block so it wins on source order.
- */
-.counter__number--idle {
-    color: var(--ink-soft);
-    font-size: var(--size-office);
-    font-weight: 600;
-    letter-spacing: normal;
-    line-height: 1.2;
-}
-
 .counter__service {
-    /* Held open when empty so an idle panel keeps the same row positions. */
+    /* Held open when empty so a service-less ticket keeps the same row positions. */
     min-height: calc(var(--size-service) * 1.2);
     overflow: hidden;
     max-width: 100%;
@@ -291,6 +280,40 @@ ul {
 
 /* ---------------------------------------------------------------- waiting --- */
 
+/*
+ * The waiting queue is a room of its own: a cool slate field, framed, sitting
+ * on the warm board. Two zones that used to be told apart by a small centred
+ * word are now told apart by colour and by an edge, which is what survives the
+ * walk across the plaza.
+ */
+.waiting {
+    padding: calc(var(--pad) * 0.6) var(--pad) calc(var(--pad) * 0.8);
+    border: var(--border) solid var(--wait-rule);
+    border-radius: var(--radius);
+    background-color: var(--wait-wash);
+}
+
+.waiting__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--gap) * 0.5);
+    margin-bottom: calc(var(--gap) * 0.65);
+    color: var(--wait-ink);
+    font-size: var(--size-section);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+/* The count is a fact, not a decoration, so it carries the zone's darkest tone. */
+.waiting__count {
+    padding: 0.1em 0.5em;
+    border-radius: 999px;
+    background-color: var(--wait-ink);
+    color: var(--paper);
+    font-weight: 700;
+}
+
 .waiting__list {
     display: flex;
     flex-wrap: wrap;
@@ -298,7 +321,11 @@ ul {
     gap: var(--gap);
 }
 
-/* Six per row: one row at the usual load, two at the twelve-ticket maximum. */
+/*
+ * Six per row: one row at the usual load, two at the twelve-ticket maximum.
+ * No border: on the slate field a paper fill already separates one number from
+ * the next, and twelve outlined boxes would put a grid of lines on the board.
+ */
 .ticket {
     display: flex;
     flex: 0 1 calc((100% - 5 * var(--gap)) / 6);
@@ -307,32 +334,15 @@ ul {
     justify-content: center;
     min-width: 0;
     padding: calc(var(--pad) * 0.5) calc(var(--pad) * 0.4);
-    border: 1px solid var(--rule);
     border-radius: var(--radius);
     background-color: var(--paper);
     text-align: center;
 }
 
-/*
- * The head of the queue is inverted rather than tinted. A single dark cell in a
- * row of light ones is the strongest signal available at this distance, and it
- * spends no new colour: Ink on Paper is already the system's chip-active pair.
- */
-.ticket--next {
-    border-color: var(--ink);
-    background-color: var(--ink);
-}
-
-.ticket--next .ticket__number,
-.ticket--next .ticket__service,
-.ticket--next .ticket__tag {
-    color: var(--paper);
-}
-
+/* The tail of the queue is a count, not a ticket, so it does not take a fill. */
 .ticket--overflow {
-    border-style: dashed;
-    background-color: var(--field);
-    color: var(--ink-soft);
+    border: 1px dashed var(--wait-rule);
+    background-color: transparent;
 }
 
 .ticket__number {
@@ -343,8 +353,9 @@ ul {
     line-height: 1;
 }
 
-.ticket--overflow .ticket__number {
-    color: var(--ink-soft);
+.ticket--overflow .ticket__number,
+.ticket--overflow .ticket__service {
+    color: var(--wait-ink);
 }
 
 .ticket__service {
@@ -359,13 +370,6 @@ ul {
     max-width: 100%;
 }
 
-.ticket__tag {
-    margin-top: calc(var(--gap) * 0.25);
-    font-size: var(--size-tag);
-    font-weight: 700;
-    line-height: 1.2;
-}
-
 /* --------------------------------------------------- empty and error state --- */
 
 .section-empty {
@@ -377,6 +381,25 @@ ul {
     border-radius: var(--radius);
     background-color: var(--paper);
     text-align: center;
+}
+
+/* Sits where the numbers would be, at their height, not at the top of the band. */
+.counters .section-empty {
+    margin: auto;
+}
+
+/*
+ * The waiting zone already is a surface. A second framed panel inside it would
+ * be a box in a box, so the quiet message just sits on the slate field.
+ */
+.waiting .section-empty {
+    padding: calc(var(--pad) * 0.35) 0 calc(var(--pad) * 0.15);
+    border: 0;
+    background-color: transparent;
+}
+
+.waiting .section-empty__lead {
+    color: var(--wait-ink);
 }
 
 .section-empty__lead {
@@ -474,54 +497,51 @@ ul {
     white-space: nowrap;
 }
 
+/*
+ * Ink Soft, not Ink Muted: on a 1366x768 panel this line falls to 21 px, below
+ * the size where WCAG lets a 3:1 ratio stand. Weight already separates the
+ * window name from the number it follows.
+ */
 .history__office {
-    color: var(--ink-muted);
+    color: var(--ink-soft);
     font-weight: 500;
 }
 
 /* ----------------------------------------------------------------- ribbon --- */
 
 /*
- * Corner ribbon shown only when GUICHET_TEST_MODE is set. It exists so nobody
- * in the plaza trusts a number on a board that is being trialled, so it is
- * sized to be read at the same distance as the numbers themselves.
+ * Shown only when GUICHET_TEST_MODE is set. It exists so nobody in the plaza
+ * trusts a number on a board that is being trialled, so it is sized to be read
+ * at the same distance as the board itself.
  *
- * The square wrapper clips the rotated band, which keeps a 45-degree element
- * from pushing the page wider and triggering a scrollbar.
+ * It takes a row of the board rather than a corner of it. A rotated corner
+ * ribbon has to be large to be read from the plaza, and at that size it covered
+ * the first window's name; a strip cannot overlap anything by construction.
  */
+.board--test {
+    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+}
+
 .ribbon {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: min(22vw, 39vh);
-    height: min(22vw, 39vh);
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 10;
+    /* Cancels the board padding on the three edges the strip touches, so it
+       reads as chrome wrapped around the board instead of a panel inside it. */
+    margin: calc(var(--pad) * -1) calc(var(--pad) * -1) 0;
+    padding: calc(var(--gap) * 0.45) var(--pad);
+    background-color: var(--alarm);
+    /* 5.9:1 on Alarm. The Paper Rule covers the board's own surfaces; this strip
+       is deliberately not one of them. */
+    color: #fff;
+    text-align: center;
 }
 
 .ribbon__label {
-    position: absolute;
-    top: 24%;
-    left: -50%;
-    width: 200%;
-    padding: calc(var(--gap) * 0.4) 0;
-    transform: rotate(-45deg);
-    background-color: var(--alarm);
-    color: #fff;
-    font-size: var(--size-office);
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    line-height: 1.2;
-    text-align: center;
-    /* One-word badge: the single case DESIGN.md allows uppercase. The DOM keeps
-       sentence case so assistive tech does not spell it out. */
-    text-transform: uppercase;
+    font-size: var(--size-rail);
+    font-weight: 500;
+    line-height: 1.3;
 }
 
-/* Clears the identity out from under the ribbon rather than letting it hide. */
-.board--test .rail__identity {
-    padding-left: min(18vw, 32vh);
+.ribbon__strong {
+    font-weight: 800;
 }
 
 /* ---------------------------------------------------------------- offline --- */
@@ -561,7 +581,9 @@ ul {
 @media (prefers-contrast: more) {
     :root {
         --rule: #a89f93;
-        --ink-muted: #6a6359;
         --ink-soft: #4a443c;
+        --wait-wash: #d3ecf3;
+        --wait-rule: #2f6f7e;
+        --wait-ink: #093d48;
     }
 }

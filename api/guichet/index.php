@@ -138,13 +138,33 @@ $waitingShown = $waitingOverflow > 0
         ? array_slice($waiting, 0, WAITING_SLOTS - 1)
         : $waiting;
 
+/*
+ * Only windows with someone at them reach the board. A row of "Libre" panels
+ * spends the brightest, largest real estate on the one thing nobody in the
+ * queue is looking for. Office order is kept rather than call order, so a panel
+ * does not jump sideways between two polls.
+ */
+$callPanels = [];
+foreach ($offices as $office) {
+    $ticket = $currentByOffice[(int)$office['id']] ?? null;
+    if ($ticket !== null) {
+        $callPanels[] = ['office' => $office, 'ticket' => $ticket];
+    }
+}
+
 ob_start();
 ?>
 <main class="board<?= $isTest ? ' board--test' : '' ?>" id="board">
 
     <?php if ($isTest): ?>
+        <?php /* A row of the board rather than a corner of it. The rotated corner
+                 ribbon sat on top of the first window's name, and reading the
+                 window names is one of the things a trial is there to check. */ ?>
         <div class="ribbon">
-            <p class="ribbon__label">Test</p>
+            <p class="ribbon__label">
+                <strong class="ribbon__strong">Écran de test</strong>&nbsp;:
+                les numéros affichés ne sont pas fiables
+            </p>
         </div>
     <?php endif; ?>
 
@@ -169,29 +189,32 @@ ob_start();
     <?php else: ?>
 
         <section class="counters" aria-labelledby="counters-title" aria-live="polite">
-            <h2 class="section-title" id="counters-title">Appelés</h2>
+            <?php /* The band needs no visible label: four huge numbers under a
+                     window name are self-evident from the plaza. The heading
+                     stays in the DOM so the page keeps a readable outline. */ ?>
+            <h2 class="visually-hidden" id="counters-title">Numéros appelés</h2>
 
-            <?php if ($offices === []): ?>
-                <p class="section-empty__lead">Aucun guichet configuré.</p>
+            <?php if ($callPanels === []): ?>
+                <div class="section-empty">
+                    <?php if ($offices === []): ?>
+                        <p class="section-empty__lead">Aucun guichet configuré.</p>
+                    <?php else: ?>
+                        <p class="section-empty__lead">Aucun numéro appelé pour le moment.</p>
+                        <p class="section-empty__hint">Le numéro s'affiche ici dès qu'un guichet vous appelle.</p>
+                    <?php endif; ?>
+                </div>
             <?php else: ?>
                 <ul class="counters__list">
-                    <?php foreach ($offices as $office): ?>
-                        <?php
-                        $ticket = $currentByOffice[(int)$office['id']] ?? null;
-                        ?>
-                        <li class="counter<?= $ticket === null ? ' counter--idle' : '' ?>"
-                            data-office="<?= esc((string)$office['id']) ?>"
-                            data-ticket="<?= esc($ticket['number'] ?? '') ?>">
-                            <?php /* Every panel renders the same three rows, empty where it has
-                                     nothing to say, so numbers align across the whole band. */ ?>
-                            <p class="counter__name"><?= esc($office['name']) ?></p>
-                            <?php if ($ticket === null): ?>
-                                <p class="counter__number counter__number--idle">Libre</p>
-                                <p class="counter__service"></p>
-                            <?php else: ?>
-                                <p class="counter__number"><?= esc($ticket['number']) ?></p>
-                                <p class="counter__service"><?= esc($ticket['service']) ?></p>
-                            <?php endif; ?>
+                    <?php foreach ($callPanels as $panel): ?>
+                        <li class="counter"
+                            data-office="<?= esc((string)$panel['office']['id']) ?>"
+                            data-ticket="<?= esc($panel['ticket']['number']) ?>">
+                            <?php /* Three fixed rows in every panel, the service one empty where
+                                     the ticket carries no service, so numbers keep a shared
+                                     baseline across the band. */ ?>
+                            <p class="counter__name"><?= esc($panel['office']['name']) ?></p>
+                            <p class="counter__number"><?= esc($panel['ticket']['number']) ?></p>
+                            <p class="counter__service"><?= esc($panel['ticket']['service']) ?></p>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -199,10 +222,10 @@ ob_start();
         </section>
 
         <section class="waiting" aria-labelledby="waiting-title">
-            <h2 class="section-title" id="waiting-title">
+            <h2 class="waiting__title" id="waiting-title">
                 En attente
                 <?php if ($waitingTotal > 0): ?>
-                    <span class="section-title__count"><?= $waitingTotal ?></span>
+                    <span class="waiting__count"><?= $waitingTotal ?></span>
                 <?php endif; ?>
             </h2>
 
@@ -213,7 +236,7 @@ ob_start();
                 </div>
             <?php else: ?>
                 <ul class="waiting__list">
-                    <?php foreach ($waitingShown as $index => $ticket): ?>
+                    <?php foreach ($waitingShown as $ticket): ?>
                         <li class="ticket">
                             <p class="ticket__number"><?= esc($ticket['number']) ?></p>
                             <p class="ticket__service"><?= esc($ticket['service']) ?></p>
@@ -263,7 +286,7 @@ if ($isPartial) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $isTest ? '[Test] ' : '' ?>File d'attente - Ville de Marche-en-Famenne</title>
-    <link rel="stylesheet" href="/api/guichet/guichet.css?v=2">
+    <link rel="stylesheet" href="/api/guichet/guichet.css?v=3">
     <noscript>
         <meta http-equiv="refresh" content="20">
     </noscript>

@@ -99,8 +99,10 @@ the plaza at several metres. `index.php` holds both the queries and the markup;
 swaps the fragment in, so the screen updates without the full-reload flash.
 `<meta http-equiv="refresh">` remains as a `<noscript>` fallback.
 
-Set `GUICHET_TEST_MODE=1` in `.env` to overlay a red "Test" corner ribbon and
-prefix the page title, so nobody trusts the numbers on a board being trialled.
+Set `GUICHET_TEST_MODE=1` in `.env` to add a red strip across the top of the
+board and prefix the page title, so nobody trusts the numbers on a board being
+trialled. The strip takes a grid row rather than a corner: a rotated corner
+ribbon large enough to read from the plaza covered the first window's name.
 Off unless the variable is set, and deliberately not switchable by query string:
 the board is served over HTTP, and a URL toggle would let anyone make the real
 board look untrustworthy.

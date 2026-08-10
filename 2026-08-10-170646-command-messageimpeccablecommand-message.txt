@@ -1,0 +1,845 @@
+╭─── Claude Code v2.1.226 ─────────────────────────────────────────────────────╮
+│                                                    │ What's new              │
+│                  Welcome back jf!                  │ Bug fixes and reliabil… │
+│                                                    │ Added gateway spend-li… │
+│                       ▐▛███▜▌                      │ Added a workspace trus… │
+│                      ▝▜█████▛▘                     │ /release-notes for more │
+│                        ▘▘ ▝▝                       │                         │
+│    Opus 5 · Claude Pro · jfsenechal@gmail.com's    │                         │
+│    Organization                                    │                         │
+│                 /var/www/marche-wp                 │                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+❯ /impeccable craft api/guichet/index.php retire title "appelés" n'affiche pas  
+les guichets libres                                                             
+une meilleur séparation entre appelés et "en attente"                           
+peut être mettre en couleur ce dernier                                          
+attention aux regles (RGAA / WCAG)                                              
+
+● I'll start with the skill setup steps.
+
+  Made 1 scratchpad edit +63, read 4 files, listed 2 directories, ran 6 shell commands (ctrl+o to expand)
+
+● Now I have the full picture. Let me check the current visual baseline before
+  editing.
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Now the edits. First the PHP:
+
+● Update(api/guichet/index.php)
+  ⎿  Added 14 lines
+      138          ? array_slice($waiting, 0, WAITING_SLOTS - 1)
+      139          : $waiting;
+      140  
+      141 +/*                                                            
+      142 + * Only windows with someone at them reach the board. A row of
+          + "Libre" panels                                               
+      143 + * spends the brightest, largest real estate on the one thing 
+          +nobody in the                                                 
+      144 + * queue is looking for. Office order is kept rather than call
+          + order, so a panel                                            
+      145 + * does not jump sideways between two polls.                  
+      146 + */                                                           
+      147 +$callPanels = [];                                             
+      148 +foreach ($offices as $office) {                               
+      149 +    $ticket = $currentByOffice[(int)$office['id']] ?? null;   
+      150 +    if ($ticket !== null) {                                   
+      151 +        $callPanels[] = ['office' => $office, 'ticket' => $tic
+          +ket];                                                         
+      152 +    }                                                         
+      153 +}                                                             
+      154 +                                                              
+      155  ob_start();
+      156  ?>
+      157  <main class="board<?= $isTest ? ' board--test' : '' ?>" id="bo
+           ard">
+
+● Update(api/guichet/index.php)
+  ⎿  Added 26 lines, removed 23 lines
+      183      <?php else: ?>
+      184  
+      185          <section class="counters" aria-labelledby="counters-ti
+           tle" aria-live="polite">
+      186 -            <h2 class="section-title" id="counters-title">Appe
+          -lés</h2>                                                      
+      186 +            <?php /* The band needs no visible label: four hug
+          +e numbers under a                                             
+      187 +                     window name are self-evident from the pla
+          +za. The heading                                               
+      188 +                     stays in the DOM so the page keeps a read
+          +able outline. */ ?>                                           
+      189 +            <h2 class="visually-hidden" id="counters-title">Nu
+          +méros appelés</h2>                                            
+      190  
+      188 -            <?php if ($offices === []): ?>                    
+      189 -                <p class="section-empty__lead">Aucun guichet c
+          -onfiguré.</p>                                                 
+      191 +            <?php if ($callPanels === []): ?>                 
+      192 +                <div class="section-empty">                   
+      193 +                    <?php if ($offices === []): ?>            
+      194 +                        <p class="section-empty__lead">Aucun g
+          +uichet configuré.</p>                                         
+      195 +                    <?php else: ?>                            
+      196 +                        <p class="section-empty__lead">Aucun n
+          +uméro appelé pour le moment.</p>                              
+      197 +                        <p class="section-empty__hint">Le numé
+          +ro s'affiche ici dès qu'un guichet vous appelle.</p>          
+      198 +                    <?php endif; ?>                           
+      199 +                </div>                                        
+      200              <?php else: ?>
+      201                  <ul class="counters__list">
+      192 -                    <?php foreach ($offices as $office): ?>   
+      193 -                        <?php                                 
+      194 -                        $ticket = $currentByOffice[(int)$offic
+          -e['id']] ?? null;                                             
+      195 -                        ?>                                    
+      196 -                        <li class="counter<?= $ticket === null
+          - ? ' counter--idle' : '' ?>"                                  
+      197 -                            data-office="<?= esc((string)$offi
+          -ce['id']) ?>"                                                 
+      198 -                            data-ticket="<?= esc($ticket['numb
+          -er'] ?? '') ?>">                                              
+      199 -                            <?php /* Every panel renders the s
+          -ame three rows, empty where it has                            
+      200 -                                     nothing to say, so number
+          -s align across the whole band. */ ?>                          
+      201 -                            <p class="counter__name"><?= esc($
+          -office['name']) ?></p>                                        
+      202 -                            <?php if ($ticket === null): ?>   
+      203 -                                <p class="counter__number coun
+          -ter__number--idle">Libre</p>                                  
+      204 -                                <p class="counter__service"></
+          -p>                                                            
+      205 -                            <?php else: ?>                    
+      206 -                                <p class="counter__number"><?=
+          - esc($ticket['number']) ?></p>                                
+      207 -                                <p class="counter__service"><?
+          -= esc($ticket['service']) ?></p>                              
+      208 -                            <?php endif; ?>                   
+      202 +                    <?php foreach ($callPanels as $panel): ?> 
+      203 +                        <li class="counter"                   
+      204 +                            data-office="<?= esc((string)$pane
+          +l['office']['id']) ?>"                                        
+      205 +                            data-ticket="<?= esc($panel['ticke
+          +t']['number']) ?>">                                           
+      206 +                            <?php /* Three fixed rows in every
+          + panel, the service one empty where                           
+      207 +                                     the ticket carries no ser
+          +vice, so numbers keep a shared                                
+      208 +                                     baseline across the band.
+          + */ ?>                                                        
+      209 +                            <p class="counter__name"><?= esc($
+          +panel['office']['name']) ?></p>                               
+      210 +                            <p class="counter__number"><?= esc
+          +($panel['ticket']['number']) ?></p>                           
+      211 +                            <p class="counter__service"><?= es
+          +c($panel['ticket']['service']) ?></p>                         
+      212                          </li>
+      213                      <?php endforeach; ?>
+      214                  </ul>
+     ...
+      216          </section>
+      217  
+      218          <section class="waiting" aria-labelledby="waiting-titl
+           e">
+      216 -            <h2 class="section-title" id="waiting-title">     
+      219 +            <h2 class="waiting__title" id="waiting-title">    
+      220                  En attente
+      221                  <?php if ($waitingTotal > 0): ?>
+      219 -                    <span class="section-title__count"><?= $wa
+          -itingTotal ?></span>                                          
+      222 +                    <span class="waiting__count"><?= $waitingT
+          +otal ?></span>                                                
+      223                  <?php endif; ?>
+      224              </h2>
+      225  
+     ...
+      230                  </div>
+      231              <?php else: ?>
+      232                  <ul class="waiting__list">
+      230 -                    <?php foreach ($waitingShown as $index => 
+          -$ticket): ?>                                                  
+      233 +                    <?php foreach ($waitingShown as $ticket): 
+          +?>                                                            
+      234                          <li class="ticket">
+      235                              <p class="ticket__number"><?= esc(
+           $ticket['number']) ?></p>
+      236                              <p class="ticket__service"><?= esc
+           ($ticket['service']) ?></p>
+
+● Update(api/guichet/index.php)
+  ⎿  Added 1 line, removed 1 line
+      280      <meta charset="UTF-8">
+      281      <meta name="viewport" content="width=device-width, initial
+           -scale=1.0">
+      282      <title><?= $isTest ? '[Test] ' : '' ?>File d'attente - Vil
+           le de Marche-en-Famenne</title>
+      283 -    <link rel="stylesheet" href="/api/guichet/guichet.css?v=2"
+          ->                                                             
+      283 +    <link rel="stylesheet" href="/api/guichet/guichet.css?v=3"
+          +>                                                             
+      284      <noscript>
+      285          <meta http-equiv="refresh" content="20">
+      286      </noscript>
+
+● Now the stylesheet:
+
+● Update(api/guichet/guichet.css)
+  ⎿  Added 8 lines
+      24      /* Citoyen Ember survives only as the wash behind a newly c
+          alled number. */
+      25      --ember-wash: #ffe6d2;
+      26      /*
+      27 +     * Ardennes Slate, the DESIGN.md supporting voice, carries 
+         +the waiting zone.                                              
+      28 +     * Cool against a warm board, so the two halves separate by
+         + hue as well as                                                
+      29 +     * by frame, and it leaves Citoyen Ember free to mean "just
+         + called".                                                      
+      30 +     */                                                        
+      31 +    --wait-wash: #dff1f5;                                      
+      32 +    --wait-rule: #5191a1;                                      
+      33 +    --wait-ink: #0f505d;                                       
+      34 +    /*                                                         
+      35       * Deliberately outside the DESIGN.md palette. The test rib
+          bon's whole job is
+      36       * to look alien to the board; if it read as brand colour i
+          t would fail.
+      37       * White on this red is 5.9:1.
+
+● Update(api/guichet/guichet.css)
+  ⎿  Added 3 lines
+      67          --ink-soft: oklch(45% 0.01 70);
+      68          --ink: oklch(25% 0.01 70);
+      69          --ember-wash: oklch(93% 0.055 47);
+      70 +        --wait-wash: oklch(94.5% 0.02 215);                    
+      71 +        --wait-rule: oklch(62% 0.07 215);                      
+      72 +        --wait-ink: oklch(40% 0.065 215);                      
+      73      }
+      74  }
+      75  
+
+● Update(api/guichet/guichet.css)
+  ⎿  Added 14 lines
+      102      list-style: none;
+      103  }
+      104  
+      105 +/*                                                            
+      106 + * Kept out of sight, kept in the accessibility tree. `display
+          +: none` would drop                                            
+      107 + * the heading that names the called-numbers band and leave th
+          +e page with an                                                
+      108 + * h1 and a single h2.                                        
+      109 + */                                                           
+      110 +.visually-hidden {                                            
+      111 +    position: absolute;                                       
+      112 +    width: 1px;                                               
+      113 +    height: 1px;                                              
+      114 +    overflow: hidden;                                         
+      115 +    clip-path: inset(50%);                                    
+      116 +    white-space: nowrap;                                      
+      117 +}                                                             
+      118 +                                                              
+      119  /* -----------------------------------------------------------
+           ----- board --- */
+      120  
+      121  .board {
+
+● Update(api/guichet/guichet.css)
+  ⎿  Removed 19 lines
+      172      line-height: 1;
+      173  }
+      174  
+      175 -/* -------------------------------------------------------- se
+          -ction chrome --- */                                           
+      176 -                                                              
+      177 -.section-title {                                              
+      178 -    display: flex;                                            
+      179 -    align-items: baseline;                                    
+      180 -    justify-content: center;                                  
+      181 -    gap: calc(var(--gap) * 0.5);                              
+      182 -    margin-bottom: calc(var(--gap) * 0.75);                   
+      183 -    color: var(--ink-soft);                                   
+      184 -    font-size: var(--size-section);                           
+      185 -    font-weight: 600;                                         
+      186 -    line-height: 1.2;                                         
+      187 -}                                                             
+      188 -                                                              
+      189 -.section-title__count {                                       
+      190 -    color: var(--ink);                                        
+      191 -    font-weight: 700;                                         
+      192 -}                                                             
+      193 -                                                              
+      175  /* -----------------------------------------------------------
+           ---- counters --- */
+      176  
+      177  .counters {
+
+● Update(api/guichet/guichet.css)
+  ⎿  Added 2 lines, removed 3 lines
+      198  
+      199  /*
+      200   * Three fixed rows (name / number / service) in every panel, 
+           filled or empty.
+      201 - * Without them an idle panel, which has no service line, pull
+          -s its number off                                              
+      202 - * the baseline its neighbours sit on and the band stops scann
+          -ing cleanly left                                              
+      203 - * to right.                                                  
+      201 + * Without them a ticket carrying no service pulls its number 
+          +off the baseline                                              
+      202 + * its neighbours sit on and the band stops scanning cleanly l
+          +eft to right.                                                 
+      203   */
+      204  .counter {
+      205      display: grid;
+
+● Update(api/guichet/guichet.css)
+  ⎿  Removed 5 lines
+      219      text-align: center;
+      220  }
+      221  
+      222 -.counter--idle {                                              
+      223 -    border-style: dashed;                                     
+      224 -    background-color: var(--field);                           
+      225 -}                                                             
+      226 -                                                              
+      222  /*
+      223   * Office names and services are free-text varchars. Held to a
+            single line so a
+      224   * long one truncates instead of wrapping down over the number
+           . CSS truncation
+● Update(api/guichet/guichet.css)
+  ⎿  Added 1 line, removed 14 lines
+      249      }
+      250  }
+      251  
+      252 -/*                                                            
+      253 - * A free window says so in words, centred where its number wo
+          -uld be. A muted                                               
+      254 - * placeholder glyph in that slot just reads as a stray mark f
+          -rom the plaza.                                                
+      255 - * Declared after the @supports block so it wins on source ord
+          -er.                                                           
+      256 - */                                                           
+      257 -.counter__number--idle {                                      
+      258 -    color: var(--ink-soft);                                   
+      259 -    font-size: var(--size-office);                            
+      260 -    font-weight: 600;                                         
+      261 -    letter-spacing: normal;                                   
+      262 -    line-height: 1.2;                                         
+      263 -}                                                             
+      264 -                                                              
+      252  .counter__service {
+      266 -    /* Held open when empty so an idle panel keeps the same ro
+          -w positions. */                                               
+      253 +    /* Held open when empty so a service-less ticket keeps the
+          + same row positions. */                                       
+      254      min-height: calc(var(--size-service) * 1.2);
+      255      overflow: hidden;
+      256      max-width: 100%;
+
+● Now the waiting band itself:
+
+● Update(api/guichet/guichet.css)
+  ⎿  Added 42 lines, removed 21 lines
+      278  
+      279  /* -----------------------------------------------------------
+           ----- waiting --- */
+      280  
+      281 +/*                                                            
+      282 + * The waiting queue is a room of its own: a cool slate field,
+          + framed, sitting                                              
+      283 + * on the warm board. Two zones that used to be told apart by 
+          +a small centred                                               
+      284 + * word are now told apart by colour and by an edge, which is 
+          +what survives the                                             
+      285 + * walk across the plaza.                                     
+      286 + */                                                           
+      287 +.waiting {                                                    
+      288 +    padding: calc(var(--pad) * 0.6) var(--pad) calc(var(--pad)
+          + * 0.8);                                                      
+      289 +    border: var(--border) solid var(--wait-rule);             
+      290 +    border-radius: var(--radius);                             
+      291 +    background-color: var(--wait-wash);                       
+      292 +}                                                             
+      293 +                                                              
+      294 +.waiting__title {                                             
+      295 +    display: flex;                                            
+      296 +    align-items: center;                                      
+      297 +    justify-content: center;                                  
+      298 +    gap: calc(var(--gap) * 0.5);                              
+      299 +    margin-bottom: calc(var(--gap) * 0.65);                   
+      300 +    color: var(--wait-ink);                                   
+      301 +    font-size: var(--size-section);                           
+      302 +    font-weight: 700;                                         
+      303 +    line-height: 1.2;                                         
+      304 +}                                                             
+      305 +                                                              
+      306 +/* The count is a fact, not a decoration, so it carries the zo
+          +ne's darkest tone. */                                         
+      307 +.waiting__count {                                             
+      308 +    padding: 0.1em 0.5em;                                     
+      309 +    border-radius: 999px;                                     
+      310 +    background-color: var(--wait-ink);                        
+      311 +    color: var(--paper);                                      
+      312 +    font-weight: 700;                                         
+      313 +}                                                             
+      314 +                                                              
+      315  .waiting__list {
+      316      display: flex;
+      317      flex-wrap: wrap;
+     ...
+      319      gap: var(--gap);
+      320  }
+      321  
+      288 -/* Six per row: one row at the usual load, two at the twelve-t
+          -icket maximum. */                                             
+      322 +/*                                                            
+      323 + * Six per row: one row at the usual load, two at the twelve-t
+          +icket maximum.                                                
+      324 + * No border: on the slate field a paper fill already separate
+          +s one number from                                             
+      325 + * the next, and twelve outlined boxes would put a grid of lin
+          +es on the board.                                              
+      326 + */                                                           
+      327  .ticket {
+      328      display: flex;
+      329      flex: 0 1 calc((100% - 5 * var(--gap)) / 6);
+     ...
+      332      justify-content: center;
+      333      min-width: 0;
+      334      padding: calc(var(--pad) * 0.5) calc(var(--pad) * 0.4);
+      297 -    border: 1px solid var(--rule);                            
+      335      border-radius: var(--radius);
+      336      background-color: var(--paper);
+      337      text-align: center;
+      338  }
+      339  
+      303 -/*                                                            
+      304 - * The head of the queue is inverted rather than tinted. A sin
+          -gle dark cell in a                                            
+      305 - * row of light ones is the strongest signal available at this
+          - distance, and it                                             
+      306 - * spends no new colour: Ink on Paper is already the system's 
+          -chip-active pair.                                             
+      307 - */                                                           
+      308 -.ticket--next {                                               
+      309 -    border-color: var(--ink);                                 
+      310 -    background-color: var(--ink);                             
+      311 -}                                                             
+      312 -                                                              
+      313 -.ticket--next .ticket__number,                                
+      314 -.ticket--next .ticket__service,                               
+      315 -.ticket--next .ticket__tag {                                  
+      316 -    color: var(--paper);                                      
+      317 -}                                                             
+      318 -                                                              
+      340 +/* The tail of the queue is a count, not a ticket, so it does 
+          +not take a fill. */                                           
+      341  .ticket--overflow {
+      320 -    border-style: dashed;                                     
+      321 -    background-color: var(--field);                           
+      322 -    color: var(--ink-soft);                                   
+      342 +    border: 1px dashed var(--wait-rule);                      
+      343 +    background-color: transparent;                            
+      344  }
+      345  
+      346  .ticket__number {
+
+● Update(api/guichet/guichet.css)
+  ⎿  Added 3 lines, removed 2 lines
+      351      line-height: 1;
+      352  }
+      353  
+      354 -.ticket--overflow .ticket__number {                           
+      355 -    color: var(--ink-soft);                                   
+      354 +.ticket--overflow .ticket__number,                            
+      355 +.ticket--overflow .ticket__service {                          
+      356 +    color: var(--wait-ink);                                   
+      357  }
+      358  
+      359  .ticket__service {
+
+● Update(api/guichet/guichet.css)
+  ⎿  Added 19 lines, removed 7 lines
+      368      max-width: 100%;
+      369  }
+      370  
+      371 -.ticket__tag {                                                
+      372 -    margin-top: calc(var(--gap) * 0.25);                      
+      373 -    font-size: var(--size-tag);                               
+      374 -    font-weight: 700;                                         
+      375 -    line-height: 1.2;                                         
+      376 -}                                                             
+      377 -                                                              
+      371  /* --------------------------------------------------- empty a
+           nd error state --- */
+      372  
+      373  .section-empty {
+     ...
+      381      text-align: center;
+      382  }
+      383  
+      384 +/* Sits where the numbers would be, at their height, not at th
+          +e top of the band. */                                         
+      385 +.counters .section-empty {                                    
+      386 +    margin: auto;                                             
+      387 +}                                                             
+      388 +                                                              
+      389 +/*                                                            
+      390 + * The waiting zone already is a surface. A second framed pane
+          +l inside it would                                             
+      391 + * be a box in a box, so the quiet message just sits on the sl
+          +ate field.                                                    
+      392 + */                                                           
+      393 +.waiting .section-empty {                                     
+      394 +    padding: calc(var(--pad) * 0.35) 0 calc(var(--pad) * 0.15)
+          +;                                                             
+      395 +    border: 0;                                                
+      396 +    background-color: transparent;                            
+      397 +}                                                             
+      398 +                                                              
+      399 +.waiting .section-empty__lead {                               
+      400 +    color: var(--wait-ink);                                   
+      401 +}                                                             
+      402 +                                                              
+      403  .section-empty__lead {
+      404      color: var(--ink);
+      405      font-size: var(--size-office);
+
+● Update(api/guichet/guichet.css)
+  ⎿  Added 3 lines
+      584          --rule: #a89f93;
+      585          --ink-muted: #6a6359;
+      586          --ink-soft: #4a443c;
+      587 +        --wait-wash: #d3ecf3;                                 
+      588 +        --wait-rule: #2f6f7e;                                 
+      589 +        --wait-ink: #093d48;                                  
+      590      }
+      591  }
+
+● Now a preview harness so I can actually look at this at 1920×1080 across
+  states:
+
+  Called claude-in-chrome 5 times, ran 3 shell commands (ctrl+o to expand)
+
+● Two refinements: a lone called panel shouldn't stretch edge to edge.
+
+● Update(api/guichet/guichet.css)
+  ⎿  Added 1 line
+      187      /* Quiet mornings leave this band most of the board; centr
+           ing the row keeps
+      188         the panels a sane height instead of stretching them int
+           o empty columns. */
+      189      align-content: center;
+      190 +    justify-content: center;                                  
+      191      gap: var(--gap);
+      192      min-height: 0;
+      193      /*
+
+● Update(api/guichet/guichet.css)
+  ⎿  Added 4 lines, removed 1 line
+      209      align-items: center;
+      210      min-width: 0;
+      211      /* Fill the band, but stop short of the stretched-column l
+           ook on a quiet
+      212 -       morning when the band is most of the screen. */        
+      212 +       morning when the band is most of the screen. The width 
+          +cap does the same                                             
+      213 +       job sideways: one window in service gets a proportioned
+          + panel in the                                                 
+      214 +       middle of the board, not a letterbox with a number lost
+          + inside it. */                                                
+      215      height: 100%;
+      216      max-height: 42vh;
+      217 +    max-width: min(46vw, 82vh);                               
+      218      overflow: hidden;
+      219      padding: var(--pad-counter) var(--pad);
+      220      border: var(--border) solid var(--rule);
+
+  Called claude-in-chrome 10 times, ran 5 shell commands (ctrl+o to expand)
+
+● Terminé. Les quatre demandes sont en place, vérifiées au navigateur sur 8
+  états et 5 résolutions.
+
+  Le tableau avec les données réelles
+  (/tmp/claude-chrome-screenshots-W6bBbx/screenshot-1786373709035-0.jpg)
+
+  Ce qui a changé
+
+  api/guichet/index.php
+  - Le titre « Appelés » disparaît de l'écran. Le <h2> reste dans le DOM en
+  .visually-hidden : la section garde son nom accessible et le plan de titres
+  reste h1 → h2 ×3 (RGAA 9.1).
+  - Les guichets libres ne sont plus rendus du tout. Un tableau $callPanels ne
+  retient que les guichets qui appellent, dans l'ordre des guichets (pas l'ordre
+  des appels), pour qu'un panneau ne saute pas latéralement entre deux polls.
+  - Nouvel état vide quand personne n'est appelé : « Aucun numéro appelé pour le
+  moment », centré à la hauteur où les numéros apparaîtront. « Aucun guichet
+  configuré » est conservé pour le cas d'installation cassée.
+  - guichet.css?v=3 : sans ça l'écran, qui tourne des semaines sans
+  surveillance, garderait l'ancienne feuille.
+
+  api/guichet/guichet.css
+  - La file d'attente devient une pièce à part : fond Ardennes Slate
+  (oklch(94.5% 0.02 215)), cadre 2px, titre et pastille de comptage dans le
+  slate foncé. Froid sur un tableau chaud : les deux zones se séparent par la
+  teinte et par un bord, ce qui survit à la traversée de la place. J'ai gardé
+  Citoyen Ember pour le flash « vient d'être appelé » uniquement, conformément à
+  DESIGN.md.
+  - Les tickets en attente perdent leur bordure : sur le champ slate, le
+  remplissage papier suffit à les séparer, et douze cadres auraient posé une
+  grille de traits sur l'écran.
+  - Un seul guichet en service donne maintenant un panneau proportionné et
+  centré (max-width: min(46vw, 82vh)) au lieu d'un letterbox pleine largeur avec
+  un chiffre perdu au milieu.
+  - CSS morte supprimée (.counter--idle, .counter__number--idle, .ticket--next,
+  .ticket__tag, .section-title).
+
+  Vérifications
+
+  - Contraste : 215 nœuds de texte mesurés sur 8 états, 0 échec. Titre « En
+  attente » 7,8:1, pastille 8,5:1, numéros 15,1:1. Le cadre de la zone fait
+  3,15:1 contre le tableau et 3,05:1 contre son propre fond (WCAG 1.4.11).
+  prefers-contrast: more renforce les trois nouveaux jetons (9,6:1 / 11,3:1).
+  - Pas de couleur seule (RGAA 3.1) : la zone garde son titre texte et son
+  cadre.
+  - Aucun débordement en 1920×1080, 1366×768, 1280×1024, 1024×768 et 3840×2160,
+  sur tous les états, y compris 18 en attente avec la pastille « +7 autres ».
+  - Le poll : le fragment ?partial=1 est intact et un panneau qui apparaît à
+  partir de rien (le cas créé par la suppression des guichets libres) déclenche
+  bien le flash.
+  - prefers-reduced-motion conservé.
+
+  Un point que je n'ai pas touché
+
+  Le bandeau TEST recouvre le nom du premier guichet quand 3 ou 4 guichets
+  appellent : le ruban est en position: fixed sur un carré de min(22vw, 39vh),
+  et seul .rail__identity est décalé pour l'éviter. Le défaut existait avant ce
+  travail et corriger la géométrie change la mise en page en mode test, donc je
+  vous laisse l'arbitrage. Dites-moi si vous voulez que je le règle.
+
+  Rien n'est commité. Qu'est-ce qui marche, qu'est-ce qui ne marche pas ?
+
+✻ Crunched for 18m 12s
+❯ corrige le bandeau test aussi                                                 
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Update(api/guichet/index.php)
+  ⎿  Added 7 lines, removed 1 line
+      157  <main class="board<?= $isTest ? ' board--test' : '' ?>" id="bo
+           ard">
+      158  
+      159      <?php if ($isTest): ?>
+      160 +        <?php /* A row of the board rather than a corner of it
+          +. The rotated corner                                          
+      161 +                 ribbon sat on top of the first window's name,
+          + and reading the                                              
+      162 +                 window names is one of the things a trial is 
+          +there to check. */ ?>                                         
+      163          <div class="ribbon">
+      161 -            <p class="ribbon__label">Test</p>                 
+      164 +            <p class="ribbon__label">                         
+      165 +                <strong class="ribbon__strong">Écran de test</
+          +strong>&nbsp;:                                                
+      166 +                les numéros affichés ne sont pas fiables      
+      167 +            </p>                                              
+      168          </div>
+      169      <?php endif; ?>
+      170  
+
+● Update(api/guichet/guichet.css)
+  ⎿  Added 23 lines, removed 31 lines
+      507  /* -----------------------------------------------------------
+           ------ ribbon --- */
+      508  
+      509  /*
+      510 - * Corner ribbon shown only when GUICHET_TEST_MODE is set. It 
+          -exists so nobody                                              
+      511 - * in the plaza trusts a number on a board that is being trial
+          -led, so it is                                                 
+      512 - * sized to be read at the same distance as the numbers themse
+          -lves.                                                         
+      510 + * Shown only when GUICHET_TEST_MODE is set. It exists so nobo
+          +dy in the plaza                                               
+      511 + * trusts a number on a board that is being trialled, so it is
+          + sized to be read                                             
+      512 + * at the same distance as the board itself.                  
+      513   *
+      514 - * The square wrapper clips the rotated band, which keeps a 45
+          --degree element                                               
+      515 - * from pushing the page wider and triggering a scrollbar.    
+      514 + * It takes a row of the board rather than a corner of it. A r
+          +otated corner                                                 
+      515 + * ribbon has to be large to be read from the plaza, and at th
+          +at size it covered                                            
+      516 + * the first window's name; a strip cannot overlap anything by
+          + construction.                                                
+      517   */
+      517 -.ribbon {                                                     
+      518 -    position: fixed;                                          
+      519 -    top: 0;                                                   
+      520 -    left: 0;                                                  
+      521 -    width: min(22vw, 39vh);                                   
+      522 -    height: min(22vw, 39vh);                                  
+      523 -    overflow: hidden;                                         
+      524 -    pointer-events: none;                                     
+      525 -    z-index: 10;                                              
+      518 +.board--test {                                                
+      519 +    grid-template-rows: auto auto minmax(0, 1fr) auto auto;   
+      520  }
+      521  
+      528 -.ribbon__label {                                              
+      529 -    position: absolute;                                       
+      530 -    top: 24%;                                                 
+      531 -    left: -50%;                                               
+      532 -    width: 200%;                                              
+      533 -    padding: calc(var(--gap) * 0.4) 0;                        
+      534 -    transform: rotate(-45deg);                                
+      522 +.ribbon {                                                     
+      523 +    /* Cancels the board padding on the three edges the strip 
+          +touches, so it                                                
+      524 +       reads as chrome wrapped around the board instead of a p
+          +anel inside it. */                                            
+      525 +    margin: calc(var(--pad) * -1) calc(var(--pad) * -1) 0;    
+      526 +    padding: calc(var(--gap) * 0.45) var(--pad);              
+      527      background-color: var(--alarm);
+      528 +    /* 5.9:1 on Alarm. The Paper Rule covers the board's own s
+          +urfaces; this strip                                           
+      529 +       is deliberately not one of them. */                    
+      530      color: #fff;
+      537 -    font-size: var(--size-office);                            
+      538 -    font-weight: 800;                                         
+      539 -    letter-spacing: 0.12em;                                   
+      540 -    line-height: 1.2;                                         
+      531      text-align: center;
+      542 -    /* One-word badge: the single case DESIGN.md allows upperc
+          -ase. The DOM keeps                                            
+      543 -       sentence case so assistive tech does not spell it out. 
+          -*/                                                            
+      544 -    text-transform: uppercase;                                
+      532  }
+      533  
+      547 -/* Clears the identity out from under the ribbon rather than l
+          -etting it hide. */                                            
+      548 -.board--test .rail__identity {                                
+      549 -    padding-left: min(18vw, 32vh);                            
+      534 +.ribbon__label {                                              
+      535 +    font-size: var(--size-rail);                              
+      536 +    font-weight: 500;                                         
+      537 +    line-height: 1.3;                                         
+      538  }
+      539  
+      540 +.ribbon__strong {                                             
+      541 +    font-weight: 800;                                         
+      542 +}                                                             
+      543 +                                                              
+      544  /* -----------------------------------------------------------
+           ----- offline --- */
+      545  
+      546  /*
+
+  Searched for 1 pattern, read 1 file, called claude-in-chrome 4 times, ran 1 shell command (ctrl+o to expand)
+
+● Update(api/guichet/guichet.css)
+  ⎿  Added 6 lines, removed 1 line
+      499      white-space: nowrap;
+      500  }
+      501  
+      502 +/*                                                            
+      503 + * Ink Soft, not Ink Muted: on a 1366x768 panel this line fall
+          +s to 21 px, below                                             
+      504 + * the size where WCAG lets a 3:1 ratio stand. Weight already 
+          +separates the                                                 
+      505 + * window name from the number it follows.                    
+      506 + */                                                           
+      507  .history__office {
+      503 -    color: var(--ink-muted);                                  
+      508 +    color: var(--ink-soft);                                   
+      509      font-weight: 500;
+      510  }
+      511  
+
+  Called claude-in-chrome 7 times, ran 4 shell commands (ctrl+o to expand)
+
+● The CLAUDE.md description of the ribbon is now stale:
+
+● Update(CLAUDE.md)
+  ⎿  Added 4 lines, removed 2 lines
+       99  swaps the fragment in, so the screen updates without the full-
+           reload flash.
+      100  `<meta http-equiv="refresh">` remains as a `<noscript>` fallba
+           ck.
+      101  
+      102 -Set `GUICHET_TEST_MODE=1` in `.env` to overlay a red "Test" co
+          -rner ribbon and                                               
+      103 -prefix the page title, so nobody trusts the numbers on a board
+          - being trialled.                                              
+      102 +Set `GUICHET_TEST_MODE=1` in `.env` to add a red strip across 
+          +the top of the                                                
+      103 +board and prefix the page title, so nobody trusts the numbers 
+          +on a board being                                              
+      104 +trialled. The strip takes a grid row rather than a corner: a r
+          +otated corner                                                 
+      105 +ribbon large enough to read from the plaza covered the first w
+          +indow's name.                                                 
+      106  Off unless the variable is set, and deliberately not switchabl
+           e by query string:
+      107  the board is served over HTTP, and a URL toggle would let anyo
+           ne make the real
+      108  board look untrustworthy.
+
+● Bandeau test corrigé.
+
+  Le tableau réel, mode test actif
+  (/tmp/claude-chrome-screenshots-W6bBbx/screenshot-1786374347551-1.jpg)
+
+  Ce qui change
+
+  Le ruban d'angle devient une bande qui occupe une ligne du tableau, sur toute
+  la largeur de l'écran. Le recouvrement disparaît par construction : la bande
+  ne peut chevaucher aucun contenu, quel que soit le nombre de guichets qui
+  appellent.
+
+  - .board--test passe à grid-template-rows: auto auto minmax(0, 1fr) auto auto,
+  la bande prend la première ligne. L'état d'erreur (.notice, grid-row: span 3)
+  suit correctement le décalage.
+  - Marges négatives sur --pad pour que la bande touche les trois bords qu'elle
+  longe : elle se lit comme du chrome autour du tableau, pas comme un panneau
+  dedans.
+  - Le décalage .board--test .rail__identity n'a plus de raison d'être,
+  supprimé.
+  - La place gagnée sert le message. « Test » seul devenait une bande rouge
+  presque vide ; maintenant : Écran de test : les numéros affichés ne sont pas
+  fiables. Casse normale, conforme à DESIGN.md, et c'est bien plus explicite
+  pour quelqu'un sur la place que le mot seul.
+  - Coût vertical : 44 px en 1080p, sur les ~1080 disponibles. Aucun débordement
+  nulle part.
+
+  En chemin j'ai aussi corrigé un vrai échec WCAG 1.4.3 que l'audit élargi a
+  révélé : les noms de guichets du bandeau « Déjà appelés aujourd'hui » étaient
+  en Ink Muted, ce qui donne 3,8:1. En 1080p ils passent (texte large, seuil
+  3:1), mais sur un panneau 1366×768 ils tombent à 21 px et le seuil devient
+  4,5:1. Passés en Ink Soft : 7,07:1 partout, la distinction avec les numéros
+  reste portée par la graisse. Le jeton --ink-muted n'était plus utilisé,
+  retiré.
+
+  Vérification finale
+
+  80 combinaisons (8 états × 5 résolutions × mode test on/off), 2150 nœuds de
+  texte mesurés :
+
+  - 0 échec de contraste. Le ratio le plus bas de tout le tableau est 5,88:1, le
+  blanc sur le rouge d'alerte, au-dessus même du seuil corps de texte.
+  - 0 débordement vertical ou horizontal.
+  - États vérifiés visuellement en mode test : charge pleine, noms longs
+  tronqués, erreur base de données.
+
+  CLAUDE.md mis à jour, la section Queue Board décrivait encore le ruban
+  d'angle. Rien n'est commité.
+
+✻ Sautéed for 7m 36s
