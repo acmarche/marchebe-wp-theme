@@ -162,8 +162,8 @@ ob_start();
                  window names is one of the things a trial is there to check. */ ?>
         <div class="ribbon">
             <p class="ribbon__label">
-                <strong class="ribbon__strong">Écran de test</strong>&nbsp;:
-                les numéros affichés ne sont pas fiables
+                <strong class="ribbon__strong">Phase de test</strong>&nbsp;:
+                Nous sommes en cours de test
             </p>
         </div>
     <?php endif; ?>
