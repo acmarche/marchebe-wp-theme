@@ -168,9 +168,8 @@ ob_start();
                     <?php foreach ($offices as $office): ?>
                         <?php
                         $ticket = $currentByOffice[(int)$office['id']] ?? null;
-                        $isLatest = $ticket !== null && $ticket['id'] === $latestCallId;
                         ?>
-                        <li class="counter<?= $ticket === null ? ' counter--idle' : '' ?><?= $isLatest ? ' counter--latest' : '' ?>"
+                        <li class="counter<?= $ticket === null ? ' counter--idle' : '' ?>"
                             data-office="<?= esc((string)$office['id']) ?>"
                             data-ticket="<?= esc($ticket['number'] ?? '') ?>">
                             <?php /* Every panel renders the same four rows, empty where it has
@@ -183,7 +182,7 @@ ob_start();
                             <?php else: ?>
                                 <p class="counter__number"><?= esc($ticket['number']) ?></p>
                                 <p class="counter__service"><?= esc($ticket['service']) ?></p>
-                                <p class="counter__state<?= $isLatest ? ' counter__state--latest' : '' ?>"><?= $isLatest ? 'Appelé maintenant' : '' ?></p>
+                                <p class="counter__state<?= ' counter__state--latest' ?>"></p>
                             <?php endif; ?>
                         </li>
                     <?php endforeach; ?>
