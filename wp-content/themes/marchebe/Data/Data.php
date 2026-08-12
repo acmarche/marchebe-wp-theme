@@ -20,7 +20,7 @@ class Data
             'iconcolor' => 'text-cta-dark',
         ],
         [
-            'name' => 'Travaux en cours',
+            'name' => 'Travaux',
             'description' => '',
             'icon' => 'fas fa-person-digging',
             'color' => 'text-white',
