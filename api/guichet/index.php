@@ -18,9 +18,6 @@ require_once dirname(__DIR__, 2).'/vendor/autoload.php';
 
 use Symfony\Component\Dotenv\Dotenv;
 
-/** Waiting numbers the board shows before collapsing the rest into a counter. */
-const WAITING_SLOTS = 12;
-
 (new Dotenv())->load(dirname(__DIR__, 2).'/.env');
 
 $isPartial = isset($_GET['partial']);
@@ -73,9 +70,7 @@ function frenchDate(DateTimeImmutable $date): string
 $now = new DateTimeImmutable();
 
 $offices = [];
-$waiting = [];
 $currentByOffice = [];
-$earlierCalls = [];
 $hasError = false;
 
 try {
@@ -92,51 +87,30 @@ try {
     $offices = $pdo->query('SELECT id, name FROM offices ORDER BY name')->fetchAll(PDO::FETCH_ASSOC);
 
     $sql = <<<SQL
-        SELECT t.id, t.number, t.service, t.office_id, t.createdAt, t.assigned_date,
-               o.name AS office_name
+        SELECT t.id, t.number, t.service, t.office_id, t.createdAt, t.assigned_date
         FROM tickets t
-        LEFT JOIN offices o ON t.office_id = o.id
-        WHERE t.created_date = :today AND t.archive = 0
+        WHERE t.created_date = :today AND t.archive = 0 AND t.office_id IS NOT NULL
         SQL;
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['today' => $now->format('Y-m-d')]);
-    $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $called = [];
-    foreach ($tickets as $ticket) {
-        if ($ticket['office_id'] === null) {
-            $waiting[] = $ticket;
-        } else {
-            $called[] = $ticket;
-        }
-    }
-
-    // The queue reads in the order people will be served: oldest ticket first.
-    usort($waiting, static fn(array $a, array $b): int => strcmp((string)$a['createdAt'], (string)$b['createdAt']));
+    $called = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // A call ranks by when it was assigned to a window, not by when the ticket
-    // was printed.
+    // was printed. Most recent first, so the first call seen for a window is
+    // the one it is serving now.
     $callTime = static fn(array $t): string => (string)($t['assigned_date'] ?? $t['createdAt']);
     usort($called, static fn(array $a, array $b): int => strcmp($callTime($b), $callTime($a)));
 
     foreach ($called as $ticket) {
         $officeId = (int)$ticket['office_id'];
-        if (isset($currentByOffice[$officeId])) {
-            $earlierCalls[] = $ticket;
-        } else {
+        if (!isset($currentByOffice[$officeId])) {
             $currentByOffice[$officeId] = $ticket;
         }
     }
 } catch (PDOException) {
     $hasError = true;
 }
-
-$waitingTotal = count($waiting);
-$waitingOverflow = max(0, $waitingTotal - WAITING_SLOTS);
-$waitingShown = $waitingOverflow > 0
-        ? array_slice($waiting, 0, WAITING_SLOTS - 1)
-        : $waiting;
 
 /*
  * Only windows with someone at them reach the board. A row of "Libre" panels
@@ -221,51 +195,6 @@ ob_start();
             <?php endif; ?>
         </section>
 
-        <section class="waiting" aria-labelledby="waiting-title">
-            <h2 class="waiting__title" id="waiting-title">
-                En attente
-                <?php if ($waitingTotal > 0): ?>
-                    <span class="waiting__count"><?= $waitingTotal ?></span>
-                <?php endif; ?>
-            </h2>
-
-            <?php if ($waitingShown === []): ?>
-                <div class="section-empty">
-                    <p class="section-empty__lead">Personne n'attend pour le moment.</p>
-                    <p class="section-empty__hint">Prenez votre ticket à l'accueil.</p>
-                </div>
-            <?php else: ?>
-                <ul class="waiting__list">
-                    <?php foreach ($waitingShown as $ticket): ?>
-                        <li class="ticket">
-                            <p class="ticket__number"><?= esc($ticket['number']) ?></p>
-                            <p class="ticket__service"><?= esc($ticket['service']) ?></p>
-                        </li>
-                    <?php endforeach; ?>
-                    <?php if ($waitingOverflow > 0): ?>
-                        <li class="ticket ticket--overflow">
-                            <p class="ticket__number">+<?= $waitingOverflow + 1 ?></p>
-                            <p class="ticket__service">autres</p>
-                        </li>
-                    <?php endif; ?>
-                </ul>
-            <?php endif; ?>
-        </section>
-
-        <?php if ($earlierCalls !== []): ?>
-            <section class="history" aria-labelledby="history-title">
-                <h2 class="history__title" id="history-title">Déjà appelés aujourd'hui</h2>
-                <ul class="history__list">
-                    <?php foreach ($earlierCalls as $ticket): ?>
-                        <li class="history__item">
-                            <?= esc($ticket['number']) ?>
-                            <span class="history__office"><?= esc($ticket['office_name']) ?></span>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            </section>
-        <?php endif; ?>
-
     <?php endif; ?>
 
     <p class="offline" role="status">Affichage hors ligne, les numéros peuvent avoir changé.</p>
@@ -286,7 +215,7 @@ if ($isPartial) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $isTest ? '[Test] ' : '' ?>File d'attente - Ville de Marche-en-Famenne</title>
-    <link rel="stylesheet" href="/api/guichet/guichet.css?v=3">
+    <link rel="stylesheet" href="/api/guichet/guichet.css?v=4">
     <noscript>
         <meta http-equiv="refresh" content="20">
     </noscript>

@@ -16,20 +16,11 @@
 :root {
     --paper: #fbf9f6;
     --vellum: #f4f1ec;
-    --field: #ece8e2;
     --rule: #d9d3cb;
     --ink-soft: #6a6359;
     --ink: #312c25;
     /* Citoyen Ember survives only as the wash behind a newly called number. */
     --ember-wash: #ffe6d2;
-    /*
-     * Ardennes Slate, the DESIGN.md supporting voice, carries the waiting zone.
-     * Cool against a warm board, so the two halves separate by hue as well as
-     * by frame, and it leaves Citoyen Ember free to mean "just called".
-     */
-    --wait-wash: #dff1f5;
-    --wait-rule: #5191a1;
-    --wait-ink: #0f505d;
     /*
      * Deliberately outside the DESIGN.md palette. The test ribbon's whole job is
      * to look alien to the board; if it read as brand colour it would fail.
@@ -41,12 +32,11 @@
     --size-number: min(9.6vw, 17.1vh);
     --size-office: min(2.3vw, 4.1vh);
     --size-service: min(1.7vw, 3vh);
-    --size-wait-number: min(3.8vw, 6.8vh);
-    --size-section: min(1.85vw, 3.3vh);
     --size-rail: min(1.6vw, 2.85vh);
     --size-clock: min(2.3vw, 4.1vh);
-    --size-tag: min(1.6vw, 2.85vh);
-    --size-history: min(1.55vw, 2.75vh);
+    /* The board's smallest type, and the only thing wearing it is the offline
+       badge, which staff read from the desk rather than from the plaza. */
+    --size-note: min(1.55vw, 2.75vh);
 
     --gap: min(1.25vw, 2.2vh);
     --pad: min(1.7vw, 3vh);
@@ -60,14 +50,10 @@
     :root {
         --paper: oklch(98% 0.005 70);
         --vellum: oklch(96% 0.008 70);
-        --field: oklch(94% 0.008 70);
         --rule: oklch(88% 0.01 70);
         --ink-soft: oklch(45% 0.01 70);
         --ink: oklch(25% 0.01 70);
         --ember-wash: oklch(93% 0.055 47);
-        --wait-wash: oklch(94.5% 0.02 215);
-        --wait-rule: oklch(62% 0.07 215);
-        --wait-ink: oklch(40% 0.065 215);
     }
 }
 
@@ -102,8 +88,7 @@ ul {
 
 /*
  * Kept out of sight, kept in the accessibility tree. `display: none` would drop
- * the heading that names the called-numbers band and leave the page with an
- * h1 and a single h2.
+ * the heading that names the called-numbers band, and it is the page's only h2.
  */
 .visually-hidden {
     position: absolute;
@@ -118,7 +103,10 @@ ul {
 
 .board {
     display: grid;
-    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    /* Rail, then everything left over to the numbers. The offline badge is
+       fixed-positioned, so it claims no track: an unused auto track would be
+       0 px tall but still take a gap, and park the band off centre. */
+    grid-template-rows: auto minmax(0, 1fr);
     gap: var(--gap);
     height: 100vh;
     padding: var(--pad);
@@ -278,128 +266,19 @@ ul {
     animation: call-flash 1000ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* ---------------------------------------------------------------- waiting --- */
-
-/*
- * The waiting queue is a room of its own: a cool slate field, framed, sitting
- * on the warm board. Two zones that used to be told apart by a small centred
- * word are now told apart by colour and by an edge, which is what survives the
- * walk across the plaza.
- */
-.waiting {
-    padding: calc(var(--pad) * 0.6) var(--pad) calc(var(--pad) * 0.8);
-    border: var(--border) solid var(--wait-rule);
-    border-radius: var(--radius);
-    background-color: var(--wait-wash);
-}
-
-.waiting__title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: calc(var(--gap) * 0.5);
-    margin-bottom: calc(var(--gap) * 0.65);
-    color: var(--wait-ink);
-    font-size: var(--size-section);
-    font-weight: 700;
-    line-height: 1.2;
-}
-
-/* The count is a fact, not a decoration, so it carries the zone's darkest tone. */
-.waiting__count {
-    padding: 0.1em 0.5em;
-    border-radius: 999px;
-    background-color: var(--wait-ink);
-    color: var(--paper);
-    font-weight: 700;
-}
-
-.waiting__list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--gap);
-}
-
-/*
- * Six per row: one row at the usual load, two at the twelve-ticket maximum.
- * No border: on the slate field a paper fill already separates one number from
- * the next, and twelve outlined boxes would put a grid of lines on the board.
- */
-.ticket {
-    display: flex;
-    flex: 0 1 calc((100% - 5 * var(--gap)) / 6);
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-width: 0;
-    padding: calc(var(--pad) * 0.5) calc(var(--pad) * 0.4);
-    border-radius: var(--radius);
-    background-color: var(--paper);
-    text-align: center;
-}
-
-/* The tail of the queue is a count, not a ticket, so it does not take a fill. */
-.ticket--overflow {
-    border: 1px dashed var(--wait-rule);
-    background-color: transparent;
-}
-
-.ticket__number {
-    color: var(--ink);
-    font-size: var(--size-wait-number);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1;
-}
-
-.ticket--overflow .ticket__number,
-.ticket--overflow .ticket__service {
-    color: var(--wait-ink);
-}
-
-.ticket__service {
-    margin-top: calc(var(--gap) * 0.25);
-    overflow: hidden;
-    color: var(--ink-soft);
-    font-size: var(--size-tag);
-    font-weight: 500;
-    line-height: 1.2;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100%;
-}
-
 /* --------------------------------------------------- empty and error state --- */
 
 .section-empty {
     display: flex;
     flex-direction: column;
     gap: calc(var(--gap) * 0.35);
+    /* Sits where the numbers would be, at their height, not at the top of the band. */
+    margin: auto;
     padding: calc(var(--pad) * 0.8) var(--pad);
     border: 1px dashed var(--rule);
     border-radius: var(--radius);
     background-color: var(--paper);
     text-align: center;
-}
-
-/* Sits where the numbers would be, at their height, not at the top of the band. */
-.counters .section-empty {
-    margin: auto;
-}
-
-/*
- * The waiting zone already is a surface. A second framed panel inside it would
- * be a box in a box, so the quiet message just sits on the slate field.
- */
-.waiting .section-empty {
-    padding: calc(var(--pad) * 0.35) 0 calc(var(--pad) * 0.15);
-    border: 0;
-    background-color: transparent;
-}
-
-.waiting .section-empty__lead {
-    color: var(--wait-ink);
 }
 
 .section-empty__lead {
@@ -422,7 +301,6 @@ ul {
     align-items: center;
     justify-content: center;
     gap: var(--gap);
-    grid-row: span 3;
     padding: var(--pad);
     border: var(--border) solid var(--rule);
     border-radius: var(--radius);
@@ -444,69 +322,6 @@ ul {
     line-height: 1.3;
 }
 
-/* ---------------------------------------------------------------- history --- */
-
-.history {
-    display: flex;
-    position: relative;
-    align-items: baseline;
-    gap: calc(var(--gap) * 0.75);
-    padding-top: calc(var(--gap) * 0.6);
-    border-top: 1px solid var(--rule);
-    min-width: 0;
-}
-
-/*
- * Fades the tail only when the day's calls actually reach the right edge. A
- * mask on the list itself would dim the last entry even on a quiet morning,
- * because it has no way to know whether anything overflowed.
- */
-.history::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: min(6vw, 10.7vh);
-    background: linear-gradient(to right, rgb(244 241 236 / 0), var(--vellum));
-    pointer-events: none;
-}
-
-.history__title {
-    flex: none;
-    color: var(--ink-soft);
-    font-size: var(--size-history);
-    font-weight: 500;
-    line-height: 1.3;
-    white-space: nowrap;
-}
-
-.history__list {
-    display: flex;
-    gap: calc(var(--gap) * 0.75);
-    overflow: hidden;
-    min-width: 0;
-}
-
-.history__item {
-    flex: none;
-    color: var(--ink-soft);
-    font-size: var(--size-history);
-    font-weight: 700;
-    line-height: 1.3;
-    white-space: nowrap;
-}
-
-/*
- * Ink Soft, not Ink Muted: on a 1366x768 panel this line falls to 21 px, below
- * the size where WCAG lets a 3:1 ratio stand. Weight already separates the
- * window name from the number it follows.
- */
-.history__office {
-    color: var(--ink-soft);
-    font-weight: 500;
-}
-
 /* ----------------------------------------------------------------- ribbon --- */
 
 /*
@@ -519,7 +334,7 @@ ul {
  * the first window's name; a strip cannot overlap anything by construction.
  */
 .board--test {
-    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+    grid-template-rows: auto auto minmax(0, 1fr);
 }
 
 .ribbon {
@@ -561,7 +376,7 @@ ul {
     /* Ink rather than Hearth: the wash already carries the alert colour, and
        this has to stay readable off a panel that is catching a reflection. */
     color: var(--ink);
-    font-size: var(--size-history);
+    font-size: var(--size-note);
     font-weight: 600;
     line-height: 1.3;
 }
@@ -582,8 +397,5 @@ ul {
     :root {
         --rule: #a89f93;
         --ink-soft: #4a443c;
-        --wait-wash: #d3ecf3;
-        --wait-rule: #2f6f7e;
-        --wait-ink: #093d48;
     }
 }
