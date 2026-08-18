@@ -146,6 +146,38 @@ try {
 }
 
 /*
+ * `?state=1` answers with a fingerprint of what the board would show: the calls
+ * in order, each with the window it belongs to. The page reads it every second
+ * and only refetches the fragment when it moves, so a call reaches the screen
+ * about as fast as it is assigned while a quiet hall costs a few dozen bytes a
+ * minute. It is deliberately served from the same query as the board itself,
+ * which is what keeps the two from ever disagreeing.
+ */
+if (isset($_GET['state'])) {
+    header('Content-Type: text/plain; charset=utf-8');
+    header('Cache-Control: no-store, no-cache, must-revalidate');
+
+    if ($hasError) {
+        echo 'error';
+
+        exit;
+    }
+
+    // Everything a panel is made of, so renaming a window or correcting a
+    // number reaches the screen as fast as a new call does.
+    $signature = [$offices];
+    foreach ($ticketsByOffice as $officeId => $tickets) {
+        foreach ($tickets as $ticket) {
+            $signature[] = [$officeId, $ticket['id'], $ticket['number'], $ticket['service']];
+        }
+    }
+
+    echo md5(json_encode($signature, JSON_THROW_ON_ERROR));
+
+    exit;
+}
+
+/*
  * One panel per call, so a window holding several tickets appears once per
  * ticket. Only windows with someone at them reach the board: a row of "Libre"
  * panels spends the brightest, largest real estate on the one thing nobody in
@@ -276,8 +308,12 @@ if ($isPartial) {
         const POLL_MS = 10000;
         const RELOAD_MS = 3600000;
         const FAILURES_BEFORE_OFFLINE = 3;
+        const STATE_MS = 1000;
+        const CALL_SOUND_URL = '/api/guichet/ticket-assigned.mp3';
 
         let failures = 0;
+        let callSound = null;
+        let lastState = null;
 
         function board() {
             return document.getElementById('board');
@@ -294,12 +330,73 @@ if ($isPartial) {
             return state;
         }
 
+        /**
+         * The chime that turns the queue's head around. Tied to a panel
+         * appearing rather than to the socket, so it rings once per call
+         * whatever brought the update in, and never on the first paint or on
+         * the hourly reload, where every panel is "new" but nothing was called.
+         *
+         * An unattended screen has no user gesture behind it, so a browser with
+         * the default autoplay policy refuses to play. The rejection is
+         * swallowed: a silent board still shows the right numbers.
+         */
+        function playCallSound() {
+            try {
+                if (callSound === null) {
+                    callSound = new Audio(CALL_SOUND_URL);
+                }
+                callSound.currentTime = 0;
+                const played = callSound.play();
+                if (played) {
+                    played.catch(function () {
+                    });
+                }
+            } catch (e) {
+            }
+        }
+
+        /**
+         * A browser started without `--autoplay-policy=no-user-gesture-required`
+         * refuses to play until the page has been interacted with, which never
+         * happens on a screen bolted above a door. The flag is the real fix;
+         * this only makes sure that if anyone ever touches or types on the
+         * kiosk, the board is audible for the rest of its session.
+         */
+        function unlockCallSound() {
+            const unlock = function () {
+                try {
+                    if (callSound === null) {
+                        callSound = new Audio(CALL_SOUND_URL);
+                    }
+                    callSound.muted = true;
+                    const played = callSound.play();
+                    const restore = function () {
+                        callSound.pause();
+                        callSound.currentTime = 0;
+                        callSound.muted = false;
+                    };
+                    if (played) {
+                        played.then(restore).catch(restore);
+                    } else {
+                        restore();
+                    }
+                } catch (e) {
+                }
+            };
+
+            ['pointerdown', 'keydown'].forEach(function (type) {
+                document.addEventListener(type, unlock, {once: true});
+            });
+        }
+
         function flashNewCalls(before) {
             const current = board();
+            let hasNewCall = false;
             current.querySelectorAll('[data-call]').forEach(function (counter) {
                 if (before[counter.getAttribute('data-call')]) {
                     return;
                 }
+                hasNewCall = true;
                 // Settle the freshly inserted panel's style first. Without this
                 // the class lands in the same recalculation as the insertion,
                 // so there is no change for the animation to start from.
@@ -313,6 +410,10 @@ if ($isPartial) {
                 // arrives and the class would otherwise stick.
                 setTimeout(clear, 1500);
             });
+
+            if (hasNewCall) {
+                playCallSound();
+            }
         }
 
         function poll() {
@@ -333,6 +434,7 @@ if ($isPartial) {
                     board().replaceWith(next);
                     flashNewCalls(before);
                     failures = 0;
+                    lastState = null;
                     document.body.classList.remove('is-offline');
                 })
                 .catch(function () {
@@ -352,6 +454,42 @@ if ($isPartial) {
             clock.textContent = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
         }
 
+        /**
+         * The watcher. A changed fingerprint is the only thing that pulls a
+         * fragment in between two scheduled polls, and a failure is simply left
+         * to the next second: the ten-second poll below stays the safety net
+         * that already carries the offline handling.
+         */
+        function pollState() {
+            fetch('?state=1&t=' + Date.now(), {cache: 'no-store'})
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error(String(response.status));
+                    }
+
+                    return response.text();
+                })
+                .then(function (state) {
+                    // A full poll clears the baseline rather than setting it,
+                    // so the board is never refetched twice for one change.
+                    if (lastState === null) {
+                        lastState = state;
+
+                        return;
+                    }
+
+                    if (state !== lastState) {
+                        lastState = state;
+                        poll();
+                    }
+                })
+                .catch(function () {
+                });
+        }
+
+        unlockCallSound();
+
+        setInterval(pollState, STATE_MS);
         setInterval(poll, POLL_MS);
         setInterval(tickClock, 15000);
 
