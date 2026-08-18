@@ -44,6 +44,9 @@
 
     --radius: 10px;
     --border: 2px;
+    /* The panel frame, which is what carries a window's colour. Thick because a
+       2 px rule is a hairline from the plaza. */
+    --border-panel: min(0.8vw, 1.4vh);
 }
 
 @supports (color: oklch(50% 0.1 50)) {
@@ -166,21 +169,24 @@ ul {
     min-height: 0;
 }
 
+/*
+ * `--cols` and `--rows` come from the markup, which knows how many panels the
+ * band holds. They let the panels divide the band exactly: rows share the
+ * height instead of each claiming all of it, so a window serving several
+ * tickets can add a second and third row to a screen that never scrolls.
+ * Wrapping is left to flexbox rather than to a grid because it centres a short
+ * last row, which is where an odd panel count lands.
+ */
 .counters__list {
     display: flex;
     flex: 1;
     flex-wrap: wrap;
-    /* Quiet mornings leave this band most of the board; centring the row keeps
-       the panels a sane height instead of stretching them into empty columns. */
+    /* Quiet mornings leave this band most of the board; centring keeps the
+       panels a sane height instead of stretching them into empty columns. */
     align-content: center;
     justify-content: center;
     gap: var(--gap);
     min-height: 0;
-    /*
-     * Sizing container for the number below: the band is sized by the board
-     * grid, and the digits scale to whatever height that leaves.
-     */
-    container-type: size;
 }
 
 /*
@@ -190,7 +196,7 @@ ul {
  */
 .counter {
     display: grid;
-    flex: 1 1 min(20rem, 100%);
+    flex: 0 0 auto;
     grid-template-rows: auto minmax(0, 1fr) auto;
     align-items: center;
     min-width: 0;
@@ -198,13 +204,31 @@ ul {
        morning when the band is most of the screen. The width cap does the same
        job sideways: one window in service gets a proportioned panel in the
        middle of the board, not a letterbox with a number lost inside it. */
-    height: 100%;
+    width: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+    height: calc((100% - (var(--rows) - 1) * var(--gap)) / var(--rows));
     max-height: 42vh;
     max-width: min(46vw, 82vh);
     overflow: hidden;
+    /*
+     * Sizing container for the number below: the panel is sized by the band,
+     * and the digits scale to whatever height that leaves it. Held on the panel
+     * rather than on the band so a second row of panels shrinks its digits
+     * instead of sizing them off a height it no longer has.
+     */
+    container-type: size;
     padding: var(--pad-counter) var(--pad);
-    border: var(--border) solid var(--rule);
-    border-radius: var(--radius);
+    /*
+     * The frame carries the window's own colour, handed in as `--accent` from
+     * `offices.color`, and falls back to the neutral rule for a window that has
+     * none. Heavy enough to read as a colour from the plaza, and the same
+     * weight on every panel, so the band stays one system and only the hue
+     * tells windows apart. It is the frame that wears the colour rather than
+     * the background, which belongs to the flash marking a new call, or the
+     * text, which stays ink on paper at the contrast the plaza needs.
+     * The radius grows with the frame, or the corners square off.
+     */
+    border: var(--border-panel) solid var(--accent, var(--rule));
+    border-radius: calc(var(--radius) + var(--border-panel) / 2);
     background-color: var(--paper);
     text-align: center;
 }
@@ -235,7 +259,11 @@ ul {
 
 @supports (container-type: size) {
     .counter__number {
-        font-size: min(var(--size-number), 42cqh);
+        /* Height term: what the panel's middle row leaves once the name and
+           service rows have taken theirs. Width term: panels get narrower as a
+           busy window adds a panel per ticket, and a three-digit number has to
+           stay inside its own. */
+        font-size: min(var(--size-number), 55cqh, 40cqw);
     }
 }
 

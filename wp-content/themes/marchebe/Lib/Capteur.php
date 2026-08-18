@@ -20,7 +20,6 @@ class Capteur
 
     public function getStations(): array
     {
-        return [];
         try {
             $stations = $this->stationRepository->getStations();
         } catch (\JsonException $e) {

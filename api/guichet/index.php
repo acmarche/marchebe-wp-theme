@@ -38,6 +38,40 @@ function esc(?string $value): string
 }
 
 /**
+ * A window carries a colour picked by staff in the back office, stored as free
+ * text. Only a hex colour is let through: the value ends up in a style
+ * attribute, and anything else arriving there is a CSS injection rather than a
+ * colour. A colour close to the board's paper is darkened until it separates
+ * from it, since it was chosen against the white of an office screen.
+ */
+function officeAccent(?string $value): ?string
+{
+    if (preg_match('/^#([0-9a-f]{3}|[0-9a-f]{6})$/i', trim((string)$value)) !== 1) {
+        return null;
+    }
+
+    $hex = ltrim(trim((string)$value), '#');
+    if (strlen($hex) === 3) {
+        $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2];
+    }
+
+    $channels = array_map(static fn(string $pair): int => (int)hexdec($pair), str_split($hex, 2));
+    [$red, $green, $blue] = $channels;
+
+    // sRGB luminance. The paper behind the frame sits at about 0.97, so a
+    // colour much above half of that reads as another shade of the panel.
+    $luminance = (0.2126 * $red + 0.7152 * $green + 0.0722 * $blue) / 255;
+    if ($luminance > 0.5) {
+        $channels = array_map(
+                static fn(int $channel): int => (int)round($channel * 0.5 / $luminance),
+                $channels,
+        );
+    }
+
+    return sprintf('#%02x%02x%02x', ...$channels);
+}
+
+/**
  * French long date, without relying on ext-intl being present on the kiosk host.
  */
 function frenchDate(DateTimeImmutable $date): string
@@ -70,7 +104,7 @@ function frenchDate(DateTimeImmutable $date): string
 $now = new DateTimeImmutable();
 
 $offices = [];
-$currentByOffice = [];
+$ticketsByOffice = [];
 $hasError = false;
 
 try {
@@ -84,7 +118,7 @@ try {
             ],
     );
 
-    $offices = $pdo->query('SELECT id, name FROM offices ORDER BY name')->fetchAll(PDO::FETCH_ASSOC);
+    $offices = $pdo->query('SELECT id, name, color FROM offices ORDER BY name')->fetchAll(PDO::FETCH_ASSOC);
 
     $sql = <<<SQL
         SELECT t.id, t.number, t.service, t.office_id, t.createdAt, t.assigned_date
@@ -97,34 +131,44 @@ try {
     $called = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // A call ranks by when it was assigned to a window, not by when the ticket
-    // was printed. Most recent first, so the first call seen for a window is
-    // the one it is serving now.
+    // was printed. Most recent first, so a window's freshest call leads its
+    // group on the board.
     $callTime = static fn(array $t): string => (string)($t['assigned_date'] ?? $t['createdAt']);
     usort($called, static fn(array $a, array $b): int => strcmp($callTime($b), $callTime($a)));
 
+    // A window can hold several open tickets at once, so every call is kept
+    // rather than only the latest one per window.
     foreach ($called as $ticket) {
-        $officeId = (int)$ticket['office_id'];
-        if (!isset($currentByOffice[$officeId])) {
-            $currentByOffice[$officeId] = $ticket;
-        }
+        $ticketsByOffice[(int)$ticket['office_id']][] = $ticket;
     }
 } catch (PDOException) {
     $hasError = true;
 }
 
 /*
- * Only windows with someone at them reach the board. A row of "Libre" panels
- * spends the brightest, largest real estate on the one thing nobody in the
- * queue is looking for. Office order is kept rather than call order, so a panel
- * does not jump sideways between two polls.
+ * One panel per call, so a window holding several tickets appears once per
+ * ticket. Only windows with someone at them reach the board: a row of "Libre"
+ * panels spends the brightest, largest real estate on the one thing nobody in
+ * the queue is looking for. Office order is kept rather than call order, so a
+ * panel does not jump sideways between two polls, and a window's own tickets
+ * stay side by side under the same name.
  */
 $callPanels = [];
 foreach ($offices as $office) {
-    $ticket = $currentByOffice[(int)$office['id']] ?? null;
-    if ($ticket !== null) {
-        $callPanels[] = ['office' => $office, 'ticket' => $ticket];
+    $accent = officeAccent($office['color'] ?? null);
+    foreach ($ticketsByOffice[(int)$office['id']] ?? [] as $ticket) {
+        $callPanels[] = ['office' => $office, 'ticket' => $ticket, 'accent' => $accent];
     }
 }
+
+/*
+ * Panels are laid out in balanced rows of at most four: four numbers is about
+ * all the plaza scans at once, and splitting evenly keeps a second row from
+ * trailing off with a single panel. The counts go to the stylesheet so the
+ * panels divide the band exactly, whatever the day brings.
+ */
+$panelRows = max(1, (int)ceil(count($callPanels) / 4));
+$panelColumns = max(1, (int)ceil(count($callPanels) / $panelRows));
 
 ob_start();
 ?>
@@ -178,11 +222,12 @@ ob_start();
                     <?php endif; ?>
                 </div>
             <?php else: ?>
-                <ul class="counters__list">
+                <ul class="counters__list" style="--cols: <?= $panelColumns ?>; --rows: <?= $panelRows ?>">
                     <?php foreach ($callPanels as $panel): ?>
-                        <li class="counter"
-                            data-office="<?= esc((string)$panel['office']['id']) ?>"
-                            data-ticket="<?= esc($panel['ticket']['number']) ?>">
+                        <?php /* Keyed by ticket, not by window: a window can show several
+                                 panels, so the ticket is what identifies a call to the
+                                 script that flashes newly arrived ones. */ ?>
+                        <li class="counter" data-call="<?= esc((string)$panel['ticket']['id']) ?>"<?php if ($panel['accent'] !== null): ?> style="--accent: <?= esc($panel['accent']) ?>"<?php endif; ?>>
                             <?php /* Three fixed rows in every panel, the service one empty where
                                      the ticket carries no service, so numbers keep a shared
                                      baseline across the band. */ ?>
@@ -215,7 +260,7 @@ if ($isPartial) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $isTest ? '[Test] ' : '' ?>File d'attente - Ville de Marche-en-Famenne</title>
-    <link rel="stylesheet" href="/api/guichet/guichet.css?v=4">
+    <link rel="stylesheet" href="/api/guichet/guichet.css?v=6">
     <noscript>
         <meta http-equiv="refresh" content="20">
     </noscript>
@@ -238,10 +283,12 @@ if ($isPartial) {
             return document.getElementById('board');
         }
 
-        function calledNumbers(root) {
+        // The set of calls on the board, by ticket. A window can hold several
+        // tickets and so show several panels, which rules out keying by window.
+        function calledTickets(root) {
             const state = {};
-            root.querySelectorAll('[data-office]').forEach(function (counter) {
-                state[counter.getAttribute('data-office')] = counter.getAttribute('data-ticket');
+            root.querySelectorAll('[data-call]').forEach(function (counter) {
+                state[counter.getAttribute('data-call')] = true;
             });
 
             return state;
@@ -249,13 +296,8 @@ if ($isPartial) {
 
         function flashNewCalls(before) {
             const current = board();
-            const after = calledNumbers(current);
-            Object.keys(after).forEach(function (office) {
-                if (!after[office] || after[office] === before[office]) {
-                    return;
-                }
-                const counter = current.querySelector('[data-office="' + office + '"]');
-                if (!counter) {
+            current.querySelectorAll('[data-call]').forEach(function (counter) {
+                if (before[counter.getAttribute('data-call')]) {
                     return;
                 }
                 // Settle the freshly inserted panel's style first. Without this
@@ -287,7 +329,7 @@ if ($isPartial) {
                     if (!next) {
                         throw new Error('missing board');
                     }
-                    const before = calledNumbers(board());
+                    const before = calledTickets(board());
                     board().replaceWith(next);
                     flashNewCalls(before);
                     failures = 0;

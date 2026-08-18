@@ -95,6 +95,20 @@ waiting-room board shown on a screen mounted above the entrance door, read from
 the plaza at several metres. `index.php` holds both the queries and the markup;
 `guichet.css` is hand-written (see the build-command warning above).
 
+One panel per open ticket, not per window: a window can hold several tickets at
+once, so it appears once per ticket, its panels grouped under the same name.
+PHP counts the panels and passes `--cols`/`--rows` to the stylesheet, which
+splits them into balanced rows of at most four so any count divides the band
+exactly and the last row stays centred.
+
+`offices.color` (free-text hex, often null) paints the panel frame, which is
+what ties a window's several panels together. Only `#rgb`/`#rrggbb` is let
+through — the value lands in a style attribute — and a colour too light for the
+board's paper is darkened, since staff pick it against a white office screen.
+Every panel wears the same frame weight, neutral where no colour is set. The
+colour never touches the text (contrast) or the background (the new-call
+flash).
+
 `?partial=1` returns the board fragment only; the page polls it every 10s and
 swaps the fragment in, so the screen updates without the full-reload flash.
 `<meta http-equiv="refresh">` remains as a `<noscript>` fallback.
