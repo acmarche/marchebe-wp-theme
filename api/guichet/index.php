@@ -260,12 +260,8 @@ ob_start();
                                  panels, so the ticket is what identifies a call to the
                                  script that flashes newly arrived ones. */ ?>
                         <li class="counter" data-call="<?= esc((string)$panel['ticket']['id']) ?>"<?php if ($panel['accent'] !== null): ?> style="--accent: <?= esc($panel['accent']) ?>"<?php endif; ?>>
-                            <?php /* Three fixed rows in every panel, the service one empty where
-                                     the ticket carries no service, so numbers keep a shared
-                                     baseline across the band. */ ?>
                             <p class="counter__name"><?= esc($panel['office']['name']) ?></p>
                             <p class="counter__number"><?= esc($panel['ticket']['number']) ?></p>
-                            <p class="counter__service"><?= esc($panel['ticket']['service']) ?></p>
                         </li>
                     <?php endforeach; ?>
                 </ul>
