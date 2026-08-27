@@ -290,7 +290,7 @@ if ($isPartial) {
     <title><?= $isTest ? '[Test] ' : '' ?>File d'attente - Ville de Marche-en-Famenne</title>
     <link rel="stylesheet" href="/api/guichet/guichet.css?v=6">
     <noscript>
-        <meta http-equiv="refresh" content="20">
+      <!--  <meta http-equiv="refresh" content="20"> -->
     </noscript>
 </head>
 <body>
