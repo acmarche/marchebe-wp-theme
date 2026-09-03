@@ -14,6 +14,7 @@ use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -79,25 +80,28 @@ class ShortCode
         if (!CookieHelper::isAuthorizedByName(CookieHelper::$encapsulated)) {
             return '';
         }
-        $cacheKey = Cache::generateKey('enaos');
 
-        return Cache::get($cacheKey, function () {
-            return file_get_contents('https://api.marche.be/marchebe/necrologie/');
-            $content = wp_remote_get('https://api.marche.be/marchebe/necrologie/');//timeout
-            if ($content instanceof \WP_Error) {
-                return $content->get_error_message();
-            } else {
-                return $content['body'];
+        return Cache::get('enaos', function (ItemInterface $item) {
+            try {
+                $response = HttpClient::create()->request(
+                    'GET',
+                    'https://api.marche.be/marchebe/necrologie/',
+                    ['timeout' => 10]
+                );
+
+                return $response->getContent();
+            } catch (TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
+                //ne pas garder l'erreur 8h en cache
+                $item->expiresAfter(60);
+
+                return '';
             }
-        }
-        );
+        });
     }
 
     public function taxe(): string
     {
-        $cacheKey = Cache::generateKey('liste_taxes');
-
-        return Cache::get($cacheKey, function () {
+        return Cache::get('liste_taxes', function () {
             $this->httpClient = HttpClient::create();
             $nomenclatures = $this->getContentTaxe('/taxes/api2');
             if ($nomenclatures) {

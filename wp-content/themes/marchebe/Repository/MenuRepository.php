@@ -11,7 +11,7 @@ class MenuRepository
 
     public function getMenu(bool $purgeCache = false): array
     {
-        $cacheKey = Cache::generateKey('menu-top');
+        $cacheKey = 'menu-top';
 
         if ($purgeCache) {
             Cache::delete($cacheKey);

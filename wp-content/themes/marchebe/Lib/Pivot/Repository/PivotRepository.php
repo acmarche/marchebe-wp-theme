@@ -112,7 +112,7 @@ class PivotRepository
         bool $purgeCache = false,
         int $level = ContentEnum::LVL4->value
     ): Event|string|null {
-        $cacheKey = Cache::generateKey(PivotRepository::$keyAll).'-'.$codeCgt;
+        $cacheKey = PivotRepository::$keyAll.'-'.$codeCgt;
         if ($purgeCache) {
             Cache::delete($cacheKey);
         }
@@ -157,7 +157,7 @@ class PivotRepository
 
         try {
             $event = $this->parser->parseEvent($data);
-            $cacheKey = Cache::generateKey(PivotRepository::$keyAll).'-'.$codeCgt;
+            $cacheKey = PivotRepository::$keyAll.'-'.$codeCgt;
             try {
                 Cache::get($cacheKey, function () use ($jsonContent) {
                     return $jsonContent;

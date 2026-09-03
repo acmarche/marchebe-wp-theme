@@ -89,7 +89,7 @@ class PivotCommand extends Command
     private function cacheAll(bool $purge): void
     {
         $level = ContentEnum::LVL4->value;
-        $cacheKey = Cache::generateKey(PivotRepository::$keyAll);
+        $cacheKey = PivotRepository::$keyAll;
 
         try {
             $response = $this->pivotApi->query($level);
@@ -176,7 +176,7 @@ class PivotCommand extends Command
             Mailer::sendError("Error parse event code $codeCgt ", $e->getMessage());
         }
 
-        $cacheKey = Cache::generateKey(PivotRepository::$keyAll) . '-' . $codeCgt;
+        $cacheKey = PivotRepository::$keyAll . '-' . $codeCgt;
         try {
             Cache::get($cacheKey, function () use ($content) {
                 return $content;

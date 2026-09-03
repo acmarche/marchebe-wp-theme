@@ -4,12 +4,12 @@ namespace AcMarche\Theme\Lib;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
-use Symfony\Component\Cache\Adapter\RedisAdapter;
-use Symfony\Component\Cache\Adapter\RedisTagAwareAdapter;
+use Symfony\Component\Cache\Adapter\FilesystemTagAwareAdapter;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\String\UnicodeString;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class Cache
 {
@@ -20,14 +20,21 @@ class Cache
     {
     }
 
-    public static function instance(): CacheInterface|RedisTagAwareAdapter
+    public static function instance(): CacheInterface|FilesystemTagAwareAdapter
     {
         if (!self::$cache) {
-            $client = RedisAdapter::createConnection('redis://localhost');
-            self::$cache = new RedisTagAwareAdapter($client, 'marcheWp', 60 * 60 * 8);
+            self::$cache = new FilesystemTagAwareAdapter('marcheWp', 60 * 60 * 8, self::getPathCache());
         }
 
         return self::$cache;
+    }
+
+    /**
+     * Sous dossier de APP_CACHE_DIR: Twig ecrit ses templates compiles a la racine.
+     */
+    private static function getPathCache(): string
+    {
+        return ($_ENV['APP_CACHE_DIR'] ?? ABSPATH.'var/cache').'/pool';
     }
 
     public static function generateKey(string $cacheKey): string
@@ -46,7 +53,14 @@ class Cache
     {
         $cacheKey = self::generateKey($key);
 
-        return self::instance()->get($cacheKey, $callback, $beta, $tags);
+        //le 4e argument de CacheInterface::get() est $metadata, pas les tags: il faut taguer l'item
+        return self::instance()->get($cacheKey, function (ItemInterface $item) use ($callback, $tags) {
+            if ($tags) {
+                $item->tag($tags);
+            }
+
+            return $callback($item);
+        }, $beta);
     }
 
     // Helper method to delete an item from cache
@@ -62,9 +76,11 @@ class Cache
     {
         return self::instance()->invalidateTags($tags);
     }
+
     // Helper method to get an item from cache only if it exists (no computation)
-    public static function getIfExists(string $cacheKey): mixed
+    public static function getIfExists(string $key): mixed
     {
+        $cacheKey = self::generateKey($key);
         $cache = self::instance();
 
         // Both ApcuAdapter and FilesystemAdapter implement CacheItemPoolInterface
@@ -78,42 +94,5 @@ class Cache
         }
 
         return null;
-    }
-
-    private function sample()
-    {
-        // Example 1: Basic cache usage with callback
-        $userData = Cache::get('user_data_123', function () {
-            // This will only execute if cache miss
-            return [
-                'id' => 123,
-                'name' => 'John Doe',
-                'email' => 'john@example.com',
-            ];
-        });
-
-// Example 2: Cache with tags for easy invalidation
-        $products = Cache::get('products_category_5', function () {
-            // Fetch products from database
-            return fetchProductsFromDb(5);
-        }, null, ['products', 'category_5']);
-
-// Example 3: Generate cache key manually
-        $cacheKey = Cache::generateKey('My Complex Cache Key!@#');
-// Result: 'my-complex-cache-key'
-
-// Example 4: Delete specific cache entry
-        Cache::delete('user_data_123');
-
-// Example 5: Invalidate all caches with specific tags
-        Cache::invalidateTags(['products']); // Clears all product-related caches
-
-// Example 6: Direct access to cache instance if needed
-        $cacheInstance = Cache::instance();
-        $item = $cacheInstance->getItem(Cache::generateKey('some_key'));
-        if (!$item->isHit()) {
-            $item->set('some value');
-            $cacheInstance->save($item);
-        }
     }
 }
