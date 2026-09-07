@@ -14,7 +14,7 @@ class BottinRepository
     private function init(): void
     {
         if (!$this->dbh) {
-            $dsn = 'mysql:host=127.0.0.1;dbname=bottin_laravel';
+            $dsn = 'mysql:host=127.0.0.1;dbname=bottin';
             $username = $_ENV['DB_BOTTIN_USER'];
             $password = $_ENV['DB_BOTTIN_PASS'];
             $options = array(
