@@ -302,12 +302,12 @@ article h2:not(:has(a)), article h3 {
     @apply mt-2 pl-4 border-l-2 border-slate-200;
 }
 
-/* Links within article content */
-.article-content a {
+/* Links within article content (blocs .not-prose exclus, comme le plugin typography: ils stylent leurs liens eux-memes) */
+.article-content a:not(.not-prose *) {
     @apply text-blue-600 underline decoration-blue-300 underline-offset-2 transition-colors duration-200;
 }
 
-.article-content a:hover {
+.article-content a:not(.not-prose *):hover {
     @apply text-blue-800 decoration-blue-500;
 }
 
