@@ -17,6 +17,7 @@ class PublicationRepository
 {
     public const BASE_URL = 'https://www.deliberations.be/marche-en-famenne/publications';
     public static string $keyAll = 'deliberations-publications';
+    public static string $keyNatures = 'deliberations-publications-natures';
     // garde-fou si la pagination change de forme et ne s'arrete plus
     private const MAX_PAGES = 100;
     // pause entre deux requetes, le site est derriere Cloudflare
@@ -41,6 +42,96 @@ class PublicationRepository
     public function findAll(): array
     {
         return Cache::getIfExists(self::$keyAll) ?? [];
+    }
+
+    /**
+     * Publications des natures choisies (slugs), pour la page d'une categorie.
+     * @param string[] $slugs
+     * @return array<int, array<string, mixed>>
+     */
+    public function findByNatures(array $slugs): array
+    {
+        if ($slugs === []) {
+            return [];
+        }
+
+        return array_values(array_filter(
+            $this->findAll(),
+            fn(array $publication) => in_array($publication['nature_slug'] ?? null, $slugs, true)
+        ));
+    }
+
+    /**
+     * Natures pour l'edition des categories, slug => libelle, triees par libelle.
+     * Si le cache des natures manque, on se rabat sur celles des publications en cache.
+     * @return array<string, string>
+     */
+    public function findNatures(): array
+    {
+        $natures = Cache::getIfExists(self::$keyNatures) ?? [];
+
+        foreach ($this->findAll() as $publication) {
+            if (!empty($publication['nature_slug']) && !isset($natures[$publication['nature_slug']])) {
+                $natures[$publication['nature_slug']] = $publication['nature'];
+            }
+        }
+
+        asort($natures, SORT_LOCALE_STRING | SORT_FLAG_CASE);
+
+        return $natures;
+    }
+
+    /**
+     * Les natures du filtre de la page liste, slug => libelle.
+     * @return array<string, string>
+     * @throws \Throwable sur erreur HTTP
+     */
+    public function fetchNatures(): array
+    {
+        return $this->parser->parseNatures($this->get(self::BASE_URL));
+    }
+
+    /**
+     * Les cartes ne donnent que le libelle de la nature: on retrouve son slug dans la liste du filtre.
+     * @param array<int, array<string, mixed>> $publications
+     * @param array<string, string> $natures slug => libelle
+     * @return array<int, array<string, mixed>>
+     */
+    public static function addNatureSlugs(array $publications, array $natures): array
+    {
+        $slugsByLabel = [];
+        foreach ($natures as $slug => $label) {
+            $slugsByLabel[self::normalizeLabel($label)] = $slug;
+        }
+
+        foreach ($publications as &$publication) {
+            $publication['nature_slug'] = $publication['nature']
+                ? ($slugsByLabel[self::normalizeLabel($publication['nature'])] ?? null)
+                : null;
+        }
+        unset($publication);
+
+        return $publications;
+    }
+
+    /**
+     * @param array<string, string> $natures
+     */
+    public function saveNatures(array $natures): void
+    {
+        Cache::delete(self::$keyNatures);
+        Cache::get(self::$keyNatures, function (ItemInterface $item) use ($natures) {
+            // l'edition des categories en depend: on la garde longtemps, chaque synchro la rafraichit
+            $item->expiresAfter(60 * 60 * 24 * 365);
+
+            return $natures;
+        });
+    }
+
+    // apostrophe typographique ou droite, casse: le libelle d'une carte et celui du filtre peuvent differer
+    private static function normalizeLabel(string $label): string
+    {
+        return mb_strtolower(str_replace(['’', '‘'], "'", trim($label)));
     }
 
     /**

@@ -3,8 +3,10 @@
 namespace AcMarche\Theme\Templates;
 
 
+use AcMarche\Theme\Inc\PublicationCategoryMetaBox;
 use AcMarche\Theme\Lib\Helper\BreadcrumbHelper;
 use AcMarche\Theme\Lib\Twig;
+use AcMarche\Theme\Repository\PublicationRepository;
 use AcMarche\Theme\Repository\WpRepository;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -35,6 +37,9 @@ foreach ($children as $child) {
 }
 $posts = array_values($postsIndexed);
 
+// publications deliberations.be des natures choisies dans l'edition de la categorie
+$publications = (new PublicationRepository())->findByNatures(PublicationCategoryMetaBox::getNatures($cat_ID));
+
 $twig = Twig::loadTwig();
 $thumbnail = null;
 $paths = BreadcrumbHelper::category($cat_ID);
@@ -52,6 +57,8 @@ try {
         'description' => $description,
         'children' => $children,
         'currentSite' => $currentSite,
+        'publications' => $publications,
+        'publicationsSource' => PublicationRepository::BASE_URL,
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
     Twig::renderErrorPage($e);

@@ -55,6 +55,28 @@ class PublicationCommand extends Command
             return Command::FAILURE;
         }
 
+        try {
+            $natures = $repository->fetchNatures();
+        } catch (\Throwable $e) {
+            $io->warning('Natures error '.$e->getMessage());
+            $natures = [];
+        }
+        // sans la liste du site, on garde la derniere connue pour ne pas perdre le filtrage des categories
+        $fetchedNatures = $natures !== [];
+        if (!$fetchedNatures) {
+            $natures = $repository->findNatures();
+        }
+        $publications = PublicationRepository::addNatureSlugs($publications, $natures);
+        $io->writeln('Natures: '.count($natures).($fetchedNatures ? '' : ' (from cache)'));
+
+        $unmatched = array_unique(array_filter(array_map(
+            fn(array $p) => $p['nature'] && !$p['nature_slug'] ? $p['nature'] : null,
+            $publications
+        )));
+        if ($unmatched !== []) {
+            $io->warning('Natures without slug, not filterable: '.implode(', ', $unmatched));
+        }
+
         if (!$input->getOption('no-pdf')) {
             $fetched = 0;
             foreach ($publications as &$publication) {
@@ -78,6 +100,9 @@ class PublicationCommand extends Command
         }
 
         $repository->save($publications);
+        if ($fetchedNatures) {
+            $repository->saveNatures($natures);
+        }
         $io->success(count($publications).' publications cached');
 
         return Command::SUCCESS;

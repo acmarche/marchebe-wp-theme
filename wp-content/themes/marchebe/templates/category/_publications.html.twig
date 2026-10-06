@@ -1,0 +1,13 @@
+{# publications deliberations.be des natures cochees dans l'edition de la categorie #}
+{% if publications is not empty %}
+    <section class="py-4 mt-3 mb-6" id="publications">
+        <div class="container mx-auto px-6">
+            <h2 class="text-lg lg:text-2xl font-bold text-cta-brown mb-4">Publications officielles</h2>
+            {% include '@AcMarche/conseil/_publications.html.twig' with {
+                publications: publications,
+                total: publications|length,
+                source: publicationsSource,
+            } only %}
+        </div>
+    </section>
+{% endif %}

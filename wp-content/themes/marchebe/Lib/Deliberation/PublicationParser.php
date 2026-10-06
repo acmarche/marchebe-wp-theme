@@ -67,6 +67,27 @@ class PublicationParser
     }
 
     /**
+     * Liste des natures du filtre de la page: <select name="nature">, slug => libelle.
+     * Le slug sert de cle (meta des categories), le libelle est celui affiche sur les cartes.
+     * @return array<string, string>
+     */
+    public function parseNatures(string $html): array
+    {
+        $document = HTMLDocument::createFromString($html, LIBXML_NOERROR);
+        $natures = [];
+
+        foreach ($document->querySelectorAll('select[name="nature"] option') as $option) {
+            $slug = trim($option->getAttribute('value') ?? '');
+            // l'option "Tous" a une valeur vide
+            if ($slug !== '') {
+                $natures[$slug] = $this->text($option);
+            }
+        }
+
+        return $natures;
+    }
+
+    /**
      * Page de detail: le PDF est dans <x-pdf-viewer file="...">.
      */
     public function parsePdfUrl(string $html): ?string

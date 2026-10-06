@@ -7,7 +7,8 @@
         </p>
     {% else %}
         <p class="mb-5 text-sm text-ink-muted">
-            {{ publications|length }} publications sur {{ total }}, de la plus récente à la plus ancienne.
+            {% if total > publications|length %}{{ publications|length }} publications sur {{ total }}{% else %}{{ total }} publication{{ total > 1 ? 's' }}{% endif %},
+            de la plus récente à la plus ancienne.
             Source :
             <a href="{{ source }}" target="_blank" class="text-cta-dark underline underline-offset-2 hover:text-ink">deliberations.be</a>
         </p>
