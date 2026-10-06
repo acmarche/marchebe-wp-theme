@@ -8,6 +8,7 @@ use AcMarche\Theme\Lib\Capteur;
 use AcMarche\Theme\Lib\Helper\CookieHelper;
 use AcMarche\Theme\Lib\Twig;
 use AcMarche\Theme\Repository\ConseilRepository;
+use AcMarche\Theme\Repository\PublicationRepository;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -35,6 +36,7 @@ class ShortCode
         add_shortcode('enaos', [$this, 'enaos']);
         add_shortcode('conseil_archive', [$this, 'conseilPv']);
         add_shortcode('conseil_ordre', [$this, 'conseilOrdre']);
+        add_shortcode('deliberations_publications', [$this, 'deliberationsPublications']);
         add_shortcode('google_map', [$this, 'googleMap']);
         add_shortcode('capteur_list', [$this, 'capteurList']);
         add_shortcode('capteur_color', [$this, 'capteurColor']);
@@ -50,6 +52,26 @@ class ShortCode
             '@AcMarche/conseil/_ordre.html.twig',
             [
                 'ordres' => $ordres,
+            ]
+        );
+    }
+
+    /**
+     * [deliberations_publications limit="10"]
+     * Lit seulement le cache rempli par "php console deliberations:publications".
+     */
+    public function deliberationsPublications(array|string $args = []): string
+    {
+        $args = shortcode_atts(['limit' => 10], $args);
+        $publications = (new PublicationRepository())->findAll();
+        $twig = Twig::LoadTwig();
+
+        return $twig->render(
+            '@AcMarche/conseil/_publications.html.twig',
+            [
+                'publications' => array_slice($publications, 0, max(1, (int)$args['limit'])),
+                'total' => count($publications),
+                'source' => PublicationRepository::BASE_URL,
             ]
         );
     }

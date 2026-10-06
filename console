@@ -6,6 +6,7 @@ use AcMarche\Theme\Command\IntegrityCommand;
 use AcMarche\Theme\Command\MeiliCommand;
 use AcMarche\Theme\Command\PivotCommand;
 use AcMarche\Theme\Command\PivotQueryCommand;
+use AcMarche\Theme\Command\PublicationCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Dotenv\Dotenv;
 
@@ -28,5 +29,6 @@ $application->addCommand(new PivotQueryCommand());
 $application->addCommand(new MeiliCommand());
 $application->addCommand(new FixCommand());
 $application->addCommand(new IntegrityCommand());
+$application->addCommand(new PublicationCommand());
 
 $application->run();

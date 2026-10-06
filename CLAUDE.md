@@ -27,6 +27,7 @@ it: the output would overwrite the board's stylesheet.
 php console pivot:cache          # Fetch & cache Pivot tourism API data (--all, --parse, --purge)
 php console pivot:query          # Query single Pivot event (--codeCgt=<code>, --level=<2|4>)
 php console meili:server         # Manage MeiliSearch index (--key, --tasks, --reset, --update, --dump)
+php console deliberations:publications  # Cache deliberations.be publications + PDF links (--no-pdf, --dry-run, --show)
 php console fix                  # Data integrity fixes
 php console integrity            # Data integrity checks
 ```
