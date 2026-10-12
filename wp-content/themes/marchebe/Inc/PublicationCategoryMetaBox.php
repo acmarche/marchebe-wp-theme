@@ -56,7 +56,7 @@ class PublicationCategoryMetaBox
                         style="max-height: 16rem; overflow-y: auto; padding: .5rem .75rem; border: 1px solid #c3c4c7; background: #fff;">
                     <legend class="screen-reader-text">Natures de publications</legend>
                     <?php foreach ($natures as $slug => $label) {
-                        if (!empty($counts[$slug])) { ?>
+                        if ((int)($counts[$slug]) > 0) { ?>
                             <label style="display: block; margin: .25rem 0;">
                                 <input type="checkbox" name="<?php echo self::KEY_NAME; ?>[]"
                                        value="<?php echo esc_attr($slug); ?>"
