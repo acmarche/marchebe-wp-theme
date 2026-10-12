@@ -59,7 +59,9 @@ class PublicationCategoryMetaBox
                                        value="<?php echo esc_attr($slug); ?>"
                                     <?php checked(in_array($slug, $selected, true)); ?>>
                                 <?php echo esc_html($label); ?>
-                                <span style="color: #646970;">(<?php echo (int)($counts[$slug] ?? 0); ?>)</span>
+                                <?php if (!empty($counts[$slug])) { ?>
+                                    <span style="color: #646970;">(<?php echo (int)$counts[$slug]; ?>)</span>
+                                <?php } ?>
                             </label>
                         <?php } ?>
                     </fieldset>
