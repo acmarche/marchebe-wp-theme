@@ -159,11 +159,13 @@ class MeiliCommand extends Command
     private function indexPublications(OutputInterface $output): void
     {
         $documents = [];
-        switch_to_blog(Theme::ADMINISTRATION);
-        foreach ($this->dataForSearch->getAllPublications() as $document) {
-            $documents[] = $document;
+        foreach (Theme::SITES as $idSite => $nom) {
+            switch_to_blog($idSite);
+            foreach ($this->dataForSearch->getPublications($idSite) as $document) {
+                $documents[] = $document;
+            }
+            restore_current_blog();
         }
-        restore_current_blog();
         //$output->writeln(sprintf('  - %d publications', count($documents)));
         $this->indexInBatches($documents, $output);
     }

@@ -3,10 +3,12 @@
 namespace AcMarche\Theme\Lib\Search;
 
 use AcMarche\Theme\Inc\BottinCategoryMetaBox;
+use AcMarche\Theme\Inc\PublicationCategoryMetaBox;
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Bottin\Bottin;
 use AcMarche\Theme\Repository\ApiRepository;
 use AcMarche\Theme\Repository\BottinRepository;
+use AcMarche\Theme\Repository\PublicationRepository;
 use AcMarche\Theme\Repository\WpRepository;
 
 class DataForSearch
@@ -308,20 +310,40 @@ class DataForSearch
     }
 
     /**
+     * Publications deliberations.be des natures choisies dans les categories du site courant.
+     * Une publication reprise par plusieurs categories n'est indexee qu'une fois, avec chaque categorie en tag.
      * @return Document[]
      */
-    public function getAllPublications(): array
+    public function getPublications(int $idSite): array
     {
-        $apiRepository = new ApiRepository();
-        $publications = $apiRepository->getAllPublications();
-        $documents = [];
-        foreach ($publications as $publication) {
-            $category = get_category($publication->category->wpCategoryId);
-            $publication->paths = [];
-            if ($category) {
-                $publication->paths = [['id' => $category->term_id, 'name' => $category->name]];
+        $categories = get_terms([
+            'taxonomy' => 'category',
+            'hide_empty' => false,
+            'meta_key' => PublicationCategoryMetaBox::KEY_NAME,
+        ]);
+        if (!is_array($categories)) {
+            return [];
+        }
+
+        $publicationRepository = new PublicationRepository();
+        $publications = [];
+        $tags = [];
+        foreach ($categories as $category) {
+            $natures = PublicationCategoryMetaBox::getNatures($category->term_id);
+            foreach ($publicationRepository->findByNatures($natures) as $publication) {
+                $publications[$publication['url']] = $publication;
+                $tags[$publication['url']][] = ['id' => $category->term_id, 'name' => $category->name];
             }
-            $documents[] = Document::documentFromPublication($publication, 'Publications communales');
+        }
+
+        $documents = [];
+        foreach ($publications as $url => $publication) {
+            $documents[] = Document::documentFromDeliberationPublication(
+                $publication,
+                $tags[$url],
+                $idSite,
+                'Publications communales'
+            );
         }
 
         return $documents;

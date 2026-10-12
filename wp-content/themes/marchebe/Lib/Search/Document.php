@@ -130,20 +130,32 @@ class Document
         return $document;
     }
 
-    public static function documentFromPublication(\stdClass $item, string $source): Document
-    {
+    /**
+     * Publication deliberations.be (tableau du cache de PublicationRepository).
+     * Pas d'identifiant numerique: l'url, stable, en tient lieu.
+     */
+    public static function documentFromDeliberationPublication(
+        array $publication,
+        array $tags,
+        int $idSite,
+        string $source
+    ): Document {
         $document = new Document();
-        $nameSite = Theme::getTitleBlog(Theme::ADMINISTRATION);
-        $document->id = self::createId($item->id, "publication", Theme::ADMINISTRATION);
-        $document->name = Cleaner::cleandata($item->name);
+        $nameSite = Theme::getTitleBlog($idSite);
+        $document->id = 'publication-'.md5($publication['url']).'-'.$idSite;
+        $document->name = Cleaner::cleandata($publication['title']);
         $document->source = $source;
-        $document->excerpt = "";
-        $document->content = "";
-        $document->site = ['name' => $nameSite, 'id' => Theme::ADMINISTRATION];
-        $document->tags = [];
-        $document->date = $item->created_at;
+        $document->excerpt = ($publication['description'] ?? '') ?: null;
+        $document->content = implode(' ', array_filter([
+            $publication['description'] ?? '',
+            $publication['nature'] ?? '',
+            $publication['matiere'] ?? '',
+        ]));
+        $document->site = ['name' => $nameSite, 'id' => $idSite];
+        $document->tags = $tags;
+        $document->date = $publication['date'] ?? date('Y-m-d');
         $document->type = 'publication';
-        $document->link = $item->url;
+        $document->link = $publication['url'];
 
         return $document;
     }

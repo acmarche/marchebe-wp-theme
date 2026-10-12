@@ -54,68 +54,9 @@ class ApiRepository
         return null;
     }
 
-    public function getAllPublications(): array
-    {
-        global $wpdb;
-
-        $categories = $wpdb->get_results("SELECT * FROM publication.publication_categories");
-
-        $publications = [];
-        foreach ($categories as $category) {
-            $results = $wpdb->get_results(
-                $wpdb->prepare(
-                    "SELECT * FROM publication.publications WHERE publication.publications.category_id = %d ORDER BY created_at DESC",
-                    $category->id
-                ),
-                OBJECT
-            );
-            foreach ($results as $result) {
-                $result->category = $category;
-                $publications[] = $result;
-            }
-        }
-
-        return $publications;
-    }
-
     public  function getCategoryEnquete(): ?\WP_Term
     {
         return get_category(Theme::ENQUETE_DIRECTORY_URBA);
     }
 
-    public static function getPublicationsByCategoryWp(int $wpCategoryId): array
-    {
-        global $wpdb;
-
-        $category = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT * FROM publication.publication_categories WHERE publication.publication_categories.wpCategoryId = %d",
-                $wpCategoryId
-            ),
-            OBJECT
-        );
-
-        if (empty($category)) {
-            return [];
-        }
-
-        $categoryId = $category[0]->id ?? null;
-        if (!$categoryId) {
-            return [];
-        }
-
-        $results = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT * FROM publication.publications WHERE publication.publications.category_id = %d ORDER BY created_at DESC",
-                $categoryId
-            ),
-            OBJECT
-        );
-
-        if (!$results) {
-            return [];
-        }
-
-        return $results;
-    }
 }

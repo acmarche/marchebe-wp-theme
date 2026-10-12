@@ -128,14 +128,6 @@ class WpRepository
             }
         }
 
-        if ($currentSite === Theme::ADMINISTRATION) {
-            $publications = ApiRepository::getPublicationsByCategoryWp($categoryIdSelected);
-            foreach ($publications as $item) {
-                $item->paths = [];
-                $documents[] = Document::documentFromPublication($item,'Publications communales');
-            }
-        }
-
         return SortingHelper::sortDocuments($documents);
     }
 
