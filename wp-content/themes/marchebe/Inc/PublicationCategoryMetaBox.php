@@ -43,7 +43,8 @@ class PublicationCategoryMetaBox
         }
         ?>
         <tr class="form-field">
-            <th scope="row"><label>Publications (deliberations.be)</label></th>
+            <th scope="row"><label>Publications <a href="https://deliberations.be"
+                                                   target="_blank">(deliberations.be)</a></label></th>
             <td>
                 <input type="hidden" name="<?php echo self::MARKER; ?>" value="1">
                 <?php if ($natures === []) { ?>
@@ -51,25 +52,29 @@ class PublicationCategoryMetaBox
                         Aucune nature disponible: lancer <code>php console deliberations:publications</code>.
                     </p>
                 <?php } else { ?>
-                    <fieldset style="max-height: 16rem; overflow-y: auto; padding: .5rem .75rem; border: 1px solid #c3c4c7; background: #fff;">
-                        <legend class="screen-reader-text">Natures de publications</legend>
-                        <?php foreach ($natures as $slug => $label) { ?>
+                <fieldset
+                        style="max-height: 16rem; overflow-y: auto; padding: .5rem .75rem; border: 1px solid #c3c4c7; background: #fff;">
+                    <legend class="screen-reader-text">Natures de publications</legend>
+                    <?php foreach ($natures as $slug => $label) {
+                        if (!empty($counts[$slug])) { ?>
                             <label style="display: block; margin: .25rem 0;">
                                 <input type="checkbox" name="<?php echo self::KEY_NAME; ?>[]"
                                        value="<?php echo esc_attr($slug); ?>"
-                                    <?php checked(in_array($slug, $selected, true)); ?>>
+                                        <?php checked(in_array($slug, $selected, true)); ?>>
                                 <?php echo esc_html($label); ?>
-                                <?php if (!empty($counts[$slug])) { ?>
-                                    <span style="color: #646970;">(<?php echo (int)$counts[$slug]; ?>)</span>
-                                <?php } ?>
+
+                                <span style="color: #646970;">(<?php echo (int)$counts[$slug]; ?>)</span>
                             </label>
-                        <?php } ?>
-                    </fieldset>
-                    <p class="description">
-                        Les publications des natures cochées s'affichent sur la page de la catégorie.
-                        Entre parenthèses : le nombre de publications actuellement.
-                    </p>
-                <?php } ?>
+                        <?php }
+                    }
+                    }
+                    ?>
+                </fieldset>
+                <p class="description">
+                    Les publications des natures cochées s'affichent sur la page de la catégorie.
+                    Entre parenthèses : le nombre de publications actuellement.
+                </p>
+
             </td>
         </tr>
         <?php
