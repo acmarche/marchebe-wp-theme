@@ -3,6 +3,7 @@
 namespace AcMarche\Theme\Repository;
 
 use AcMarche\Theme\Inc\BottinCategoryMetaBox;
+use AcMarche\Theme\Inc\PublicationCategoryMetaBox;
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Helper\SortingHelper;
 use AcMarche\Theme\Lib\Search\Document;
@@ -116,6 +117,21 @@ class WpRepository
             foreach ($fiches as $fiche) {
                 $idSite = $bottinRepository->findByFicheIdWpSite($fiche);
                 $documents[] = Document::documentFromFiche($fiche, $idSite,'bottin');
+            }
+        }
+
+        // publications deliberations.be des natures choisies dans l'edition de la categorie
+        $natures = PublicationCategoryMetaBox::getNatures($categoryIdSelected);
+        if ($natures !== []) {
+            $category = get_category($categoryIdSelected);
+            $tags = $category ? [['id' => $category->term_id, 'name' => $category->name]] : [];
+            foreach ((new PublicationRepository())->findByNatures($natures) as $publication) {
+                $documents[] = Document::documentFromDeliberationPublication(
+                    $publication,
+                    $tags,
+                    $currentSite,
+                    'Publications communales'
+                );
             }
         }
 

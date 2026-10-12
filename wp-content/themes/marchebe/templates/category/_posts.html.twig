@@ -14,9 +14,7 @@
             <template x-for="post in filteredPosts" :key="post.id">
                 {% include '@AcMarche/category/_post_inline.html.twig' %}
             </template>
-            {# sur la categorie principale, ses publications s'affichent dessous: pas de message "vide" #}
-            <div x-show="!loading && filteredPosts.length === 0{% if publications is not empty %} && categorySelected !== currentCategory{% endif %}"
-                 class="text-center col-span-full">
+            <div x-show="!loading && filteredPosts.length === 0" class="text-center col-span-full">
                 Aucun article pour le moment.
             </div>
         </div>
