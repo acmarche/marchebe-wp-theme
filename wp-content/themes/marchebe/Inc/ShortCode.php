@@ -206,12 +206,13 @@ class ShortCode
     public function capteurList(): string
     {
         $twig = Twig::LoadTwig();
-        $capteur = new Capteur();
+        //$capteur = new Capteur();
+        //$capteur->getStations();
 
         return $twig->render(
             '@AcMarche/capteur/_list.html.twig',
             [
-                'stations' => $capteur->getStations(),
+                'stations' => [],
             ]
         );
     }
