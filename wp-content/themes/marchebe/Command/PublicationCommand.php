@@ -23,6 +23,7 @@ class PublicationCommand extends Command
         $this->addOption('no-pdf', null, InputOption::VALUE_NONE, 'Skip detail pages (no PDF links)');
         $this->addOption('dry-run', null, InputOption::VALUE_NONE, 'Fetch and display without saving the list (PDF links are still cached)');
         $this->addOption('show', null, InputOption::VALUE_NONE, 'Display the cached publications, fetch nothing');
+        $this->addOption('purge', null, InputOption::VALUE_NONE, 'Purge the cached PDF links and fetch every detail page again');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -77,11 +78,16 @@ class PublicationCommand extends Command
             $io->warning('Natures without slug, not filterable: '.implode(', ', $unmatched));
         }
 
+        $purge = (bool)$input->getOption('purge');
+        if ($purge && $input->getOption('no-pdf')) {
+            $io->warning('--purge ignored with --no-pdf');
+        }
+
         if (!$input->getOption('no-pdf')) {
             $fetched = 0;
             foreach ($publications as &$publication) {
                 try {
-                    $publication['pdf'] = $repository->fetchPdfUrl($publication['url'], $fromCache);
+                    $publication['pdf'] = $repository->fetchPdfUrl($publication['url'], $fromCache, $purge);
                     $fromCache || $fetched++;
                 } catch (\Throwable $e) {
                     $io->warning('PDF error '.$publication['url'].' '.$e->getMessage());
