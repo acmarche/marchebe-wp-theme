@@ -164,7 +164,8 @@ class PublicationRepository
         }
 
         $publications = array_values($publications);
-        usort($publications, fn(array $a, array $b) => strcmp($b['date'] ?? '', $a['date'] ?? ''));
+        // date de publication la plus recente d'abord, puis par titre
+        usort($publications, fn(array $a, array $b) => [$b['date'] ?? '', $a['title']] <=> [$a['date'] ?? '', $b['title']]);
 
         return $publications;
     }
