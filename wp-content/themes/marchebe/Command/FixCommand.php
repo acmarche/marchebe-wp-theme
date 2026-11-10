@@ -7,6 +7,7 @@ use AcMarche\Theme\Repository\WpRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -17,17 +18,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class FixCommand extends Command
 {
     private SymfonyStyle $io;
-    private OutputInterface $output;
     private array $allposts = [];
 
     protected function configure(): void
     {
         $this->setDescription('To cleaning medias');
+        $this->addOption('force', null, InputOption::VALUE_NONE, 'Actually delete the unused attachments (otherwise only list them)');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->output = $output;
         $this->io = new SymfonyStyle($input, $output);
 
         $this->allposts = $this->getAllPosts();
@@ -47,16 +47,25 @@ class FixCommand extends Command
             while ($query->have_posts()) {
                 $attachment = $query->next_post();
                 if (!$this->checkAttachmentIsUsed($attachment)) {
-                    $attachmentsToDelete[] = $attachment;
+                    $attachmentsToDelete[] = [$idSite, $attachment];
                 }
             }
         }
 
+        $force = (bool)$input->getOption('force');
+
         $this->io->success(count($attachmentsToDelete).' posts to delete');
 
-        foreach ($attachmentsToDelete as $attachment) {
+        foreach ($attachmentsToDelete as [$idSite, $attachment]) {
             $this->io->writeln($attachment->guid);
-            //  wp_delete_attachment($post, true);
+            if ($force) {
+                switch_to_blog($idSite);
+                wp_delete_attachment($attachment->ID, true);
+            }
+        }
+
+        if (!$force) {
+            $this->io->note('Dry run: nothing deleted. Re-run with --force to delete these attachments.');
         }
 
         return Command::SUCCESS;
