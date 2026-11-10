@@ -13,18 +13,23 @@
                         <td class="px-4 py-2.5 text-slate-600">
                             {% if schedule.is_closed %}
                                 <span class="text-red-500">Fermé</span>
-                            {% elseif schedule.is_by_appointment %}
+                            {% elseif schedule.isRdv and schedule.morningStart is null and schedule.noonStart is null %}
                                 <span class="text-amber-600">Sur rendez-vous</span>
                             {% elseif schedule.morning_end is null and schedule.noon_start is null %}
                                 {{ schedule.morningStart }}
                                 {% if schedule.noonEnd %}- {{ schedule.noonEnd }}{% endif %}
+                                {% if schedule.isRdv %}<span class="ml-1 text-amber-600">(sur rendez-vous)</span>{% endif %}
                             {% else %}
-                                {{ schedule.morningStart }}
-                                {% if schedule.morningEnd %}- {{ schedule.morningEnd }}{% endif %}
+                                {% if schedule.morningStart %}
+                                    {{ schedule.morningStart }}
+                                    {% if schedule.morningEnd %}- {{ schedule.morningEnd }}{% endif %}
+                                    {% if schedule.isMorningRdv %}<span class="ml-1 text-amber-600">(sur rendez-vous)</span>{% endif %}
+                                {% endif %}
                                 {% if schedule.noon_start %}
-                                    <span class="mx-1 text-slate-400">|</span>
+                                    {% if schedule.morningStart %}<span class="mx-1 text-slate-400">|</span>{% endif %}
                                     {{ schedule.noonStart }}
                                     {% if schedule.noonEnd %}- {{ schedule.noonEnd }}{% endif %}
+                                    {% if schedule.isNoonRdv %}<span class="ml-1 text-amber-600">(sur rendez-vous)</span>{% endif %}
                                 {% endif %}
                             {% endif %}
                         </td>
