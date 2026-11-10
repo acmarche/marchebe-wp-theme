@@ -87,7 +87,7 @@ class BottinRepository
      */
     public function getFicheById(int $id): bool|object
     {
-        $sql = 'SELECT * FROM shops WHERE `id` = '.$id;
+        $sql = 'SELECT * FROM shops WHERE `id` = '.$id.' AND `is_active` = 1';
         $query = $this->execQuery($sql);
 
         return $query->fetch(\PDO::FETCH_OBJ);
@@ -102,7 +102,7 @@ class BottinRepository
     public function getFicheBySlug(string $slug): ?object
     {
         $this->init();
-        $sql = 'SELECT * FROM shops WHERE `slug` = :slug ';
+        $sql = 'SELECT * FROM shops WHERE `slug` = :slug AND `is_active` = 1';
         $sth = $this->dbh->prepare($sql, array(\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY));
         $sth->execute(array(':slug' => $slug));
         if (!$data = $sth->fetch(\PDO::FETCH_OBJ)) {
@@ -118,7 +118,7 @@ class BottinRepository
      */
     public function getFiches(): array|bool
     {
-        $sql = 'SELECT * FROM shops';
+        $sql = 'SELECT * FROM shops WHERE `is_active` = 1';
         $query = $this->execQuery($sql);
 
         return $query->fetchAll(\PDO::FETCH_OBJ);
@@ -155,7 +155,9 @@ class BottinRepository
         $schedules = [];
         while ($row = $sth->fetch(\PDO::FETCH_OBJ)) {
             $row->isClosed = (bool)$row->is_closed;
-            $row->isRdv = (bool)$row->is_by_appointment;
+            $row->isMorningRdv = (bool)$row->is_morning_by_appointment;
+            $row->isNoonRdv = (bool)$row->is_noon_by_appointment;
+            $row->isRdv = $row->isMorningRdv || $row->isNoonRdv;
             $row->morningStart = $row->morning_start ? substr((string)$row->morning_start, 0, 5) : null;
             $row->morningEnd = $row->morning_end ? substr((string)$row->morning_end, 0, 5) : null;
             $row->noonStart = $row->noon_start ? substr((string)$row->noon_start, 0, 5) : null;
@@ -190,7 +192,7 @@ class BottinRepository
 
     public function getFichesByTag(int $tagId): array
     {
-        $sql = 'SELECT s.* FROM shop_tag st JOIN shops s ON st.shop_id = s.id WHERE st.tag_id = '.$tagId.' ORDER BY s.company';
+        $sql = 'SELECT s.* FROM shop_tag st JOIN shops s ON st.shop_id = s.id WHERE st.tag_id = '.$tagId.' AND s.is_active = 1 ORDER BY s.company';
         $query = $this->execQuery($sql);
 
         return $query->fetchAll(\PDO::FETCH_OBJ);
@@ -284,21 +286,10 @@ class BottinRepository
 
     public function getFichesByCategory(int $id): array
     {
-        $sql = 'SELECT * FROM category_shop WHERE `category_id` = '.$id;
+        $sql = 'SELECT DISTINCT s.* FROM category_shop cs JOIN shops s ON cs.shop_id = s.id WHERE cs.category_id = '.$id.' AND s.is_active = 1';
         $query = $this->execQuery($sql);
-        $classements = $query->fetchAll();
 
-        $fiches = array_map(
-            fn($classement) => $this->getFicheById($classement['shop_id']),
-            $classements
-        );
-
-        $data = [];
-        foreach ($fiches as $fiche) {
-            $data[$fiche->id] = $fiche;
-        }
-
-        return $this->sortFiches($data);
+        return $this->sortFiches($query->fetchAll(\PDO::FETCH_OBJ));
     }
 
     /**
