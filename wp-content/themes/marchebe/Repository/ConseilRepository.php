@@ -71,7 +71,7 @@ class ConseilRepository
             foreach ($finder as $file) {
                 $data = [];
                 $fileName = $file->getRelativePathname();
-                $data['nom'] = $fileName;
+                $data['name'] = $fileName;
                 $data['year'] = $year;
                 $data['url'] = '/wp-content'.$path.$fileName;
                 $file_info = pathinfo($dir.$file);
