@@ -66,7 +66,11 @@ class WpRepository
                     $post->post_thumbnail_srcset = wp_get_attachment_image_srcset($attachment_id, 'news-thumbnail');
                     $post->post_thumbnail_sizes = wp_get_attachment_image_sizes($attachment_id, 'news-thumbnail');
                 } else {
-                    $post->post_thumbnail_url = get_template_directory_uri().'/assets/images/404.jpg';
+                    // No thumbnail: templates render a text-only card. All three are set
+                    // because Twig runs with strict_variables.
+                    $post->post_thumbnail_url = null;
+                    $post->post_thumbnail_srcset = null;
+                    $post->post_thumbnail_sizes = null;
                 }
 
                 $permalink = get_permalink($id);
@@ -116,7 +120,7 @@ class WpRepository
 
             foreach ($fiches as $fiche) {
                 $idSite = $bottinRepository->findByFicheIdWpSite($fiche);
-                $documents[] = Document::documentFromFiche($fiche, $idSite,'bottin');
+                $documents[] = Document::documentFromFiche($fiche, $idSite, 'bottin');
             }
         }
 
@@ -135,12 +139,13 @@ class WpRepository
             }
         }
 
-        if ($currentSite === Theme::ADMINISTRATION && $categoryIdSelected === Theme::ENQUETE_DIRECTORY_URBA) {
+        if ($currentSite === Theme::ADMINISTRATION &&
+            (in_array($categoryIdSelected, [Theme::ENQUETE_DIRECTORY_URBA, Theme::ENQUETE_DIRECTORY_INSTITUTION]))) {
             $apiRepository = new ApiRepository();
             $enquetes = $apiRepository->getEnquetesPubliques();
             foreach ($enquetes as $enquete) {
                 $enquete->paths = [];
-                $documents[] = Document::documentFromEnquete($enquete,'Enquêtes publiques');
+                $documents[] = Document::documentFromEnquete($enquete, 'Enquêtes publiques');
             }
         }
 

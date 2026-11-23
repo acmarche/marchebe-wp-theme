@@ -9,6 +9,7 @@ class Theme
 {
     const PAGE_ALERT = 5087;
     const ENQUETE_DIRECTORY_URBA = 61;
+    const ENQUETE_DIRECTORY_INSTITUTION = 60;
     const CITOYEN = 1;
     const ADMINISTRATION = 2;
     const ECONOMIE = 3;
