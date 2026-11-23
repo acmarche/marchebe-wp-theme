@@ -1,13 +1,39 @@
-<!-- Hero Section -->
-<section class="relative min-h-[22vh] md:min-h-[25vh] bg-gradient-to-b from-slate-100 via-slate-50 to-white flex items-center justify-center text-slate-800 pt-4 pb-6">
-    <!-- Hero Content -->
-    <div class="relative z-10 text-center px-4">
-        <h1 class="text-2xl md:text-5xl lg:text-6xl font-extrabold tracking-tight flex flex-col md:flex-row gap-2 text-slate-700">
-            <span>Bienvenue à </span><span class="text-cta-dark">Marche-en-Famenne</span>
-        </h1>
-        <div class="mt-6 max-w-xl mx-auto px-4 md:px-0">
-            {% include '@AcMarche/homepage/_form_search.html.twig' %}
+<section class="home-hero" aria-labelledby="home-title">
+    <div class="container mx-auto px-4 md:px-6 grid lg:grid-cols-12 gap-8 lg:gap-12 items-center pt-8 pb-10 lg:py-14">
+        <div class="lg:col-span-5">
+            <h1 id="home-title" class="text-ink font-bold text-[clamp(1.625rem,3.4vw,2.75rem)] leading-[1.1] tracking-[-0.015em] text-balance">
+                Ville de <span class="whitespace-nowrap">Marche-en-Famenne</span>
+            </h1>
+            <div class="mt-6">
+                {% include '@AcMarche/homepage/_form_search.html.twig' %}
+            </div>
+            {% if council %}
+                <div class="mt-8 pt-6 border-t border-rule">
+                    <p class="text-ink-soft">Prochain conseil communal</p>
+                    <p class="mt-1 text-xl font-semibold text-ink">
+                        <time datetime="{{ council.iso }}">{{ council.label }}</time>
+                    </p>
+                    <p class="mt-1 flex flex-wrap gap-x-6">
+                        <a href="{{ council.agendaUrl }}" class="home-link inline-flex items-center min-h-11">Ordre du jour</a>
+                        {% if council.isToday %}
+                            <a href="{{ council.liveUrl }}" class="home-link inline-flex items-center min-h-11">Suivre en direct<span class="sr-only"> (YouTube)</span></a>
+                        {% endif %}
+                    </p>
+                </div>
+            {% endif %}
         </div>
-        <div class="md:hidden mb-4"></div>
+        <figure class="lg:col-span-7">
+            <picture>
+                <source type="image/webp"
+                        srcset="{{ template_directory }}/assets/images/home/marche-centre-800.webp 800w, {{ template_directory }}/assets/images/home/marche-centre-1400.webp 1400w"
+                        sizes="(min-width: 1024px) 58vw, 100vw">
+                <img src="{{ template_directory }}/assets/images/home/marche-centre-1400.jpg"
+                     width="1400" height="787"
+                     alt="Vue aérienne du centre de Marche-en-Famenne en automne : les toits d’ardoise, le clocher de l’église et les collines boisées de la Famenne."
+                     fetchpriority="high"
+                     class="w-full aspect-[16/9] max-h-[30vh] lg:max-h-none object-cover object-[50%_45%] rounded-lg">
+            </picture>
+            <figcaption class="mt-2 text-[0.9375rem] text-ink-soft">Marche-en-Famenne, le centre-ville</figcaption>
+        </figure>
     </div>
 </section>

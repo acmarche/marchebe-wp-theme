@@ -1,0 +1,20 @@
+<section class="container mx-auto px-4 md:px-6 py-10 md:py-12" aria-labelledby="home-services">
+    <div class="border-t border-rule pt-8 md:flex md:gap-10">
+        <h2 id="home-services" class="shrink-0 text-ink font-semibold text-xl md:w-56 md:min-h-11 md:flex md:items-center">Autres services</h2>
+        <ul class="mt-3 md:mt-0 flex flex-wrap gap-x-8">
+            {% for service in services %}
+                <li>
+                    <a href="{{ service.url }}" class="home-link inline-flex items-center justify-center min-h-11 min-w-11">
+                        {{- service.name -}}
+                        {% if service.external %}
+                            <svg class="size-4 ms-1 text-ink-soft" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
+                            </svg>
+                            <span class="sr-only">(autre site)</span>
+                        {% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>

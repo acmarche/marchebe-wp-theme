@@ -1,46 +1,53 @@
-<section class="flex flex-col h-full bg-slate-50 rounded-2xl ">
-    <h3 class="text-2xl md:text-3xl font-bold mb-6 text-slate-800 flex items-center gap-3">
-        <span class="w-1 h-8 bg-cta-dark rounded-full"></span>
+{# Natural height: no panel stretched to the news column, so one event never sits in a void. #}
+<section class="flex flex-col" aria-labelledby="home-agenda">
+    <h2 id="home-agenda" class="type-headline mb-6">
         Agenda
-    </h3>
-    <ul class="space-y-3 flex-1">
-        {% for event in events %}
-            <li class="{% if loop.index > 3 %}hidden md:block{% endif %}">
-                <a
-                        href="/tourisme/agenda-des-manifestations/manifestation/{{ event.codeCgt }}"
-                        class="bg-white rounded-xl overflow-hidden flex border border-slate-200 hover:border-cta-light hover:shadow-md transition-all duration-200"
-                >
-                    <div
-                            class="bg-cta-dark text-white p-3 md:p-4 flex flex-col items-center justify-center w-20 md:w-24 text-center flex-shrink-0">
-                        {% if event.isEventOnPeriod and event.dates[0].dateEnd %}
-                            <div class="flex flex-col items-center">
-                                <span class="text-lg md:text-xl font-bold leading-none">{{ event.dates[0].dateBegin|date('d') }}</span>
-                                <span class="text-[10px] md:text-xs uppercase tracking-wide opacity-90">{{ event.dates[0].dateBegin|date('M') }}</span>
-                            </div>
-                            <span class="mx-1.5 md:mx-2 text-white/70 text-sm">›</span>
-                            <div class="flex flex-col items-center">
-                                <span class="text-lg md:text-xl font-bold leading-none">{{ event.dates[0].dateEnd|date('d') }}</span>
-                                <span class="text-[10px] md:text-xs uppercase tracking-wide opacity-90">{{ event.dates[0].dateEnd|date('M') }}</span>
-                            </div>
-                        {% else %}
-                            <span class="text-2xl md:text-3xl font-bold leading-none">{{ event.shortCutDateEvent["day"] }}</span>
-                            <span class="text-xs md:text-sm uppercase tracking-wide opacity-90">{{ event.shortCutDateEvent["month"] }}</span>
-                        {% endif %}
-                    </div>
-                    <div class="p-3 md:p-4 flex-1 overflow-hidden flex flex-col justify-center">
-                        <h4 class="font-semibold text-sm md:text-base text-slate-800 line-clamp-2 leading-snug">{{ event.nom }}</h4>
-                        <p class="text-xs md:text-sm text-slate-500 mt-1"><i
-                                    class="fas fa-map-marker-alt mr-1 text-citoyen"></i> {{ event.locality }}</p>
-                    </div>
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
-    <div class="mt-auto pt-6">
+    </h2>
+    {% if events is empty %}
+        <p class="text-ink-soft">
+            Aucune manifestation annoncée pour le moment. Le calendrier complet reste disponible dans l’agenda.
+        </p>
+    {% else %}
+        <ul class="space-y-3">
+            {% for event in events %}
+                <li class="{% if loop.index > 3 %}hidden md:block{% endif %}">
+                    <a
+                            href="/tourisme/agenda-des-manifestations/manifestation/{{ event.codeCgt }}"
+                            class="bg-paper rounded-xl overflow-hidden flex border border-rule hover:shadow-hover transition-shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    >
+                        <div
+                                class="bg-vellum border-r border-rule text-slate-ink p-3 md:p-4 flex flex-col items-center justify-center w-20 md:w-24 text-center flex-shrink-0">
+                            {% if event.isEventOnPeriod and event.dates[0].dateEnd %}
+                                <div class="flex flex-col items-center">
+                                    <span class="text-lg md:text-xl font-bold leading-none">{{ event.dates[0].dateBegin|date('d') }}</span>
+                                    <span class="type-label text-ink-soft">{{ event.dates[0].dateBegin|format_date(pattern: 'MMM', locale: 'fr') }}</span>
+                                </div>
+                                <span class="mx-1.5 md:mx-2" aria-hidden="true">–</span><span class="sr-only">au</span>
+                                <div class="flex flex-col items-center">
+                                    <span class="text-lg md:text-xl font-bold leading-none">{{ event.dates[0].dateEnd|date('d') }}</span>
+                                    <span class="type-label text-ink-soft">{{ event.dates[0].dateEnd|format_date(pattern: 'MMM', locale: 'fr') }}</span>
+                                </div>
+                            {% else %}
+                                <span class="text-2xl md:text-3xl font-bold leading-none">{{ event.shortCutDateEvent["day"] }}</span>
+                                <span class="type-label text-ink-soft">{{ event.firstDateBegin|format_date(pattern: 'MMM', locale: 'fr') }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="p-3 md:p-4 flex-1 min-w-0 flex flex-col justify-center">
+                            <h3 class="type-title line-clamp-2 break-words">{{ event.nom }}</h3>
+                            {% if event.locality %}
+                                <p class="text-ink-soft mt-1 truncate"><svg class="inline-block size-4 mr-1 align-[-0.15em] text-ink-muted" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 17.5s5.5-4.9 5.5-9.25a5.5 5.5 0 0 0-11 0C4.5 12.6 10 17.5 10 17.5Z"/><circle cx="10" cy="8.25" r="2"/></svg> {{ event.locality }}</p>
+                            {% endif %}
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <div class="pt-6">
         <a href="/tourisme/agenda-des-manifestations/"
-           class="inline-flex items-center gap-2 bg-cta-dark text-white font-semibold py-2.5 px-6 rounded-lg hover:bg-cta-light transition-colors">
-            Tout l'agenda
-            <i class="fas fa-arrow-right text-sm"></i>
+           class="inline-flex items-center gap-2 min-h-11 bg-paper text-ink font-semibold py-2.5 px-5 rounded-md border border-rule hover:bg-vellum transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+            Tout l’agenda
+            <svg class="size-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 10h12m-5-5 5 5-5 5"/></svg>
         </a>
     </div>
 </section>

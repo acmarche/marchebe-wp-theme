@@ -6,6 +6,21 @@ class Assets
 {
     const leaflet_js = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
     const leaflet_css = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    const alpine_js = 'https://unpkg.com/alpinejs@3.17.5/dist/cdn.min.js';
+    const fontawesome_css = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css';
+
+    /**
+     * Subresource Integrity for every third-party file, keyed by WordPress handle.
+     * Versions are pinned in the URLs above: the browser refuses a file whose bytes
+     * no longer match, instead of running whatever the CDN serves. When bumping a
+     * version, update its hash too (`curl -s URL | openssl dgst -sha256 -binary | base64`).
+     */
+    const SRI = [
+        'marchebe-alpine' => 'sha256-tANunprCL6b2rhuikuAV4fPpyF0Neec+TI65uxObUi4=',
+        'marchebe-awesome' => 'sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==',
+        'leaflet-js' => 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=',
+        'leaflet-css' => 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=',
+    ];
 
     public function __construct()
     {
@@ -13,7 +28,10 @@ class Assets
         add_action('wp_enqueue_scripts', [$this, 'enqueue_styles']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
         add_action('enqueue_block_assets', [$this, 'enqueue_editor_styles']);
+        add_action('wp_head', [$this, 'preload_fonts'], 1);
         add_filter('script_loader_tag', [$this, 'add_defer_attribute'], 10, 2);
+        add_filter('script_loader_tag', [$this, 'add_integrity'], 20, 2);
+        add_filter('style_loader_tag', [$this, 'add_integrity'], 20, 2);
         // Fix WordPress core asset URLs in multisite subdirectory setup
         add_filter('style_loader_src', [$this, 'fix_multisite_urls'], 10, 1);
         add_filter('script_loader_src', [$this, 'fix_multisite_urls'], 10, 1);
@@ -47,13 +65,26 @@ class Assets
         wp_enqueue_style(
             'marchebe-primary',
             $themeUri.'/assets/css/marchebe.css',
-            [],'2.3'
+            [],'2.12'
             //wp_get_theme()->get('Version')
         );
         wp_enqueue_style(
             'marchebe-awesome',
-            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css',
+            self::fontawesome_css,
             [],
+            null
+        );
+    }
+
+    /**
+     * Self-hosted Montserrat (Latin subset): start the download before the CSS
+     * is parsed, so text swaps in early and the metric-matched fallback barely shows.
+     */
+    public function preload_fonts(): void
+    {
+        printf(
+            '<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>'."\n",
+            esc_url(self::getThemeUri().'/assets/fonts/montserrat-latin-wght-normal.woff2')
         );
     }
 
@@ -88,7 +119,7 @@ class Assets
         // Alpine.js (depends on header-nav, category-show, and image-gallery)
         wp_enqueue_script(
             'marchebe-alpine',
-            'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js',
+            self::alpine_js,
             ['marchebe-header-nav', 'marchebe-category-show', 'marchebe-image-gallery'],
             null
         );
@@ -102,6 +133,20 @@ class Assets
         }
 
         return $tag;
+    }
+
+    /**
+     * Adds integrity + crossorigin to the pinned third-party tags (see SRI).
+     */
+    public function add_integrity(string $tag, string $handle): string
+    {
+        if (!isset(self::SRI[$handle]) || str_contains($tag, ' integrity=')) {
+            return $tag;
+        }
+
+        $attributes = sprintf(' integrity="%s" crossorigin="anonymous"', esc_attr(self::SRI[$handle]));
+
+        return preg_replace('/<(script|link)\b/', '<$1'.$attributes, $tag, 1);
     }
 
     function remove_unnecessary_core_styles(): void

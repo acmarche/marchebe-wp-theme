@@ -1,36 +1,21 @@
-  <form action="/" method="GET" role="search" class="">
+<form action="/" method="GET" role="search" class="flex gap-2">
     <label for="hero-search" class="sr-only">Rechercher sur le site</label>
-    <div class="relative">
-      <!-- Search Icon (decorative) -->
-      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none" aria-hidden="true">
-        <i class="fas fa-search text-gray-700" aria-hidden="true"></i>
-      </div>
-
-      <!-- Search Input -->
-      <input
-          id="hero-search"
-          name="s"
-          type="search"
-          autocomplete="off"
-          placeholder="Que cherchez-vous ?"
-          class="w-full py-3 pl-12 pr-16 md:pr-32 text-gray-900 placeholder:text-gray-700 bg-white rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-cta-dark transition-shadow"
-      >
-
-      <!-- Submit Button -->
-      <button
-          type="submit"
-          class="cursor-pointer absolute inset-y-0 right-0 flex items-center px-4 md:px-6 bg-cta-dark text-white font-semibold rounded-r-full hover:bg-cta-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta-dark transition-colors"
-          aria-label="Rechercher"
-          aria-roledescription="Search button"
-      >
-        <!-- Mobile: Icon only -->
-        <span class="md:hidden" aria-hidden="true">
-          <i class="fas fa-search text-white" aria-hidden="true"></i>
-        </span>
-        <!-- Desktop: Text only -->
-        <span class="hidden md:inline">
-          Rechercher
-        </span>
-      </button>
-    </div>
-  </form>
+    <input
+            id="hero-search"
+            name="s"
+            type="search"
+            enterkeyhint="search"
+            placeholder="Que cherchez-vous ?"
+            class="w-0 min-w-0 flex-1 min-h-12 px-4 text-base text-ink placeholder:text-ink-soft bg-field border border-rule rounded-md focus:outline-2 focus:outline-offset-2 focus:outline-accent"
+    >
+    <button
+            type="submit"
+            class="shrink-0 min-h-12 min-w-12 px-4 md:px-5 inline-flex items-center justify-center gap-2 bg-accent-strong text-paper font-semibold rounded-md cursor-pointer transition-colors hover:bg-accent-deeper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+    >
+        <svg class="size-5 md:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+        </svg>
+        <span class="sr-only md:not-sr-only">Rechercher</span>
+    </button>
+</form>

@@ -1,19 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 
 @plugin "@tailwindcss/typography";
 @source "../../templates/";
 
 @theme {
-    --font-montserrat: Montserrat, sans-serif;
-    --font-montserrat-medium: Montserrat, sans-serif;
-    --font-montserrat-thin: Montserrat, sans-serif;
-    --font-montserrat-light: Montserrat, sans-serif;
-    --font-montserrat-extra-light: Montserrat, sans-serif;
-    --font-montserrat-regular: Montserrat, sans-serif;
-    --font-montserrat-bold: Montserrat, sans-serif;
-    --font-montserrat-semi-bold: Montserrat, sans-serif;
-    --font-montserrat-extra-bold: Montserrat, sans-serif;
+    --font-montserrat: Montserrat, "Montserrat Fallback", ui-sans-serif, system-ui, sans-serif;
     --color-black-base: #4a4a4a;
     --color-administration: #6b7280;
     --color-citoyen: #e86a10;
@@ -33,9 +24,61 @@
     --color-ink-soft: oklch(45% 0.01 70);
     --color-ink-muted: oklch(58% 0.008 70);
     --color-rule: oklch(88% 0.01 70);
+    --color-vellum: oklch(96% 0.008 70);
+    --color-field: oklch(94% 0.008 70);
+    --color-accent: oklch(64% 0.17 47);
+    /* Ember darkened until paper text on it passes 4.5:1 (the 64% ember gives ~3:1). */
+    --color-accent-strong: oklch(52% 0.15 47);
+    --color-accent-deeper: oklch(46% 0.13 47);
+    --color-slate-ink: oklch(44% 0.055 215);
+    --color-alert-bg: oklch(96% 0.04 85);
+    --color-alert-ink: oklch(35% 0.10 60);
+    --color-alert-rule: oklch(84% 0.08 80);
+    --shadow-rest: 0 1px 2px oklch(25% 0.01 70 / 0.04), 0 2px 8px oklch(25% 0.01 70 / 0.06);
+    --shadow-hover: 0 2px 4px oklch(25% 0.01 70 / 0.06), 0 6px 16px oklch(25% 0.01 70 / 0.10);
+    --shadow-overlay: 0 8px 24px oklch(25% 0.01 70 / 0.10), 0 20px 48px oklch(25% 0.01 70 / 0.18);
     --object-top-center: "top center";
     --object-center-center: "center center";
     --object-bottom-center: "bottom center";
+}
+
+/* Montserrat, self-hosted (OFL, @fontsource-variable/montserrat 5.3.0): one
+   variable file per subset covers every weight. No request leaves marche.be. */
+@font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+    src: url("../fonts/montserrat-latin-wght-normal.woff2") format("woff2-variations");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+    src: url("../fonts/montserrat-latin-ext-wght-normal.woff2") format("woff2-variations");
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Arial resized to Montserrat's metrics, so the swap from fallback to web font
+   does not reflow the page (values as used by next/font for Montserrat). */
+@font-face {
+    font-family: "Montserrat Fallback";
+    src: local("Arial"), local("Liberation Sans"), local("Helvetica");
+    size-adjust: 112.83%;
+    ascent-override: 85.79%;
+    descent-override: 22.25%;
+    line-gap-override: 0%;
+}
+
+h1, h2, h3, h4 {
+    text-wrap: balance;
+}
+
+p, li, figcaption {
+    text-wrap: pretty;
 }
 
 html {
@@ -44,7 +87,7 @@ html {
 }
 
 body {
-    @apply antialiased text-cta-dark;
+    @apply antialiased bg-paper text-ink;
 }
 
 /* WordPress admin bar fix for fixed navigation */
@@ -207,7 +250,7 @@ article h2:not(:has(a)), article h3 {
 }
 
 .icon-menu-mobile {
-    @apply my-4 flex flex-col flex-wrap items-center justify-center font-montserrat-semi-bold;
+    @apply my-4 flex flex-col flex-wrap items-center justify-center font-semibold;
 }
 
 .musshadow {
@@ -247,11 +290,13 @@ article h2:not(:has(a)), article h3 {
 }
 
 .nav-bottom__lbl {
-    font-size: 11px;
+    font-size: 0.8125rem;
     font-weight: 500;
     line-height: 1.2;
-    letter-spacing: 0.02em;
-    color: var(--color-ink-muted);
+    text-align: center;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    color: var(--color-ink-soft);
 }
 
 .nav-bottom__cell.is-active {
@@ -271,6 +316,120 @@ article h2:not(:has(a)), article h3 {
     bottom: 0;
     height: 2px;
     background: var(--color-citoyen);
+}
+
+/**
+ * Type roles (DESIGN.md §3). One family; hierarchy from size and weight.
+ */
+.type-headline {
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    color: var(--color-ink);
+}
+
+.type-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-ink);
+}
+
+.type-label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+}
+
+/**
+ * Homepage: text links and the task list (no icons, no lift; hover underlines)
+ */
+.home-link {
+    color: var(--color-ink);
+    text-decoration-line: underline;
+    text-decoration-color: var(--color-ink-muted);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+    transition: text-decoration-color 150ms ease-out;
+}
+
+.home-link:hover {
+    text-decoration-color: var(--color-ink);
+}
+
+.home-link:focus-visible,
+.home-task:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+.home-task__title {
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+    transition: text-decoration-color 150ms ease-out;
+}
+
+.home-task:hover .home-task__title {
+    text-decoration-color: var(--color-ink);
+}
+
+/**
+ * Homepage alert: dismissing folds the band shut instead of yanking the page up.
+ * Fade first, then collapse; an exit, so it stays under 300ms.
+ */
+.home-alert {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows 240ms cubic-bezier(0.16, 1, 0.3, 1) 60ms,
+                opacity 150ms ease-out;
+}
+
+.home-alert > div {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.home-alert.is-dismissed {
+    grid-template-rows: 0fr;
+    opacity: 0;
+}
+
+/**
+ * Reduced motion: no smooth scrolling, no entrance or zoom animations, and no
+ * travelling transforms. Colour, opacity and outline transitions stay, so hover
+ * and focus feedback remain legible; transforms still apply, they just don't glide.
+ */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .hero-image-zoom,
+    .fade-in-up,
+    .animate-fade-in-down,
+    .animate-fade-in-down-delay,
+    .animate-card-in,
+    .animate-fade-in-up {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    *,
+    ::before,
+    ::after {
+        transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow !important;
+    }
+
+    .home-alert {
+        transition: opacity 150ms ease-out;
+    }
 }
 
 /**
@@ -369,4 +528,8 @@ mark {
  */
 .wp-die-message {
     margin-top: 12rem;
+}
+/* body is a grid: let main shrink below its content's min width, so one long word can never widen the page. */
+#main-content {
+    min-width: 0;
 }

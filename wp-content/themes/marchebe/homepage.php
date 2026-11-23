@@ -8,6 +8,8 @@ namespace AcMarche\Theme\Templates;
 
 use AcMarche\Theme\Data\Data;
 use AcMarche\Theme\Inc\Theme;
+use AcMarche\Theme\Lib\CouncilSchedule;
+use AcMarche\Theme\Lib\HomeLinks;
 use AcMarche\Theme\Lib\Mailer;
 use AcMarche\Theme\Lib\Pivot\Repository\PivotRepository;
 use AcMarche\Theme\Lib\Sort\SortLink;
@@ -42,13 +44,16 @@ if ($alertPage) {
     $alertPage->url = get_permalink($alertPage);
 }
 
+$links = HomeLinks::resolve(['tasks' => Data::tasks, 'services' => Data::services]);
+
 $twig = Twig::loadTwig();
 try {
     echo $twig->render('@AcMarche/homepage.html.twig', [
         'events' => $events,
         'news' => $news,
-        'shortcuts' => Data::shortcuts,
-        'widgets' => Data::widgets,
+        'tasks' => $links['tasks'],
+        'services' => $links['services'],
+        'council' => CouncilSchedule::next(),
         'partners' => Data::partners,
         'alertPage' => $alertPage,
         'sortLink' => SortLink::linkSortNews(),

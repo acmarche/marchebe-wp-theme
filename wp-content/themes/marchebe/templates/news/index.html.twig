@@ -13,9 +13,11 @@
                             class="group block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
                             href="{{ item.link }}"
                     >
-                        <img class="h-48 w-full object-cover"
-                             src="{{ item.post_thumbnail_url }}"
-                             alt="Article thumbnail">
+                        {% if item.post_thumbnail_url %}
+                            <img class="h-48 w-full object-cover"
+                                 src="{{ item.post_thumbnail_url }}"
+                                 alt="" loading="lazy">
+                        {% endif %}
                         <div class="p-6">
                             <h4 class="font-bold text-lg text-gray-900 group-hover:text-cta-dark transition-colors">
                                 {{ item.post_title }}

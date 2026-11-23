@@ -1,37 +1,30 @@
-<ul class="flex space-x-6 items-center">
+<ul class="flex shrink-0 gap-x-0.5 xl:gap-x-1.5 items-center">
     <li>
         <button @click="openSearchModal()"
-                class="cursor-pointer md:inline text-gray-600 hover:text-cta-light flex items-center gap-2"
+                class="cursor-pointer text-ink-soft hover:text-cta-dark flex items-center justify-center gap-2 min-h-11 min-w-11 xl:px-2"
                 type="button">
             <i class="fas fa-search" aria-hidden="true"></i>
             <span class="sr-only">Rechercher</span>
-            <span class="hidden lg:inline text-sm font-medium">Ctrl + K</span>
+            <span class="hidden xl:inline text-sm font-medium" aria-hidden="true">Ctrl + K</span>
         </button>
     </li>
-    <li class="hidden">
-        <button class="hidden text-gray-600 text-xl hover:text-cta-light  transition-colors"
-                aria-label="Menu"
-                type="button">
-            <i class="fas fa-bars" aria-hidden="true"></i>
-        </button>
-    </li>
-    <li>
+    <li class="max-sm:hidden lg:max-xl:hidden">
         <a href="https://www.facebook.com/VilledeMarcheenFamenne"
-           class="text-xl hover:text-cta-light transition-colors"
+           class="inline-flex items-center justify-center size-11 text-xl text-ink-soft hover:text-cta-dark transition-colors"
            aria-label="Suivez-nous sur Facebook">
             <i class="fab fa-facebook-f" aria-hidden="true"></i>
         </a>
     </li>
-    <li>
+    <li class="max-sm:hidden lg:max-xl:hidden">
         <a href="https://www.instagram.com/villedemarche/"
-           class="text-xl hover:text-cta-light transition-colors"
+           class="inline-flex items-center justify-center size-11 text-xl text-ink-soft hover:text-cta-dark transition-colors"
            aria-label="Suivez-nous sur Instagram">
             <i class="fab fa-instagram" aria-hidden="true"></i>
         </a>
     </li>
-    <li>
+    <li class="max-sm:hidden lg:max-xl:hidden">
         <a href="https://www.youtube.com/user/VilledeMarche"
-           class="text-xl hover:text-cta-light transition-colors"
+           class="inline-flex items-center justify-center size-11 text-xl text-ink-soft hover:text-cta-dark transition-colors"
            aria-label="Suivez-nous sur YouTube">
             <i class="fab fa-youtube" aria-hidden="true"></i>
         </a>

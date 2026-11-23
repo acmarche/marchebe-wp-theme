@@ -2,7 +2,7 @@
     {% for item in menuItems %}
         <a
            href="{{item.link}}"
-           class="flex items-center h-16 font-semibold text-cta-dark hover:text-cta-light transition-colors border-b-3 border-transparent hover:border-b-3 hover:border-cta-light leading-6">
+           class="flex items-center h-16 whitespace-nowrap font-semibold text-ink hover:text-cta-dark transition-colors border-b-2 border-transparent hover:border-cta-dark leading-6">
             {{ item.name }}
         </a>
     {% endfor %}

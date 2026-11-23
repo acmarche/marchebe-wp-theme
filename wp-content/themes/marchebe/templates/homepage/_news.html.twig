@@ -1,40 +1,43 @@
-<section class="flex flex-col h-full">
-    <h3 class="text-2xl md:text-3xl font-bold mb-6 text-slate-800 flex items-center gap-3">
-        <span class="w-1 h-8 bg-citoyen rounded-full"></span>
+<section class="flex flex-col h-full" aria-labelledby="home-news">
+    <h2 id="home-news" class="type-headline mb-6">
         Actualités
-    </h3>
+    </h2>
     {% if sortLink %}
         {{ sortLink|raw }}
     {% endif %}
-    <ul class="grid md:grid-cols-2 gap-3 flex-1">
-        {% for item in news %}
-            <li class="h-full {% if loop.index > 3 %}hidden md:block{% endif %}">
-                <a
-                        class="h-full flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-                        href="{{ item.link }}"
-                >
-                    <div class="relative overflow-hidden">
-                        <img
-                                src="{{ item.post_thumbnail_url }}"
-                                {% if item.post_thumbnail_srcset %}srcset="{{ item.post_thumbnail_srcset }}"{% endif %}
-                                {% if item.post_thumbnail_sizes %}sizes="{{ item.post_thumbnail_sizes }}"{% endif %}
-                                alt="{{ item.post_title }}"
-                                class="w-full h-44 object-cover transition-transform duration-300 group-hover:scale-105"
-                                loading="lazy"
-                        />
-                    </div>
-                    <div class="p-4 flex-1">
-                        <h4 class="font-semibold text-base md:text-lg text-slate-800 leading-snug line-clamp-2">{{ item.post_title }}</h4>
-                    </div>
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+    {% if news is empty %}
+        <p class="text-ink-soft">Aucune actualité publiée pour le moment.</p>
+    {% else %}
+        <ul class="grid md:grid-cols-2 gap-3 flex-1">
+            {% for item in news %}
+                <li class="h-full min-w-0 {% if loop.index > 3 %}hidden md:block{% endif %}">
+                    <a
+                            class="h-full flex flex-col bg-paper rounded-xl overflow-hidden border border-rule hover:shadow-hover transition-shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                            href="{{ item.link }}"
+                    >
+                        {% if item.post_thumbnail_url %}
+                            <img
+                                    src="{{ item.post_thumbnail_url }}"
+                                    {% if item.post_thumbnail_srcset %}srcset="{{ item.post_thumbnail_srcset }}"{% endif %}
+                                    {% if item.post_thumbnail_sizes %}sizes="{{ item.post_thumbnail_sizes }}"{% endif %}
+                                    alt=""
+                                    class="w-full h-44 object-cover"
+                                    loading="lazy"
+                            />
+                        {% endif %}
+                        <div class="p-4 flex-1">
+                            <h3 class="type-title line-clamp-3 break-words">{{ item.post_title }}</h3>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <div class="mt-auto pt-6">
         <a href="/actualites"
-           class="inline-flex items-center gap-2 bg-cta-dark text-white font-semibold py-2.5 px-6 rounded-lg hover:bg-cta-light transition-colors">
+           class="inline-flex items-center gap-2 min-h-11 bg-paper text-ink font-semibold py-2.5 px-5 rounded-md border border-rule hover:bg-vellum transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
             Toutes les actualités
-            <i class="fas fa-arrow-right text-sm"></i>
+            <svg class="size-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 10h12m-5-5 5 5-5 5"/></svg>
         </a>
     </div>
 </section>

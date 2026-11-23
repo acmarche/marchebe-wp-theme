@@ -4,26 +4,26 @@
      x-data="headerNav({{ menu_data }})">
     <!-- Skip to main content link for accessibility -->
     <a href="#main-content"
-       class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:bg-cta-dark focus:text-white focus:p-4 focus:m-2 focus:rounded">
+       class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:bg-ink focus:text-paper focus:p-4 focus:m-2 focus:rounded">
         Aller au contenu principal
     </a>
 
-    <header class="bg-white shadow-md relative z-40" id="main-header">
+    <header class="bg-paper border-b border-rule relative z-40" id="main-header">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between h-16">
-                <a href="/" class="">
+                <a href="/" class="shrink-0 flex items-center min-h-11">
                     <img src="{{ template_directory }}/assets/images/img_logo.png"
                          alt="Ville de Marche-en-Famenne"
                          class="h-10 w-16 xl:h-14 xl:w-24"/>
                 </a>
 
                 <!-- Desktop Menu Trigger -->
-                <div class="hidden md:flex flex-row items-center justify-center space-x-6">
+                <div class="hidden lg:flex flex-row items-center justify-center gap-x-5 xl:gap-x-6">
                     <button
                             x-ref="desktopMenuButton"
                             @click="toggleDesktopMenu()"
                             type="button"
-                            class="flex flex-row items-center justify-center gap-2 h-16 cursor-pointer font-semibold text-cta-dark hover:text-cta-light transition-colors border-b-3 border-transparent hover:border-b-3 hover:border-cta-light leading-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 focus-visible:ring-white"
+                            class="flex flex-row items-center justify-center gap-2 h-16 whitespace-nowrap cursor-pointer font-semibold text-ink hover:text-cta-dark transition-colors border-b-2 border-transparent hover:border-cta-dark leading-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-paper focus-visible:ring-accent"
                             :aria-expanded="isDesktopMenuOpen"
                             aria-controls="desktop-menu"
                     >
