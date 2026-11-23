@@ -142,7 +142,7 @@ class WpRepository
         if ($currentSite === Theme::ADMINISTRATION &&
             (in_array($categoryIdSelected, [Theme::ENQUETE_DIRECTORY_URBA, Theme::ENQUETE_DIRECTORY_INSTITUTION]))) {
             $apiRepository = new ApiRepository();
-            $enquetes = $apiRepository->getEnquetesPubliques();
+            $enquetes = $apiRepository->getEnquetesPubliques($categoryIdSelected);
             foreach ($enquetes as $enquete) {
                 $enquete->paths = [];
                 $documents[] = Document::documentFromEnquete($enquete, 'Enquêtes publiques');

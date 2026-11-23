@@ -38,7 +38,7 @@ try {
 }
 
 $twig = Twig::loadTwig();
-$category = $apiRepository->getCategoryEnquete();
+$category = $apiRepository->getCategoryEnquete($enquete);
 $paths = $tags = [];
 if ($category) {
     $paths = [

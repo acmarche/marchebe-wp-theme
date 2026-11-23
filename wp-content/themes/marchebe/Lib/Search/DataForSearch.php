@@ -4,7 +4,6 @@ namespace AcMarche\Theme\Lib\Search;
 
 use AcMarche\Theme\Inc\BottinCategoryMetaBox;
 use AcMarche\Theme\Inc\PublicationCategoryMetaBox;
-use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Bottin\Bottin;
 use AcMarche\Theme\Repository\ApiRepository;
 use AcMarche\Theme\Repository\BottinRepository;
@@ -293,15 +292,10 @@ class DataForSearch
     public function getEnqueteDocuments(): array
     {
         $apiRepository = new ApiRepository();
-        $enquetes = $apiRepository->getEnquetesPubliques();
-        $category = get_category(Theme::ENQUETE_DIRECTORY_URBA);
-        $paths = [];
         $documents = [];
-        if ($category) {
-            $paths = [['id' => $category->term_id, 'name' => $category->name]];
-        }
-        foreach ($enquetes as $enquete) {
-            $enquete->paths = $paths;
+        foreach ($apiRepository->getEnquetesPubliques() as $enquete) {
+            $category = $apiRepository->getCategoryEnquete($enquete);
+            $enquete->paths = $category ? [['id' => $category->term_id, 'name' => $category->name]] : [];
             $documents[] = Document::documentFromEnquete($enquete, 'Enquêtes publiques');
         }
 
