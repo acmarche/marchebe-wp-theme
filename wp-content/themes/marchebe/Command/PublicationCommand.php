@@ -20,10 +20,8 @@ class PublicationCommand extends Command
 {
     protected function configure(): void
     {
-        $this->addOption('no-pdf', null, InputOption::VALUE_NONE, 'Skip detail pages (no PDF links)');
-        $this->addOption('dry-run', null, InputOption::VALUE_NONE, 'Fetch and display without saving the list (PDF links are still cached)');
+        $this->addOption('dry-run', null, InputOption::VALUE_NONE, 'Fetch and display without saving the list');
         $this->addOption('show', null, InputOption::VALUE_NONE, 'Display the cached publications, fetch nothing');
-        $this->addOption('purge', null, InputOption::VALUE_NONE, 'Purge the cached PDF links and fetch every detail page again');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -78,25 +76,6 @@ class PublicationCommand extends Command
             $io->warning('Natures without slug, not filterable: '.implode(', ', $unmatched));
         }
 
-        $purge = (bool)$input->getOption('purge');
-        if ($purge && $input->getOption('no-pdf')) {
-            $io->warning('--purge ignored with --no-pdf');
-        }
-
-        if (!$input->getOption('no-pdf')) {
-            $fetched = 0;
-            foreach ($publications as &$publication) {
-                try {
-                    $publication['pdf'] = $repository->fetchPdfUrl($publication['url'], $fromCache, $purge);
-                    $fromCache || $fetched++;
-                } catch (\Throwable $e) {
-                    $io->warning('PDF error '.$publication['url'].' '.$e->getMessage());
-                }
-            }
-            unset($publication);
-            $io->writeln("Detail pages fetched: $fetched");
-        }
-
         $this->display($output, $publications);
 
         if ($input->getOption('dry-run')) {
@@ -120,11 +99,10 @@ class PublicationCommand extends Command
             $p['date'],
             mb_strimwidth($p['title'], 0, 60, '…'),
             $p['nature'],
-            $p['pdf'] ? 'oui' : '',
         ], $publications);
 
         (new Table($output))
-            ->setHeaders(['Date', 'Titre', 'Nature', 'PDF'])
+            ->setHeaders(['Date', 'Titre', 'Nature'])
             ->setRows($rows)
             ->render();
     }

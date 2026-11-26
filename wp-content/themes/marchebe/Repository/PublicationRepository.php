@@ -171,29 +171,6 @@ class PublicationRepository
     }
 
     /**
-     * Lien du PDF, depuis la page de detail. Un document publie ne change plus:
-     * on le garde longtemps en cache pour ne recharger que les nouvelles publications.
-     * $purge force le rechargement de la page de detail.
-     * @throws \Throwable sur erreur HTTP
-     */
-    public function fetchPdfUrl(string $url, ?bool &$fromCache = null, bool $purge = false): ?string
-    {
-        $fromCache = true;
-        $key = self::$keyAll.'-pdf-'.md5($url);
-        if ($purge) {
-            Cache::delete($key);
-        }
-
-        return Cache::get($key, function (ItemInterface $item) use ($url, &$fromCache) {
-            $fromCache = false;
-            $item->expiresAfter(60 * 60 * 24 * 365);
-            usleep(self::DELAY_MICROSECONDS);
-
-            return $this->parser->parsePdfUrl($this->get($url));
-        });
-    }
-
-    /**
      * @param array<int, array<string, mixed>> $publications
      */
     public function save(array $publications): void
