@@ -21,7 +21,7 @@ class FixCommand extends Command
      * Suffixes WordPress appends to an upload's file name for its derived files
      * (sizes, big-image scaling, rotation, edits, PDF previews).
      */
-    private const DERIVED_SUFFIX = '/-(?:\d+x\d+|scaled|rotated|e\d{10,}|pdf)$/';
+    public const DERIVED_SUFFIX = '/-(?:\d+x\d+|scaled|rotated|e\d{10,}|pdf)$/';
 
     private SymfonyStyle $io;
 
@@ -220,7 +220,7 @@ class FixCommand extends Command
      * Reduces an upload path to the key shared by the original and all its derived files,
      * so "2020/01/photo-1024x768.jpg" and "2020/01/photo-scaled.jpg" both match "2020/01/photo.jpg".
      */
-    private function normalizeFile(string $file): string
+    public static function normalizeFile(string $file): string
     {
         $file = rawurldecode($file);
         if (class_exists(\Normalizer::class)) {
