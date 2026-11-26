@@ -44,7 +44,6 @@ class PublicationParser
                 'nature' => $metadata['Nature du document'] ?? null,
                 'matiere' => $metadata['Matière'] ?? null,
                 'metadata' => $metadata,
-                'pdf' => null,
             ];
         }
 
@@ -85,23 +84,6 @@ class PublicationParser
         }
 
         return $natures;
-    }
-
-    /**
-     * Page de detail: le PDF est dans <x-pdf-viewer file="...">.
-     */
-    public function parsePdfUrl(string $html): ?string
-    {
-        $document = HTMLDocument::createFromString($html, LIBXML_NOERROR);
-        $file = $document->querySelector('x-pdf-viewer')?->getAttribute('file');
-        if (!$file) {
-            return null;
-        }
-
-        // le nom du fichier arrive brut (espaces, accents, apostrophes): on encode le dernier segment
-        $position = strrpos($file, '/');
-
-        return substr($file, 0, $position + 1).rawurlencode(rawurldecode(substr($file, $position + 1)));
     }
 
     private function parseDate(string $value): ?string
